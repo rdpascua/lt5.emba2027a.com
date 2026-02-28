@@ -290,28 +290,14 @@ input[type="range"]::-webkit-slider-thumb {
       <button class="preset-btn" onclick="loadSolowPreset('us50')"><strong>US 1950</strong><span>Near steady state, baseline 2.2% growth</span></button>
       <button class="preset-btn" onclick="loadSolowPreset('fr50')"><strong>France 1950</strong><span>Low capital, rapid catch-up (Durabuild boom)</span></button>
       <button class="preset-btn" onclick="loadSolowPreset('fr80')"><strong>France 1980</strong><span>Near steady state, labor declining</span></button>
-      <button class="preset-btn" onclick="loadSolowPreset('cn00')"><strong>China 2000</strong><span>45% savings, rapid industrialization</span></button>
+      <button class="preset-btn" onclick="loadSolowPreset('cn00')"><strong>China 2000</strong><span>35% investment rate, rapid industrialization</span></button>
       <button class="preset-btn" onclick="loadSolowPreset('cn1c')"><strong>China + One-Child</strong><span>Low pop growth, higher k* per worker</span></button>
 
       <div class="section-label">Philippines Scenarios</div>
       <button class="preset-btn" onclick="loadSolowPreset('ph24')"><strong>PH Baseline (2024)</strong><span>s=23%, n=0.8%, g=1.0%, LFPR=64%</span></button>
-      <button class="preset-btn" onclick="loadSolowPreset('phbd')"><strong>PH + Brain Drain</strong><span>OFW exodus suppresses domestic TFP growth to 0.3%</span></button>
-      <button class="preset-btn" onclick="loadSolowPreset('phdd')"><strong>PH Demographic Dividend</strong><span>Young population + human capital &rarr; g=2.0%, LFPR=75%</span></button>
-      <button class="preset-btn" onclick="loadSolowPreset('phhi')"><strong>PH High Investment</strong><span>If PH matched East Asian investment rates (s=38%)</span></button>
-
-      <div style="margin-top:10px;padding:10px 12px;background:var(--surface2);border-radius:4px;font-size:11px;color:var(--text3);line-height:1.6;">
-        <strong style="color:var(--text2);">PH Data Sources:</strong>
-        <strong>n=0.8%</strong>: PSA 2024 Census of Population (Proclamation 973), annualized growth 2020&ndash;2024.
-        <strong>s=23%</strong>: World Bank WDI, Gross Capital Formation 23.3% of GDP (2023).
-        <strong>LFPR=64%</strong>: CEIC/PSA Labour Force Survey, 63.6% (Q3 2025).
-        <strong>&delta;=5%</strong>: Standard developing-economy depreciation rate (PWT convention; case uses 4.4% for developed economies).
-        <strong>A<sub>0</sub>=0.35</strong>: Estimated from PH/US GDP per capita PPP ratio (~14%, $11,794 vs ~$85,000; World Bank 2024); backed out from production function.
-        <strong>g=1.0%</strong>: BSP Discussion Paper 2024-10 (Amodia et al.): TFP growth recovering post-pandemic but below pre-2019 trend of ~1.5%.
-        Brain Drain scenario <strong>g=0.3%</strong>: Cororaton (2005, <em>Asian Development Review</em>): TFP growth was negative for most of 1967&ndash;2000, averaging &minus;0.5% to +0.4%.
-        OFW remittances <strong>$38.3B = 8.3% of GDP</strong>: BSP, as reported by PSA for 2024.
-        GDP growth <strong>5.7%</strong>: World Bank, 2024 actual.
-        Population <strong>112.7M</strong>: PSA 2024 POPCEN.
-      </div>
+      <button class="preset-btn" onclick="loadSolowPreset('phbd')"><strong>PH + Brain Drain</strong><span>Hypothetical: g=0.3%, LFPR=60%</span></button>
+      <button class="preset-btn" onclick="loadSolowPreset('phdd')"><strong>PH Demographic Dividend</strong><span>Hypothetical: g=2.0%, LFPR=75%</span></button>
+      <button class="preset-btn" onclick="loadSolowPreset('phhi')"><strong>PH High Investment</strong><span>Hypothetical: s=38%, g=2.5%</span></button>
 
       <div class="section-label">Steady State</div>
       <div class="ss-grid">
@@ -734,9 +720,46 @@ input[type="range"]::-webkit-slider-thumb {
   <div class="subtitle">Data sources, references, and how to use PWT 11.0 to solve the Durabuild case</div>
 
   <div class="callout" style="border-left-color:var(--accent);">
-    The case uses Penn World Tables 7.1 (Exhibit 1 & 2 source notes). Students should replicate and extend the analysis
-    using <strong>PWT 11.0</strong> (released October 7, 2025), which covers 185 countries through 2023 and incorporates
-    the 2021 ICP purchasing power parity benchmarks.
+    The case's Exhibits 1 &amp; 2 use <strong>Penn World Tables 7.1</strong> (per Exhibit 1 source note). Students should replicate and extend the analysis
+    using <strong>PWT 11.0</strong> (released October 7, 2025), which covers 185 countries through 2023 and incorporates the 2021 ICP purchasing power parity benchmarks.
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <h3>Calibration Methodology</h3>
+      <div style="font-size:13px;color:var(--text2);line-height:1.7;">
+        <p style="margin-bottom:10px;">Preset parameters fall into three categories:</p>
+        <p style="margin-bottom:10px;"><strong style="color:var(--text);">Data (directly observed):</strong>
+        <em>s</em> (investment/GDP from World Bank WDI or PWT <span style="font-family:var(--mono);font-size:12px;">csh_i</span>),
+        <em>n</em> (population growth from national census data),
+        <em>N/POP</em> (labor force participation from case Exhibit 2 or national labor force surveys).</p>
+        <p style="margin-bottom:10px;"><strong style="color:var(--text);">Estimated:</strong>
+        <em>g</em> (TFP growth) is always a Solow residual &mdash; not directly measured &mdash; and published estimates vary widely for any country/period.
+        <em>A<sub>0</sub></em> for France and the US comes from case Exhibit 2; for China and the Philippines it is backed out from GDP per capita PPP ratios.
+        <em>&alpha;</em> = 0.30 is the textbook convention (Mankiw, Romer &amp; Weil 1992); PWT <span style="font-family:var(--mono);font-size:12px;">labsh</span> data suggests 0.35&ndash;0.40.</p>
+        <p style="margin-bottom:10px;"><strong style="color:var(--text);">Calibrated:</strong>
+        <em>k&#x0303;<sub>0</sub></em> (initial capital per effective worker) is a model-normalized variable (<em>K</em>/(<em>AL</em>)) that cannot be directly observed as a single number.
+        It is set so that each preset produces plausible initial growth dynamics consistent with historical GDP growth rates for the period.</p>
+        <p>The three PH counterfactual scenarios (Brain Drain, Demographic Dividend, High Investment) are thought experiments.
+        Their modified parameters are hypothetical, not forecasts.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Philippines Data Sources</h3>
+      <div style="font-size:13px;color:var(--text2);line-height:1.7;">
+        <p style="margin-bottom:8px;"><strong>n = 0.8%</strong>: PSA 2024 Census of Population (Proclamation 973), annualized growth 2020&ndash;2024.</p>
+        <p style="margin-bottom:8px;"><strong>s = 23%</strong>: World Bank WDI, Gross Capital Formation 23.3% of GDP (2023).</p>
+        <p style="margin-bottom:8px;"><strong>LFPR = 64%</strong>: CEIC / PSA Labour Force Survey, 63.6% (Q3 2025).</p>
+        <p style="margin-bottom:8px;"><strong>&delta; = 5%</strong>: Standard developing-economy depreciation rate (PWT convention; simulation uses 4.4% for developed economies).</p>
+        <p style="margin-bottom:8px;"><strong>A<sub>0</sub> = 0.35</strong>: Estimated from PH/US GDP per capita PPP ratio (~14%; $11,794 vs ~$85,000, World Bank 2024); backed out from production function.</p>
+        <p style="margin-bottom:8px;"><strong>g = 1.0%</strong>: BSP Discussion Paper 2024-10 (Amodia et al.): TFP growth recovering post-pandemic but below pre-2019 trend of ~1.5%.</p>
+        <p style="margin-bottom:8px;"><strong>g = 0.3%</strong> (Brain Drain): Cororaton (2005, <em>Asian Development Review</em>): TFP growth was negative for most of 1967&ndash;2000, averaging &minus;0.5% to +0.4%.</p>
+        <p style="margin-bottom:8px;"><strong>OFW remittances</strong>: $38.3B = 8.3% of GDP (BSP, as reported by PSA for 2024).</p>
+        <p style="margin-bottom:8px;"><strong>GDP growth</strong>: 5.7% (World Bank, 2024 actual).</p>
+        <p><strong>Population</strong>: 112.7M (PSA 2024 POPCEN).</p>
+      </div>
+    </div>
   </div>
 
   <div class="grid-2">
@@ -805,7 +828,7 @@ input[type="range"]::-webkit-slider-thumb {
 
       <p style="margin-bottom:6px;"><strong>Step 3: Compute capital-to-labor ratio</strong></p>
       <div class="equation"><em>K</em> / <em>N</em> = <em>rnna</em> / (<em>emp</em> &times; <em>avh</em>)</div>
-      <p style="margin-bottom:12px;">Then compute (K/N)<sub>FRA</sub>/(K/N)<sub>USA</sub> and raise to the power &alpha;. The case uses &alpha; = 0.3; alternatively use &alpha; = 1 - labsh from PWT directly.</p>
+      <p style="margin-bottom:12px;">Then compute (K/N)<sub>FRA</sub>/(K/N)<sub>USA</sub> and raise to the power &alpha;. The standard value is &alpha; = 0.3; alternatively use &alpha; = 1 - labsh from PWT directly.</p>
 
       <p style="margin-bottom:6px;"><strong>Step 4: Back out TFP (A) as a residual</strong></p>
       <div class="equation"><em>A</em> = (<em>Y</em> / <em>POP</em>) / [(<em>K</em> / <em>N</em>)<sup>&alpha;</sup> &middot; (<em>N</em> / <em>POP</em>)]</div>
@@ -930,11 +953,11 @@ function switchTab(name) {
 let sCharts = {};
 
 const SPRESETS = {
-  us50: {s:20,d:4.4,n:1.4,g:1.8,a:0.30,A:1.0,k:3.2,l:1.0},
+  us50: {s:20,d:4.4,n:1.7,g:1.8,a:0.30,A:1.0,k:3.0,l:1.0},
   fr50: {s:22,d:4.4,n:1.0,g:2.5,a:0.30,A:0.99,k:2.3,l:1.25},
-  fr80: {s:20,d:4.4,n:0.5,g:1.2,a:0.30,A:1.05,k:4.1,l:0.93},
-  cn00: {s:45,d:5.0,n:0.8,g:3.5,a:0.30,A:0.40,k:2.4,l:1.10},
-  cn1c: {s:45,d:5.0,n:0.3,g:3.5,a:0.30,A:0.40,k:2.2,l:1.10},
+  fr80: {s:24,d:4.4,n:0.5,g:1.2,a:0.30,A:1.05,k:5.3,l:0.93},
+  cn00: {s:35,d:5.0,n:0.8,g:3.5,a:0.30,A:0.40,k:1.7,l:1.10},
+  cn1c: {s:35,d:5.0,n:0.3,g:3.5,a:0.30,A:0.40,k:1.7,l:1.10},
   ph24: {s:23,d:5.0,n:0.8,g:1.0,a:0.30,A:0.35,k:1.0,l:0.64},
   phbd: {s:23,d:5.0,n:0.8,g:0.3,a:0.30,A:0.35,k:1.8,l:0.60},
   phdd: {s:23,d:5.0,n:0.8,g:2.0,a:0.30,A:0.35,k:1.0,l:0.75},
@@ -1284,9 +1307,9 @@ let convInited = false;
 function initConvergence() {
   if (convInited) return; convInited = true;
 
-  const us = solowSim(0.20,0.044,0.014,0.018,0.30,1.0,3.2,1.0,50);
+  const us = solowSim(0.20,0.044,0.017,0.018,0.30,1.0,3.0,1.0,50);
   const fr = solowSim(0.22,0.044,0.010,0.025,0.30,0.99,2.3,1.25,50);
-  const cn = solowSim(0.45,0.050,0.008,0.035,0.30,0.40,2.4,1.10,50);
+  const cn = solowSim(0.35,0.050,0.008,0.035,0.30,0.40,1.7,1.10,50);
   const ph = solowSim(0.23,0.050,0.008,0.010,0.30,0.35,1.0,0.64,50);
 
   const yrs = us.d.map(x=>x.t);
@@ -1324,7 +1347,7 @@ function initPolicy() {
   const sRates = [];
   for (let s=5; s<=60; s+=1) sRates.push(s);
   const yStar = sRates.map(s => {
-    const kStar = Math.pow((s/100)/(0.044+0.018+0.014), 1/0.7);
+    const kStar = Math.pow((s/100)/(0.044+0.018+0.017), 1/0.7);
     return Math.pow(kStar, 0.3);
   });
   makeChart('cPolSavings','line',[
@@ -1386,7 +1409,7 @@ function policyUpdate() {
   }
 
   // US baseline
-  const usR = solowSim(0.20,0.044,0.014,0.018,0.30,1.0,3.2,1.0,years);
+  const usR = solowSim(0.20,0.044,0.017,0.018,0.30,1.0,3.0,1.0,years);
 
   // China steady state (using final parameters)
   const finalBrk = Math.max(cn-0.005*(years-co),-0.005) + effG + delta;

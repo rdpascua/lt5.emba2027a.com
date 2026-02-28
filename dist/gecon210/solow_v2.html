@@ -274,6 +274,12 @@ input[type="range"]::-webkit-slider-thumb {
       <button class="preset-btn" onclick="loadSolowPreset('cn00')"><strong>China 2000</strong><span>45% savings, rapid industrialization</span></button>
       <button class="preset-btn" onclick="loadSolowPreset('cn1c')"><strong>China + One-Child</strong><span>Low pop growth, higher k* per worker</span></button>
 
+      <div class="section-label">Philippines Scenarios</div>
+      <button class="preset-btn" onclick="loadSolowPreset('ph24')"><strong>PH Baseline (2024)</strong><span>s=24%, low TFP, low capital, LFPR=64%</span></button>
+      <button class="preset-btn" onclick="loadSolowPreset('phbd')"><strong>PH + Brain Drain</strong><span>OFW exodus lowers domestic TFP growth to 0.5%</span></button>
+      <button class="preset-btn" onclick="loadSolowPreset('phdd')"><strong>PH Demographic Dividend</strong><span>Young population + human capital investment</span></button>
+      <button class="preset-btn" onclick="loadSolowPreset('phhi')"><strong>PH High Investment</strong><span>If PH matched Vietnam/China investment rates</span></button>
+
       <div class="section-label">Steady State</div>
       <div class="ss-grid">
         <div class="ss-box"><div class="val" id="ss_k2">--</div><div class="lbl">k&#x0303;*</div></div>
@@ -562,6 +568,38 @@ input[type="range"]::-webkit-slider-thumb {
       These are the "conditions" that make France's steady state lower than the US's.
     </div>
   </div>
+
+  <div class="card">
+    <h3>Philippines in the Convergence Framework</h3>
+    <div class="grid-3" style="margin-top:12px;">
+      <div style="text-align:center;">
+        <div style="font-family:var(--mono);font-size:28px;font-weight:500;color:var(--red);">~0.14</div>
+        <div style="font-size:12px;color:var(--text2);margin-top:4px;">PH/US GDP per capita (PPP)</div>
+        <div style="font-size:11px;color:var(--text3);">$11,794 vs $85,000</div>
+      </div>
+      <div style="text-align:center;">
+        <div style="font-family:var(--mono);font-size:28px;font-weight:500;color:var(--red);">~0.35</div>
+        <div style="font-size:12px;color:var(--text2);margin-top:4px;">Relative TFP (est.)</div>
+        <div style="font-size:11px;color:var(--text3);">Low but improving post-reforms</div>
+      </div>
+      <div style="text-align:center;">
+        <div style="font-family:var(--mono);font-size:28px;font-weight:500;color:var(--gold);">0.64</div>
+        <div style="font-size:12px;color:var(--text2);margin-top:4px;">Labor Force Participation</div>
+        <div style="font-size:11px;color:var(--text3);">vs US ~62%, but young population</div>
+      </div>
+    </div>
+    <div style="margin-top:16px;font-size:13px;color:var(--text2);line-height:1.6;">
+      The Philippines presents a different convergence puzzle than France. Where France converged in capital but diverged in labor,
+      the PH is far from convergence on <em>all</em> fronts: low capital stock, low TFP, and moderate labor participation.
+      The Solow model predicts this should mean high growth potential -- the marginal product of capital is high when k is low.
+      But three structural issues suppress the transition: (1) the domestic savings rate is only ~9% of GDP, with remittances
+      ($38B in 2024, 8.3% of GDP) filling the gap but flowing more to consumption than investment; (2) TFP growth was historically
+      negative for 35 years (BSP DP 2024-10), only turning positive after 1990s reforms; (3) brain drain through OFW migration
+      exports the most productive workers, directly reducing domestic A.
+      The key insight: the Philippines has the <em>initial conditions</em> for catch-up growth (low k, high MPK),
+      but not yet the <em>structural conditions</em> (savings, TFP growth, human capital retention) to realize it.
+    </div>
+  </div>
 </div>
 
 <!-- ========== TAB 5: POLICY ========== -->
@@ -721,6 +759,10 @@ const SPRESETS = {
   fr80: {s:20,d:4.4,n:0.5,g:1.2,a:0.30,A:1.05,k:35,l:0.93},
   cn00: {s:45,d:5.0,n:0.8,g:3.5,a:0.30,A:0.40,k:3,l:1.10},
   cn1c: {s:45,d:5.0,n:0.3,g:3.5,a:0.30,A:0.40,k:3,l:1.10},
+  ph24: {s:24,d:5.0,n:1.5,g:1.2,a:0.30,A:0.35,k:5,l:0.64},
+  phbd: {s:24,d:5.0,n:1.5,g:0.5,a:0.30,A:0.35,k:5,l:0.60},
+  phdd: {s:24,d:5.0,n:1.5,g:2.0,a:0.30,A:0.35,k:5,l:0.80},
+  phhi: {s:38,d:5.0,n:1.5,g:2.5,a:0.30,A:0.35,k:5,l:0.75},
 };
 
 function loadSolowPreset(p) {
@@ -1069,26 +1111,30 @@ function initConvergence() {
   const us = solowSim(0.20,0.044,0.014,0.018,0.30,1.0,40,1.0,50);
   const fr = solowSim(0.22,0.044,0.010,0.025,0.30,0.99,4,1.25,50);
   const cn = solowSim(0.45,0.050,0.008,0.035,0.30,0.40,3,1.10,50);
+  const ph = solowSim(0.24,0.050,0.015,0.012,0.30,0.35,5,0.64,50);
 
   const yrs = us.d.map(x=>x.t);
-  const usBase = us.d[0].yAct, frBase = fr.d[0].yAct, cnBase = cn.d[0].yAct;
+  const usBase = us.d[0].yAct, frBase = fr.d[0].yAct, cnBase = cn.d[0].yAct, phBase = ph.d[0].yAct;
 
   makeChart('cConverge','line',[
     {label:'US',data:us.d.map(x=>(x.yAct/usBase)*100),borderColor:'#3574c4',borderWidth:2,pointRadius:0},
     {label:'France',data:fr.d.map(x=>(x.yAct/frBase)*100),borderColor:'#b44a2d',borderWidth:2,pointRadius:0},
-    {label:'China',data:cn.d.map(x=>(x.yAct/cnBase)*100),borderColor:'#2d8a4e',borderWidth:2,pointRadius:0}
+    {label:'China',data:cn.d.map(x=>(x.yAct/cnBase)*100),borderColor:'#2d8a4e',borderWidth:2,pointRadius:0},
+    {label:'Philippines',data:ph.d.map(x=>(x.yAct/phBase)*100),borderColor:'#c4930a',borderWidth:2,pointRadius:0}
   ],yrs);
 
   makeChart('cConvGrowth','line',[
     {label:'US Growth',data:us.d.slice(1).map(x=>x.gr),borderColor:'#3574c4',borderWidth:2,pointRadius:0},
     {label:'France Growth',data:fr.d.slice(1).map(x=>x.gr),borderColor:'#b44a2d',borderWidth:2,pointRadius:0},
-    {label:'China Growth',data:cn.d.slice(1).map(x=>x.gr),borderColor:'#2d8a4e',borderWidth:2,pointRadius:0}
+    {label:'China Growth',data:cn.d.slice(1).map(x=>x.gr),borderColor:'#2d8a4e',borderWidth:2,pointRadius:0},
+    {label:'PH Growth',data:ph.d.slice(1).map(x=>x.gr),borderColor:'#c4930a',borderWidth:2,pointRadius:0}
   ],yrs.slice(1));
 
   makeChart('cCapConv','line',[
     {label:'US k',data:us.d.map(x=>x.k),borderColor:'#3574c4',borderWidth:2,pointRadius:0},
     {label:'France k',data:fr.d.map(x=>x.k),borderColor:'#b44a2d',borderWidth:2,pointRadius:0},
-    {label:'China k',data:cn.d.map(x=>x.k),borderColor:'#2d8a4e',borderWidth:2,pointRadius:0}
+    {label:'China k',data:cn.d.map(x=>x.k),borderColor:'#2d8a4e',borderWidth:2,pointRadius:0},
+    {label:'PH k',data:ph.d.map(x=>x.k),borderColor:'#c4930a',borderWidth:2,pointRadius:0}
   ],yrs);
 }
 

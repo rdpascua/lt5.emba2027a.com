@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JetFive - 10Q Forecast v3</title>
+<script src="chart.umd.min.js"></script>
+<style>
+:root{--bg:#0f1419;--s1:#1a1f2e;--s2:#232a3b;--bd:#2d3548;--tx:#e1e4e8;--mu:#8b949e;--ac:#58a6ff;--gn:#3fb950;--rd:#f85149;--or:#d29922;--pu:#bc8cff;--ib:#0d1117}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'SF Mono','Consolas',monospace;background:var(--bg);color:var(--tx);padding:14px;font-size:12px}
+h1{font-size:20px;color:var(--ac);margin-bottom:2px}
+h2{font-size:13px;color:var(--ac);margin:14px 0 6px;padding-bottom:3px;border-bottom:1px solid var(--bd)}
+h3{font-size:11px;color:var(--or);margin:8px 0 4px;text-transform:uppercase;letter-spacing:1px}
+.sub{color:var(--mu);font-size:11px;margin-bottom:10px}
+.container{max-width:1500px;margin:0 auto}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+.g4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:10px}
+.card{background:var(--s1);border:1px solid var(--bd);border-radius:6px;padding:10px}
+table{width:100%;border-collapse:collapse;font-size:11px}
+th{background:var(--s2);color:var(--mu);text-align:center;padding:4px 3px;font-weight:500}
+th:first-child{text-align:left;min-width:130px}
+td{padding:3px;text-align:center;border-bottom:1px solid var(--bd)}
+td:first-child{text-align:left;color:var(--mu);font-size:10px}
+input[type="number"]{width:68px;background:var(--ib);border:1px solid var(--bd);color:var(--ac);padding:2px 3px;border-radius:3px;text-align:right;font-family:inherit;font-size:11px}
+input[type="number"]:focus{border-color:var(--ac);outline:none}
+select{background:var(--ib);border:1px solid var(--bd);color:var(--ac);padding:2px 4px;border-radius:3px;font-family:inherit;font-size:11px}
+.vg{color:var(--gn);font-weight:600}.vr{color:var(--rd);font-weight:600}.vm{color:var(--mu)}
+.sw{position:relative;width:34px;height:18px;display:inline-block;vertical-align:middle}
+.sw input{opacity:0;width:0;height:0}
+.sl{position:absolute;cursor:pointer;top:0;left:0;right:0;bottom:0;background:var(--s2);border-radius:18px;transition:.2s}
+.sl:before{position:absolute;content:"";height:12px;width:12px;left:3px;bottom:3px;background:var(--mu);border-radius:50%;transition:.2s}
+input:checked+.sl{background:var(--ac)}input:checked+.sl:before{transform:translateX(16px);background:#fff}
+.kpi-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin-bottom:10px}
+.kpi{background:var(--s1);border:1px solid var(--bd);border-radius:6px;padding:8px;text-align:center}
+.kpi-v{font-size:18px;font-weight:700;margin:2px 0}
+.kpi-l{font-size:9px;color:var(--mu);text-transform:uppercase;letter-spacing:.5px}
+.ch{position:relative;height:220px}
+.tabs{display:flex;gap:3px;margin-bottom:8px}
+.tab{padding:4px 12px;border-radius:4px;cursor:pointer;font-size:11px;border:1px solid var(--bd);background:var(--s1);color:var(--mu);font-family:inherit}
+.tab.active{background:var(--ac);color:#fff;border-color:var(--ac)}
+.warn{background:rgba(248,81,73,.1);border:1px solid var(--rd);border-radius:4px;padding:5px 8px;margin:3px 0;font-size:11px;color:var(--rd)}
+.fb{display:flex;justify-content:space-between;align-items:center;padding:2px 0}
+.prod-card{border:1px solid var(--bd);border-radius:6px;padding:8px;background:var(--s2)}
+.prod-card h4{font-size:12px;margin-bottom:4px}
+.upgrade-row{display:flex;align-items:center;gap:6px;padding:3px 0;border-bottom:1px solid var(--bd);font-size:10px}
+.upgrade-row:last-child{border:none}
+.upgrade-name{flex:1}.upgrade-cost{color:var(--mu);width:55px;text-align:right}.upgrade-eff{color:var(--or);width:40px;text-align:right}
+.loan-box{background:var(--s2);border:1px solid var(--bd);border-radius:6px;padding:8px;margin-top:6px}
+.div-highlight{background:rgba(63,185,80,.1);border:1px solid var(--gn);border-radius:6px;padding:8px;margin-top:6px}
+</style>
+</head>
+<body>
+<div class="container">
+<h1>JetFive Forecast v3</h1>
+<p class="sub">Annuity loan mechanics. Per-product R&amp;D. Dividend tracking. Score = total dividends / share.</p>
+
+<div class="kpi-grid">
+  <div class="kpi"><div class="kpi-l">Final Cash</div><div class="kpi-v vg" id="k-cash">$50K</div></div>
+  <div class="kpi"><div class="kpi-l">Cumul. Net Income</div><div class="kpi-v vg" id="k-ni">$576K</div></div>
+  <div class="kpi"><div class="kpi-l">Total Revenue</div><div class="kpi-v vg" id="k-rev">$4,165K</div></div>
+  <div class="kpi" style="border-color:var(--gn)"><div class="kpi-l">Total Dividends</div><div class="kpi-v vg" id="k-div">$459K</div></div>
+  <div class="kpi" style="border-color:var(--gn)"><div class="kpi-l">Dividends/Share</div><div class="kpi-v vg" id="k-dps">$459</div></div>
+  <div class="kpi"><div class="kpi-l">Total Interest Paid</div><div class="kpi-v vr" id="k-int">$32K</div></div>
+</div>
+<div id="warnings"></div>
+
+<div class="tabs">
+  <button class="tab" onclick="loadP('conservative',this)">Conservative</button>
+  <button class="tab" onclick="loadP('sportyQ2',this)">Sporty Q2 ($250K loan)</button>
+  <button class="tab active" onclick="loadP('optimal',this)">Optimal Play</button>
+</div>
+
+<div class="g2" style="margin-bottom:10px">
+  <div class="card"><h3>Revenue &amp; Net Income</h3><div class="ch"><canvas id="c1" style="display: block; box-sizing: border-box; height: 220px; width: 723px;" width="723" height="220"></canvas></div></div>
+  <div class="card"><h3>Cash, Loan &amp; Cumulative Dividends</h3><div class="ch"><canvas id="c2" style="display: block; box-sizing: border-box; height: 220px; width: 723px;" width="723" height="220"></canvas></div></div>
+</div>
+<div class="g2" style="margin-bottom:10px">
+  <div class="card"><h3>Margins</h3><div class="ch"><canvas id="c3" style="display: block; box-sizing: border-box; height: 220px; width: 723px;" width="723" height="220"></canvas></div></div>
+  <div class="card"><h3>Dividend vs Loan Payment per Quarter</h3><div class="ch"><canvas id="c4" style="display: block; box-sizing: border-box; height: 220px; width: 723px;" width="723" height="220"></canvas></div></div>
+</div>
+
+<!-- Loan Config -->
+<div class="g2" style="margin-bottom:10px">
+  <div class="card">
+    <h2 style="margin-top:0">Loan Configuration</h2>
+    <p style="font-size:10px;color:var(--mu);margin-bottom:6px">Rate scales with amount. ~9% under $200K, ~11% over. Annuity repayment.</p>
+    <div class="fb"><span>Loan Amount:</span><input type="number" id="loanAmt" value="250000" step="10000" onchange="recalc()" style="width:90px"></div>
+    <div class="fb"><span>Loan Quarter:</span>
+      <select id="loanQ" onchange="recalc()">
+        <option value="1" selected="selected">Q2 Y1</option><option value="2">Q3 Y1</option><option value="3">Q4 Y1</option><option value="4">Q1 Y2</option>
+      </select>
+    </div>
+    <div class="fb"><span>Payback Period:</span>
+      <select id="loanTerm" onchange="recalc()">
+        <option value="4">4 quarters</option><option value="8" selected="selected">8 quarters</option><option value="12">12 quarters</option>
+      </select>
+    </div>
+    <div class="loan-box" id="loanSummary"><div class="fb"><span>Rate:</span><span>11% annual / 2.75%/Q</span></div>
+    <div class="fb"><span>Payment:</span><span style="color:var(--rd)">$35,239/Q</span></div>
+    <div class="fb"><span>Total Interest:</span><span style="color:var(--rd)">$31,916</span></div>
+    <div class="fb"><span>Paid off:</span><span>Q2Y3</span></div></div>
+  </div>
+  <div class="card">
+    <h2 style="margin-top:0">Dividend Strategy</h2>
+    <p style="font-size:10px;color:var(--mu);margin-bottom:6px">Set payout % of available cash (after loan payment + $20K min buffer).</p>
+    <div class="fb"><span>Payout % of Available:</span><input type="number" id="divPct" value="70" step="5" min="0" max="100" onchange="recalc()" style="width:60px"><span>%</span></div>
+    <div class="fb"><span>Min Cash Buffer:</span><input type="number" id="divBuffer" value="15000" step="5000" onchange="recalc()" style="width:90px"></div>
+    <div class="fb"><span>Start Dividends From:</span>
+      <select id="divStart" onchange="recalc()">
+        <option value="2" selected="selected">Q3 Y1</option><option value="3">Q4 Y1</option><option value="4">Q1 Y2</option>
+      </select>
+    </div>
+    <div class="fb"><span>Shares Outstanding:</span><input type="number" id="shares" value="1000" step="100" onchange="recalc()" style="width:70px"></div>
+    <div class="div-highlight" id="divSummary"><div class="fb"><span>Total Dividends:</span><span style="color:var(--gn);font-weight:700">$459,425</span></div>
+  <div class="fb"><span>Per Share (1000 shares):</span><span style="color:var(--gn);font-weight:700">$459.43</span></div>
+  <div class="fb"><span>Quarters Paying:</span><span>6 of 10</span></div></div>
+  </div>
+</div>
+
+<!-- Products -->
+<h2>Products &amp; R&amp;D</h2>
+<div class="g4" style="margin-bottom:10px" id="prodCards"><div class="prod-card"><div class="fb"><h4 style="color:#58a6ff">Basic</h4><span style="color:var(--gn);font-size:10px">DONE</span></div>
+    <div class="fb" style="font-size:10px"><span style="color:var(--mu)">R&amp;D:</span><span>$50K / 1Q</span></div>
+    <div class="fb" style="font-size:10px"><span style="color:var(--mu)">Material:</span><span>$100 -&gt; <span style="color:var(--gn)">$90</span></span></div>
+    <div style="margin-top:4px;border-top:1px solid var(--bd);padding-top:3px">
+    <div class="upgrade-row"><label class="sw"><input type="checkbox" checked="checked" onchange="togRD('basic','base',this.checked)"><span class="sl"></span></label><span class="upgrade-name">Base</span><span class="upgrade-cost">$50K</span><span class="upgrade-eff">1Q</span></div>
+    <div class="upgrade-row"><label class="sw"><input type="checkbox" checked="checked" onchange="togRD('basic','waste',this.checked)"><span class="sl"></span></label><span class="upgrade-name">Waste Reduction</span><span class="upgrade-cost">$80K</span><span class="upgrade-eff">-10%</span></div><div class="upgrade-row"><label class="sw"><input type="checkbox" onchange="togRD('basic','light',this.checked)"><span class="sl"></span></label><span class="upgrade-name">Lightweight</span><span class="upgrade-cost">$160K</span><span class="upgrade-eff">-20%</span></div><div class="upgrade-row"><label class="sw"><input type="checkbox" onchange="togRD('basic','sub',this.checked)"><span class="sl"></span></label><span class="upgrade-name">Substitute Mat.</span><span class="upgrade-cost">$120K</span><span class="upgrade-eff">-15%</span></div>
+    </div></div><div class="prod-card"><div class="fb"><h4 style="color:#d29922">Sporty</h4><span style="color:var(--ac);font-size:10px">ACTIVE</span></div>
+    <div class="fb" style="font-size:10px"><span style="color:var(--mu)">R&amp;D:</span><span>$200K / 2Q</span></div>
+    <div class="fb" style="font-size:10px"><span style="color:var(--mu)">Material:</span><span>$160 -&gt; <span style="color:var(--gn)">$144</span></span></div>
+    <div style="margin-top:4px;border-top:1px solid var(--bd);padding-top:3px">
+    <div class="upgrade-row"><label class="sw"><input type="checkbox" checked="checked" onchange="togRD('sporty','base',this.checked)"><span class="sl"></span></label><span class="upgrade-name">Base</span><span class="upgrade-cost">$200K</span><span class="upgrade-eff">2Q</span></div>
+    <div class="upgrade-row"><label class="sw"><input type="checkbox" checked="checked" onchange="togRD('sporty','waste',this.checked)"><span class="sl"></span></label><span class="upgrade-name">Waste Reduction</span><span class="upgrade-cost">$80K</span><span class="upgrade-eff">-10%</span></div><div class="upgrade-row"><label class="sw"><input type="checkbox" onchange="togRD('sporty','light',this.checked)"><span class="sl"></span></label><span class="upgrade-name">Lightweight</span><span class="upgrade-cost">$160K</span><span class="upgrade-eff">-20%</span></div><div class="upgrade-row"><label class="sw"><input type="checkbox" onchange="togRD('sporty','sub',this.checked)"><span class="sl"></span></label><span class="upgrade-name">Substitute Mat.</span><span class="upgrade-cost">$120K</span><span class="upgrade-eff">-15%</span></div>
+    </div></div><div class="prod-card"><div class="fb"><h4 style="color:#3fb950">Safe</h4><span style="color:var(--mu);font-size:10px">Q4Y1</span></div>
+    <div class="fb" style="font-size:10px"><span style="color:var(--mu)">R&amp;D:</span><span>$100K / 2Q</span></div>
+    <div class="fb" style="font-size:10px"><span style="color:var(--mu)">Material:</span><span>$140 </span></div>
+    <div style="margin-top:4px;border-top:1px solid var(--bd);padding-top:3px">
+    <div class="upgrade-row"><label class="sw"><input type="checkbox" onchange="togRD('safe','base',this.checked)"><span class="sl"></span></label><span class="upgrade-name">Base</span><span class="upgrade-cost">$100K</span><span class="upgrade-eff">2Q</span></div>
+    <div class="upgrade-row"><label class="sw"><input type="checkbox" onchange="togRD('safe','waste',this.checked)"><span class="sl"></span></label><span class="upgrade-name">Waste Reduction</span><span class="upgrade-cost">$80K</span><span class="upgrade-eff">-10%</span></div><div class="upgrade-row"><label class="sw"><input type="checkbox" onchange="togRD('safe','light',this.checked)"><span class="sl"></span></label><span class="upgrade-name">Lightweight</span><span class="upgrade-cost">$160K</span><span class="upgrade-eff">-20%</span></div><div class="upgrade-row"><label class="sw"><input type="checkbox" onchange="togRD('safe','sub',this.checked)"><span class="sl"></span></label><span class="upgrade-name">Substitute Mat.</span><span class="upgrade-cost">$120K</span><span class="upgrade-eff">-15%</span></div>
+    </div></div><div class="prod-card"><div class="fb"><h4 style="color:#bc8cff">Green</h4><span style="color:var(--mu);font-size:10px">Q1Y2</span></div>
+    <div class="fb" style="font-size:10px"><span style="color:var(--mu)">R&amp;D:</span><span>$250K / 3Q</span></div>
+    <div class="fb" style="font-size:10px"><span style="color:var(--mu)">Material:</span><span>$120 </span></div>
+    <div style="margin-top:4px;border-top:1px solid var(--bd);padding-top:3px">
+    <div class="upgrade-row"><label class="sw"><input type="checkbox" onchange="togRD('green','base',this.checked)"><span class="sl"></span></label><span class="upgrade-name">Base</span><span class="upgrade-cost">$250K</span><span class="upgrade-eff">3Q</span></div>
+    <div class="upgrade-row"><label class="sw"><input type="checkbox" onchange="togRD('green','waste',this.checked)"><span class="sl"></span></label><span class="upgrade-name">Waste Reduction</span><span class="upgrade-cost">$80K</span><span class="upgrade-eff">-10%</span></div><div class="upgrade-row"><label class="sw"><input type="checkbox" onchange="togRD('green','light',this.checked)"><span class="sl"></span></label><span class="upgrade-name">Lightweight</span><span class="upgrade-cost">$160K</span><span class="upgrade-eff">-20%</span></div><div class="upgrade-row"><label class="sw"><input type="checkbox" onchange="togRD('green','sub',this.checked)"><span class="sl"></span></label><span class="upgrade-name">Substitute Mat.</span><span class="upgrade-cost">$120K</span><span class="upgrade-eff">-15%</span></div>
+    </div></div></div>
+
+<!-- Factory 2 -->
+<div class="g2" style="margin-bottom:10px">
+  <div class="card">
+    <h3>Factory 1 (Jaiden) - Basic Janepack</h3>
+    <div class="fb"><span>Status:</span><span style="color:var(--gn)">Active from Q2 Y1</span></div>
+    <div class="fb"><span>Capacity:</span><span>1,000 units/Q</span></div>
+  </div>
+  <div class="card">
+    <h3>Factory 2</h3>
+    <div class="fb" style="margin-bottom:4px"><span>Build Quarter:</span>
+      <select id="f2q" onchange="recalc()"><option value="-1">None</option><option value="1">Q2 Y1</option><option value="2" selected="selected">Q3 Y1</option><option value="3">Q4 Y1</option><option value="4">Q1 Y2</option></select>
+    </div>
+    <div class="fb"><span>Product:</span>
+      <select id="f2p" onchange="recalc()"><option value="basic">Basic</option><option value="sporty" selected="selected">Sporty</option><option value="safe">Safe</option><option value="green">Green</option></select>
+    </div>
+    <div class="fb"><span>Cost: $100K + $20K/Q maintenance</span></div>
+  </div>
+</div>
+
+<!-- Inputs -->
+<div class="card" style="overflow-x:auto;margin-bottom:10px">
+  <h2 style="margin-top:0">Quarter Inputs</h2>
+  <table id="tIn"><tbody><tr><th></th><th>Q1Y1</th><th>Q2Y1</th><th>Q3Y1</th><th>Q4Y1</th><th>Q1Y2</th><th>Q2Y2</th><th>Q3Y2</th><th>Q4Y2</th><th>Q1Y3</th><th>Q2Y3</th></tr><tr><td>F1 Units</td><td><input type="number" id="u1_0" value="0" step="100" onchange="onI('u1',0,this.value)"></td><td><input type="number" id="u1_1" value="1000" step="100" onchange="onI('u1',1,this.value)"></td><td><input type="number" id="u1_2" value="1000" step="100" onchange="onI('u1',2,this.value)"></td><td><input type="number" id="u1_3" value="1000" step="100" onchange="onI('u1',3,this.value)"></td><td><input type="number" id="u1_4" value="1000" step="100" onchange="onI('u1',4,this.value)"></td><td><input type="number" id="u1_5" value="1000" step="100" onchange="onI('u1',5,this.value)"></td><td><input type="number" id="u1_6" value="1000" step="100" onchange="onI('u1',6,this.value)"></td><td><input type="number" id="u1_7" value="1000" step="100" onchange="onI('u1',7,this.value)"></td><td><input type="number" id="u1_8" value="1000" step="100" onchange="onI('u1',8,this.value)"></td><td><input type="number" id="u1_9" value="1000" step="100" onchange="onI('u1',9,this.value)"></td></tr><tr><td>F1 Price</td><td><input type="number" id="p1_0" value="250" step="1" onchange="onI('p1',0,this.value)"></td><td><input type="number" id="p1_1" value="255" step="1" onchange="onI('p1',1,this.value)"></td><td><input type="number" id="p1_2" value="252" step="1" onchange="onI('p1',2,this.value)"></td><td><input type="number" id="p1_3" value="249" step="1" onchange="onI('p1',3,this.value)"></td><td><input type="number" id="p1_4" value="246" step="1" onchange="onI('p1',4,this.value)"></td><td><input type="number" id="p1_5" value="243" step="1" onchange="onI('p1',5,this.value)"></td><td><input type="number" id="p1_6" value="240" step="1" onchange="onI('p1',6,this.value)"></td><td><input type="number" id="p1_7" value="240" step="1" onchange="onI('p1',7,this.value)"></td><td><input type="number" id="p1_8" value="240" step="1" onchange="onI('p1',8,this.value)"></td><td><input type="number" id="p1_9" value="240" step="1" onchange="onI('p1',9,this.value)"></td></tr><tr><td>Marketing</td><td><input type="number" id="mk_0" value="12000" step="1000" onchange="onI('mk',0,this.value)"></td><td><input type="number" id="mk_1" value="12000" step="1000" onchange="onI('mk',1,this.value)"></td><td><input type="number" id="mk_2" value="12000" step="1000" onchange="onI('mk',2,this.value)"></td><td><input type="number" id="mk_3" value="12000" step="1000" onchange="onI('mk',3,this.value)"></td><td><input type="number" id="mk_4" value="12000" step="1000" onchange="onI('mk',4,this.value)"></td><td><input type="number" id="mk_5" value="12000" step="1000" onchange="onI('mk',5,this.value)"></td><td><input type="number" id="mk_6" value="12000" step="1000" onchange="onI('mk',6,this.value)"></td><td><input type="number" id="mk_7" value="12000" step="1000" onchange="onI('mk',7,this.value)"></td><td><input type="number" id="mk_8" value="12000" step="1000" onchange="onI('mk',8,this.value)"></td><td><input type="number" id="mk_9" value="12000" step="1000" onchange="onI('mk',9,this.value)"></td></tr></tbody></table>
+</div>
+<div class="card" style="overflow-x:auto;margin-bottom:10px">
+  <h2 style="margin-top:0">Income Statement</h2>
+  <table id="tPL"><tbody><tr><th></th><th>Q1Y1</th><th>Q2Y1</th><th>Q3Y1</th><th>Q4Y1</th><th>Q1Y2</th><th>Q2Y2</th><th>Q3Y2</th><th>Q4Y2</th><th>Q1Y3</th><th>Q2Y3</th></tr><tr><td style="">Revenue</td><td class="v" style="">-</td><td class="v" style="">$255,000</td><td class="v" style="">$252,000</td><td class="v" style="">$529,000</td><td class="v" style="">$526,000</td><td class="v" style="">$523,000</td><td class="v" style="">$520,000</td><td class="v" style="">$520,000</td><td class="v" style="">$520,000</td><td class="v" style="">$520,000</td></tr><tr><td style="">  F1</td><td class="v" style="">-</td><td class="v" style="">$255,000</td><td class="v" style="">$252,000</td><td class="v" style="">$249,000</td><td class="v" style="">$246,000</td><td class="v" style="">$243,000</td><td class="v" style="">$240,000</td><td class="v" style="">$240,000</td><td class="v" style="">$240,000</td><td class="v" style="">$240,000</td></tr><tr><td style="">  F2</td><td class="v" style="">-</td><td class="v" style="">-</td><td class="v" style="">-</td><td class="v" style="">$280,000</td><td class="v" style="">$280,000</td><td class="v" style="">$280,000</td><td class="v" style="">$280,000</td><td class="v" style="">$280,000</td><td class="v" style="">$280,000</td><td class="v" style="">$280,000</td></tr><tr><td style="color:var(--tx);font-weight:600">COGS</td><td class="vm" style="font-weight:600">-</td><td class="vg" style="font-weight:600">$158,080</td><td class="vg" style="font-weight:600">$148,080</td><td class="vg" style="font-weight:600">$366,160</td><td class="vg" style="font-weight:600">$350,160</td><td class="vg" style="font-weight:600">$350,160</td><td class="vg" style="font-weight:600">$350,160</td><td class="vg" style="font-weight:600">$350,160</td><td class="vg" style="font-weight:600">$350,160</td><td class="vg" style="font-weight:600">$350,160</td></tr><tr><td style="color:var(--tx);font-weight:600">GROSS PROFIT</td><td class="vm" style="font-weight:600">-</td><td class="vg" style="font-weight:600">$96,920</td><td class="vg" style="font-weight:600">$103,920</td><td class="vg" style="font-weight:600">$162,840</td><td class="vg" style="font-weight:600">$175,840</td><td class="vg" style="font-weight:600">$172,840</td><td class="vg" style="font-weight:600">$169,840</td><td class="vg" style="font-weight:600">$169,840</td><td class="vg" style="font-weight:600">$169,840</td><td class="vg" style="font-weight:600">$169,840</td></tr><tr><td style="color:var(--tx);font-weight:600">OpEx</td><td class="vg" style="font-weight:600">$12,000</td><td class="vg" style="font-weight:600">$41,167</td><td class="vg" style="font-weight:600">$64,500</td><td class="vg" style="font-weight:600">$89,500</td><td class="vg" style="font-weight:600">$96,167</td><td class="vg" style="font-weight:600">$96,167</td><td class="vg" style="font-weight:600">$96,167</td><td class="vg" style="font-weight:600">$96,167</td><td class="vg" style="font-weight:600">$96,167</td><td class="vg" style="font-weight:600">$96,167</td></tr><tr><td style="color:var(--tx);font-weight:600">EBIT</td><td class="vr" style="font-weight:600">($12,000)</td><td class="vg" style="font-weight:600">$55,753</td><td class="vg" style="font-weight:600">$39,420</td><td class="vg" style="font-weight:600">$73,340</td><td class="vg" style="font-weight:600">$79,673</td><td class="vg" style="font-weight:600">$76,673</td><td class="vg" style="font-weight:600">$73,673</td><td class="vg" style="font-weight:600">$73,673</td><td class="vg" style="font-weight:600">$73,673</td><td class="vg" style="font-weight:600">$73,673</td></tr><tr><td style="">Interest</td><td class="v" style="">-</td><td class="v" style="">-</td><td class="v" style="">$6,875</td><td class="v" style="">$6,095</td><td class="v" style="">$5,294</td><td class="v" style="">$4,470</td><td class="v" style="">$3,624</td><td class="v" style="">$2,754</td><td class="v" style="">$1,861</td><td class="v" style="">$943</td></tr><tr><td style="color:var(--tx);font-weight:600">NET INCOME</td><td class="vr" style="font-weight:600">($12,000)</td><td class="vg" style="font-weight:600">$55,753</td><td class="vg" style="font-weight:600">$32,545</td><td class="vg" style="font-weight:600">$67,245</td><td class="vg" style="font-weight:600">$74,380</td><td class="vg" style="font-weight:600">$72,203</td><td class="vg" style="font-weight:600">$70,050</td><td class="vg" style="font-weight:600">$70,919</td><td class="vg" style="font-weight:600">$71,812</td><td class="vg" style="font-weight:600">$72,730</td></tr><tr><td style="color:var(--tx);font-weight:600">Cumulative NI</td><td class="vr" style="font-weight:600">($12,000)</td><td class="vg" style="font-weight:600">$43,753</td><td class="vg" style="font-weight:600">$76,298</td><td class="vg" style="font-weight:600">$143,543</td><td class="vg" style="font-weight:600">$217,923</td><td class="vg" style="font-weight:600">$290,127</td><td class="vg" style="font-weight:600">$360,176</td><td class="vg" style="font-weight:600">$431,095</td><td class="vg" style="font-weight:600">$502,907</td><td class="vg" style="font-weight:600">$575,637</td></tr></tbody></table>
+</div>
+<div class="card" style="overflow-x:auto;margin-bottom:10px">
+  <h2 style="margin-top:0">Cash Flow (incl. Dividends &amp; Loan)</h2>
+  <table id="tCF"><tbody><tr><th></th><th>Q1Y1</th><th>Q2Y1</th><th>Q3Y1</th><th>Q4Y1</th><th>Q1Y2</th><th>Q2Y2</th><th>Q3Y2</th><th>Q4Y2</th><th>Q1Y3</th><th>Q2Y3</th></tr><tr><td style="">Operating CF</td><td class="v" style="">($12,000)</td><td class="v" style="">$64,920</td><td class="v" style="">$71,920</td><td class="v" style="">$110,840</td><td class="v" style="">$123,840</td><td class="v" style="">$120,840</td><td class="v" style="">$117,840</td><td class="v" style="">$117,840</td><td class="v" style="">$117,840</td><td class="v" style="">$117,840</td></tr><tr><td style="">Investing</td><td class="v" style="">($150,000)</td><td class="v" style="">($280,000)</td><td class="v" style="">($100,000)</td><td class="v" style="">($80,000)</td><td class="v" style="">-</td><td class="v" style="">-</td><td class="v" style="">-</td><td class="v" style="">-</td><td class="v" style="">-</td><td class="v" style="">-</td></tr><tr><td style="">Financing (loan net)</td><td class="v" style="">-</td><td class="v" style="">$250,000</td><td class="v" style="">($35,239)</td><td class="v" style="">($35,239)</td><td class="v" style="">($35,239)</td><td class="v" style="">($35,239)</td><td class="v" style="">($35,239)</td><td class="v" style="">($35,239)</td><td class="v" style="">($35,239)</td><td class="v" style="">($35,239)</td></tr><tr><td style="color:var(--tx);font-weight:600">Dividends Paid</td><td class="vm" style="font-weight:600">-</td><td class="vm" style="font-weight:600">-</td><td class="vm" style="font-weight:600">-</td><td class="vm" style="font-weight:600">-</td><td class="vr" style="font-weight:600">($55,161)</td><td class="vr" style="font-weight:600">($76,469)</td><td class="vr" style="font-weight:600">($80,761)</td><td class="vr" style="font-weight:600">($82,048)</td><td class="vr" style="font-weight:600">($82,435)</td><td class="vr" style="font-weight:600">($82,551)</td></tr><tr><td style="">Beginning Cash</td><td class="v" style="">$200,000</td><td class="v" style="">$38,000</td><td class="v" style="">$72,920</td><td class="v" style="">$9,601</td><td class="v" style="">$5,201</td><td class="v" style="">$38,641</td><td class="v" style="">$47,772</td><td class="v" style="">$49,612</td><td class="v" style="">$50,164</td><td class="v" style="">$50,330</td></tr><tr><td style="color:var(--tx);font-weight:600">ENDING CASH</td><td class="vg" style="font-weight:600">$38,000</td><td class="vg" style="font-weight:600">$72,920</td><td class="vg" style="font-weight:600">$9,601</td><td class="vg" style="font-weight:600">$5,201</td><td class="vg" style="font-weight:600">$38,641</td><td class="vg" style="font-weight:600">$47,772</td><td class="vg" style="font-weight:600">$49,612</td><td class="vg" style="font-weight:600">$50,164</td><td class="vg" style="font-weight:600">$50,330</td><td class="vg" style="font-weight:600">$50,379</td></tr><tr><td style="">Loan Balance</td><td class="v" style="">-</td><td class="v" style="">$250,000</td><td class="v" style="">$221,636</td><td class="v" style="">$192,491</td><td class="v" style="">$162,545</td><td class="v" style="">$131,776</td><td class="v" style="">$100,160</td><td class="v" style="">$67,675</td><td class="v" style="">$34,296</td><td class="v" style="">-</td></tr><tr><td style="color:var(--tx);font-weight:600">Cumul. Dividends</td><td class="vm" style="font-weight:600">-</td><td class="vm" style="font-weight:600">-</td><td class="vm" style="font-weight:600">-</td><td class="vm" style="font-weight:600">-</td><td class="vg" style="font-weight:600">$55,161</td><td class="vg" style="font-weight:600">$131,630</td><td class="vg" style="font-weight:600">$212,391</td><td class="vg" style="font-weight:600">$294,439</td><td class="vg" style="font-weight:600">$376,874</td><td class="vg" style="font-weight:600">$459,425</td></tr></tbody></table>
+</div>
+</div>
+
+<script>
+const Q=10,QL=['Q1Y1','Q2Y1','Q3Y1','Q4Y1','Q1Y2','Q2Y2','Q3Y2','Q4Y2','Q1Y3','Q2Y3'];
+const P={
+  basic:{name:'Basic',mat:100,pr:[250,255,252,249,246,243,240,240,240,240],rc:50000,rt:1,aq:0,col:'#58a6ff'},
+  sporty:{name:'Sporty',mat:160,pr:[280,280,280,280,280,280,280,280,280,280],rc:200000,rt:2,aq:0,col:'#d29922'},
+  safe:{name:'Safe',mat:140,pr:[268,270,272,274,270,272,274,276,278,280],rc:100000,rt:2,aq:3,col:'#3fb950'},
+  green:{name:'Green',mat:120,pr:[276,276,277,277,278,278,278,279,279,280],rc:250000,rt:3,aq:4,col:'#bc8cff'}
+};
+const UPG=[{id:'waste',n:'Waste Reduction',c:80000,e:.10},{id:'light',n:'Lightweight',c:160000,e:.20},{id:'sub',n:'Substitute Mat.',c:120000,e:.15}];
+const LAB1K=58080;
+
+let S={};
+function init(){
+  S={
+    u1:[0,1000,1000,1000,1000,1000,1000,1000,1000,1000],
+    p1:[...P.basic.pr],
+    mkt:[12000,12000,12000,12000,12000,12000,12000,12000,12000,12000],
+    rd:{
+      basic:{base:true,bQ:0,waste:true,wQ:1,light:false,lQ:-1,sub:false,sQ:-1},
+      sporty:{base:false,bQ:-1,waste:false,wQ:-1,light:false,lQ:-1,sub:false,sQ:-1},
+      safe:{base:false,bQ:-1,waste:false,wQ:-1,light:false,lQ:-1,sub:false,sQ:-1},
+      green:{base:false,bQ:-1,waste:false,wQ:-1,light:false,lQ:-1,sub:false,sQ:-1}
+    }
+  };
+}
+init();
+
+function loanCalc(amt,termQ,annualRate){
+  if(amt<=0)return{pmt:0,schedule:[],totalInt:0};
+  let qRate=annualRate/4;
+  let pmt=amt*qRate/(1-Math.pow(1+qRate,-termQ));
+  let sched=[],rem=amt,totInt=0;
+  for(let i=0;i<termQ;i++){
+    let intP=rem*qRate;
+    let repay=pmt-intP;
+    totInt+=intP;
+    rem-=repay;
+    sched.push({int:intP,repay:repay,rem:Math.max(0,rem)});
+  }
+  return{pmt,schedule:sched,totalInt:totInt};
+}
+
+function getRate(amt){return amt>200000?0.11:0.09;}
+
+const presets={
+  conservative:()=>{
+    init();
+    document.getElementById('loanAmt').value=0;document.getElementById('loanQ').value='1';document.getElementById('loanTerm').value='8';
+    document.getElementById('f2q').value='-1';document.getElementById('f2p').value='basic';
+    document.getElementById('divPct').value=60;document.getElementById('divStart').value='2';document.getElementById('divBuffer').value=20000;document.getElementById('shares').value=1000;
+  },
+  sportyQ2:()=>{
+    init();
+    S.rd.sporty={base:true,bQ:1,waste:false,wQ:-1,light:false,lQ:-1,sub:false,sQ:-1};
+    S.rd.basic.waste=false;S.rd.basic.wQ=-1;
+    document.getElementById('loanAmt').value=250000;document.getElementById('loanQ').value='1';document.getElementById('loanTerm').value='8';
+    document.getElementById('f2q').value='2';document.getElementById('f2p').value='sporty';
+    document.getElementById('divPct').value=60;document.getElementById('divStart').value='2';document.getElementById('divBuffer').value=20000;document.getElementById('shares').value=1000;
+  },
+  optimal:()=>{
+    init();
+    S.rd.sporty={base:true,bQ:1,waste:true,wQ:3,light:false,lQ:-1,sub:false,sQ:-1};
+    document.getElementById('loanAmt').value=250000;document.getElementById('loanQ').value='1';document.getElementById('loanTerm').value='8';
+    document.getElementById('f2q').value='2';document.getElementById('f2p').value='sporty';
+    document.getElementById('divPct').value=70;document.getElementById('divStart').value='2';document.getElementById('divBuffer').value=15000;document.getElementById('shares').value=1000;
+  }
+};
+
+function loadP(n,el){document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));el.classList.add('active');presets[n]();buildAll();}
+function fmt(n){if(Math.abs(n)<1)return'-';let s='$'+Math.abs(Math.round(n)).toLocaleString();return n<0?'('+s+')':s}
+function fmtK(n){if(Math.abs(n)<1)return'-';let s='$'+Math.abs(Math.round(n/1000)).toLocaleString()+'K';return n<0?'('+s+')':s}
+function vc(n){return n>0?'vg':n<0?'vr':'vm'}
+
+function getMatF(prod,q){
+  let f=1,r=S.rd[prod];
+  if(r.waste&&r.wQ>=0&&q>=r.wQ+1)f*=.9;
+  if(r.light&&r.lQ>=0&&q>=r.lQ+1)f*=.8;
+  if(r.sub&&r.sQ>=0&&q>=r.sQ+1)f*=.85;
+  return f;
+}
+function prodRdy(prod,q){let r=S.rd[prod];if(!r.base||r.bQ<0)return false;return q>=r.bQ+P[prod].rt;}
+
+function buildProdCards(){
+  let h='';
+  for(let pk of['basic','sporty','safe','green']){
+    let p=P[pk],r=S.rd[pk];
+    let mf=1;if(r.waste)mf*=.9;if(r.light)mf*=.8;if(r.sub)mf*=.85;
+    let tag=r.base&&pk==='basic'?'<span style="color:var(--gn);font-size:10px">DONE</span>':r.base?'<span style="color:var(--ac);font-size:10px">ACTIVE</span>':p.aq<=1?'<span style="color:var(--or);font-size:10px">AVAIL</span>':`<span style="color:var(--mu);font-size:10px">Q${['1Y1','2Y1','3Y1','4Y1','1Y2'][p.aq]||'?'}</span>`;
+    h+=`<div class="prod-card"><div class="fb"><h4 style="color:${p.col}">${p.name}</h4>${tag}</div>
+    <div class="fb" style="font-size:10px"><span style="color:var(--mu)">R&D:</span><span>${fmtK(p.rc)} / ${p.rt}Q</span></div>
+    <div class="fb" style="font-size:10px"><span style="color:var(--mu)">Material:</span><span>${fmt(p.mat)} ${mf<1?'-> <span style=color:var(--gn)>'+fmt(Math.round(p.mat*mf))+'</span>':''}</span></div>
+    <div style="margin-top:4px;border-top:1px solid var(--bd);padding-top:3px">
+    <div class="upgrade-row"><label class="sw"><input type="checkbox" ${r.base?'checked':''} onchange="togRD('${pk}','base',this.checked)"><span class="sl"></span></label><span class="upgrade-name">Base</span><span class="upgrade-cost">${fmtK(p.rc)}</span><span class="upgrade-eff">${p.rt}Q</span></div>
+    ${UPG.map(u=>`<div class="upgrade-row"><label class="sw"><input type="checkbox" ${r[u.id]?'checked':''} onchange="togRD('${pk}','${u.id}',this.checked)"><span class="sl"></span></label><span class="upgrade-name">${u.n}</span><span class="upgrade-cost">${fmtK(u.c)}</span><span class="upgrade-eff">-${(u.e*100).toFixed(0)}%</span></div>`).join('')}
+    </div></div>`;
+  }
+  document.getElementById('prodCards').innerHTML=h;
+}
+
+function togRD(pk,type,on){
+  let r=S.rd[pk];r[type]=on;
+  let qk={base:'bQ',waste:'wQ',light:'lQ',sub:'sQ'}[type];
+  if(on){
+    if(type==='base'&&r.bQ<0)r.bQ=Math.max(P[pk].aq,0);
+    if(type==='waste'&&r.wQ<0)r.wQ=Math.max(r.base?r.bQ+P[pk].rt:2,1);
+    if(type==='light'&&r.lQ<0)r.lQ=Math.max(r.waste?r.wQ+1:2,2);
+    if(type==='sub'&&r.sQ<0)r.sQ=Math.max(r.light?r.lQ+1:3,3);
+  }else{r[qk]=-1;}
+  buildAll();
+}
+
+function inp(id,q,v,s=1000){return`<input type="number" id="${id}_${q}" value="${v}" step="${s}" onchange="onI('${id}',${q},this.value)">`}
+function onI(id,q,v){v=parseFloat(v)||0;if(id==='u1')S.u1[q]=v;else if(id==='p1')S.p1[q]=v;else if(id==='mk')S.mkt[q]=v;recalc();}
+
+function buildInp(){
+  let rows=[{l:'F1 Units',id:'u1',d:S.u1,s:100},{l:'F1 Price',id:'p1',d:S.p1,s:1},{l:'Marketing',id:'mk',d:S.mkt,s:1000}];
+  let h='<tr><th></th>'+QL.map(l=>`<th>${l}</th>`).join('')+'</tr>';
+  rows.forEach(r=>{h+=`<tr><td>${r.l}</td>`+Array.from({length:Q},(_,q)=>`<td>${inp(r.id,q,r.d[q],r.s)}</td>`).join('')+'</tr>';});
+  document.getElementById('tIn').innerHTML=h;
+}
+
+let c1,c2,c3,c4;
+function initC(){
+  const o=()=>({responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:'#8b949e',font:{size:9,family:'monospace'}}}},scales:{x:{ticks:{color:'#8b949e',font:{size:8}},grid:{color:'#2d3548'}},y:{ticks:{color:'#8b949e',font:{size:8},callback:v=>'$'+(v/1000)+'K'},grid:{color:'#2d3548'}}}});
+  c1=new Chart(document.getElementById('c1'),{type:'bar',data:{labels:QL,datasets:[]},options:o()});
+  c2=new Chart(document.getElementById('c2'),{type:'line',data:{labels:QL,datasets:[]},options:o()});
+  c3=new Chart(document.getElementById('c3'),{type:'line',data:{labels:QL,datasets:[]},options:{...o(),scales:{...o().scales,y:{ticks:{color:'#8b949e',font:{size:8},callback:v=>v+'%'},grid:{color:'#2d3548'}}}}});
+  c4=new Chart(document.getElementById('c4'),{type:'bar',data:{labels:QL,datasets:[]},options:o()});
+}
+
+function recalc(){
+  let lAmt=parseFloat(document.getElementById('loanAmt').value)||0;
+  let lQ=parseInt(document.getElementById('loanQ').value);
+  let lTerm=parseInt(document.getElementById('loanTerm').value);
+  let divPct=(parseFloat(document.getElementById('divPct').value)||0)/100;
+  let divBuf=parseFloat(document.getElementById('divBuffer').value)||0;
+  let divStartQ=parseInt(document.getElementById('divStart').value);
+  let shares=parseFloat(document.getElementById('shares').value)||1000;
+  let f2q=parseInt(document.getElementById('f2q').value);
+  let f2p=document.getElementById('f2p').value;
+
+  // Loan
+  let rate=getRate(lAmt);
+  let loan=loanCalc(lAmt,lTerm,rate);
+  let loanPmt=Array(Q).fill(0),loanInt=Array(Q).fill(0),loanBal=Array(Q).fill(0);
+  if(lAmt>0){
+    loanBal[lQ]=lAmt;
+    for(let i=0;i<loan.schedule.length;i++){
+      let q=lQ+1+i;
+      if(q>=Q)break;
+      loanPmt[q]=loan.pmt;
+      loanInt[q]=loan.schedule[i].int;
+      loanBal[q]=loan.schedule[i].rem;
+    }
+    // Fill balance for quarters before first payment
+    for(let q=lQ;q>=0;q--)if(q===lQ)loanBal[q]=lAmt;
+    // Forward fill remaining balance
+    for(let q=lQ+1;q<Q;q++){
+      let idx=q-lQ-1;
+      if(idx>=0&&idx<loan.schedule.length)loanBal[q]=loan.schedule[idx].rem;
+      else if(idx>=loan.schedule.length)loanBal[q]=0;
+    }
+  }
+
+  // Loan summary
+  let lsH='';
+  if(lAmt>0){
+    lsH=`<div class="fb"><span>Rate:</span><span>${(rate*100).toFixed(0)}% annual / ${(rate/4*100).toFixed(2)}%/Q</span></div>
+    <div class="fb"><span>Payment:</span><span style="color:var(--rd)">${fmt(Math.round(loan.pmt))}/Q</span></div>
+    <div class="fb"><span>Total Interest:</span><span style="color:var(--rd)">${fmt(Math.round(loan.totalInt))}</span></div>
+    <div class="fb"><span>Paid off:</span><span>${lQ+1+lTerm<=Q?QL[lQ+lTerm]:'After game'}</span></div>`;
+  }else lsH='<span style="color:var(--mu)">No loan configured</span>';
+  document.getElementById('loanSummary').innerHTML=lsH;
+
+  // R&D spend
+  let rdSp=Array(Q).fill(0);
+  for(let pk of['basic','sporty','safe','green']){
+    let r=S.rd[pk];
+    if(r.base&&r.bQ>=0&&r.bQ<Q)rdSp[r.bQ]+=P[pk].rc;
+    if(r.waste&&r.wQ>=0&&r.wQ<Q)rdSp[r.wQ]+=80000;
+    if(r.light&&r.lQ>=0&&r.lQ<Q)rdSp[r.lQ]+=160000;
+    if(r.sub&&r.sQ>=0&&r.sQ<Q)rdSp[r.sQ]+=120000;
+  }
+
+  let amort=Array(Q).fill(0);
+  for(let q=0;q<Q;q++){if(rdSp[q]>0){let p=rdSp[q]/12;for(let f=q+1;f<Q;f++)amort[f]+=p;}}
+
+  let facSp=Array(Q).fill(0);facSp[0]=100000;
+  if(f2q>=0&&f2q<Q)facSp[f2q]+=100000;
+
+  let dep=Array(Q).fill(0);
+  for(let q=0;q<Q;q++){if(facSp[q]>0){let p=facSp[q]/20;for(let f=q+1;f<Q;f++)dep[f]+=p;}}
+
+  let maint=Array(Q).fill(0);
+  for(let q=1;q<Q;q++)maint[q]+=20000;
+  if(f2q>=0){for(let q=f2q+1;q<Q;q++)maint[q]+=20000;}
+
+  // F1
+  let r1=Array(Q).fill(0),m1=Array(Q).fill(0),l1=Array(Q).fill(0);
+  for(let q=0;q<Q;q++){let u=S.u1[q];r1[q]=u*S.p1[q];m1[q]=u*P.basic.mat*getMatF('basic',q);l1[q]=u>0?LAB1K:0;}
+
+  // F2
+  let r2=Array(Q).fill(0),m2=Array(Q).fill(0),l2=Array(Q).fill(0);
+  if(f2q>=0){for(let q=f2q+1;q<Q;q++){if(!prodRdy(f2p,q))continue;r2[q]=1000*P[f2p].pr[q];m2[q]=1000*P[f2p].mat*getMatF(f2p,q);l2[q]=LAB1K;}}
+
+  let rev=[],cogs=[],gp=[],opex=[],ebit=[],ni=[];
+  let tmat=[],tlab=[];
+  for(let q=0;q<Q;q++){
+    rev[q]=r1[q]+r2[q];tmat[q]=m1[q]+m2[q];tlab[q]=l1[q]+l2[q];
+    cogs[q]=tmat[q]+tlab[q];gp[q]=rev[q]-cogs[q];
+    opex[q]=S.mkt[q]+maint[q]+dep[q]+amort[q];
+    ebit[q]=gp[q]-opex[q];
+    ni[q]=ebit[q]-loanInt[q];
+  }
+
+  // Cash flow with dividends
+  let cop=[],cinv=[],cfin=[],cbeg=[],cend=[],divs=Array(Q).fill(0),cumDiv=[];
+  for(let q=0;q<Q;q++){
+    cop[q]=rev[q]-tmat[q]-tlab[q]-S.mkt[q]-maint[q];
+    cinv[q]=-(rdSp[q]+facSp[q]);
+    let loanCashIn=q===lQ?lAmt:0;
+    cfin[q]=loanCashIn-loanPmt[q];
+    cbeg[q]=q===0?200000:cend[q-1];
+    let cashBeforeDiv=cbeg[q]+cop[q]+cinv[q]+cfin[q];
+
+    // Dividend calculation
+    if(q>=divStartQ&&cashBeforeDiv>divBuf){
+      let avail=cashBeforeDiv-divBuf;
+      divs[q]=Math.max(0,Math.round(avail*divPct));
+    }
+    cend[q]=cashBeforeDiv-divs[q];
+    cumDiv[q]=(q>0?cumDiv[q-1]:0)+divs[q];
+  }
+
+  let cumNI=[];for(let q=0;q<Q;q++)cumNI[q]=(q>0?cumNI[q-1]:0)+ni[q];
+
+  // Warnings
+  let w=[];
+  for(let q=0;q<Q;q++){if(cend[q]<0)w.push(`${QL[q]}: OVERDRAFT ${fmt(cend[q])}`);}
+  if(f2q>=0){
+    let firstProd=-1;for(let q=f2q+1;q<Q;q++){if(prodRdy(f2p,q)){firstProd=q;break;}}
+    if(firstProd<0)w.push(`Factory 2: ${P[f2p].name} R&D never started! Factory will never produce.`);
+    else if(firstProd>f2q+1){for(let q=f2q+1;q<firstProd;q++)w.push(`${QL[q]}: Factory 2 idle, paying $20K maintenance`);}
+  }
+  if(lAmt>0&&lQ+1+lTerm>Q)w.push(`Loan extends beyond game end (${lTerm}Q from ${QL[lQ]}). Consider shorter term.`);
+  document.getElementById('warnings').innerHTML=w.map(x=>`<div class="warn">${x}</div>`).join('');
+
+  // KPIs
+  let el;
+  el=document.getElementById('k-cash');el.textContent=fmtK(cend[Q-1]);el.className='kpi-v '+vc(cend[Q-1]);
+  el=document.getElementById('k-ni');el.textContent=fmtK(cumNI[Q-1]);el.className='kpi-v '+vc(cumNI[Q-1]);
+  el=document.getElementById('k-rev');el.textContent=fmtK(rev.reduce((a,b)=>a+b,0));el.className='kpi-v vg';
+  let totalDiv=cumDiv[Q-1];
+  el=document.getElementById('k-div');el.textContent=fmtK(totalDiv);el.className='kpi-v '+(totalDiv>0?'vg':'vm');
+  el=document.getElementById('k-dps');el.textContent=totalDiv>0?'$'+(totalDiv/shares).toFixed(0):'$0';el.className='kpi-v '+(totalDiv>0?'vg':'vm');
+  let totalInt=loanInt.reduce((a,b)=>a+b,0);
+  el=document.getElementById('k-int');el.textContent=totalInt>0?fmtK(totalInt):'-';el.className='kpi-v '+(totalInt>0?'vr':'vm');
+
+  // Div summary
+  let dsH=`<div class="fb"><span>Total Dividends:</span><span style="color:var(--gn);font-weight:700">${fmt(totalDiv)}</span></div>
+  <div class="fb"><span>Per Share (${shares} shares):</span><span style="color:var(--gn);font-weight:700">$${(totalDiv/shares).toFixed(2)}</span></div>
+  <div class="fb"><span>Quarters Paying:</span><span>${divs.filter(d=>d>0).length} of ${Q}</span></div>`;
+  document.getElementById('divSummary').innerHTML=dsH;
+
+  // Margins
+  let gm=[],om=[],nm=[];
+  for(let q=0;q<Q;q++){gm[q]=rev[q]>0?(gp[q]/rev[q])*100:0;om[q]=rev[q]>0?(ebit[q]/rev[q])*100:0;nm[q]=rev[q]>0?(ni[q]/rev[q])*100:0;}
+
+  // Tables
+  renderT('tPL',[
+    {l:'Revenue',d:rev,b:0},{l:'  F1',d:r1,b:0},{l:'  F2',d:r2,b:0},
+    {l:'COGS',d:cogs,b:1},{l:'GROSS PROFIT',d:gp,b:1},
+    {l:'OpEx',d:opex,b:1},{l:'EBIT',d:ebit,b:1},{l:'Interest',d:loanInt,b:0},
+    {l:'NET INCOME',d:ni,b:1},{l:'Cumulative NI',d:cumNI,b:1}
+  ]);
+  renderT('tCF',[
+    {l:'Operating CF',d:cop,b:0},{l:'Investing',d:cinv,b:0},{l:'Financing (loan net)',d:cfin,b:0},
+    {l:'Dividends Paid',d:divs.map(d=>-d),b:1},{l:'Beginning Cash',d:cbeg,b:0},{l:'ENDING CASH',d:cend,b:1},
+    {l:'Loan Balance',d:loanBal,b:0},{l:'Cumul. Dividends',d:cumDiv,b:1}
+  ]);
+
+  // Charts
+  c1.data.datasets=[
+    {label:'Revenue',data:rev,backgroundColor:'rgba(88,166,255,.6)',order:2},
+    {label:'Net Income',data:ni,backgroundColor:ni.map(v=>v>=0?'rgba(63,185,80,.6)':'rgba(248,81,73,.6)'),order:1}
+  ];c1.update();
+  c2.data.datasets=[
+    {label:'Cash',data:cend,borderColor:'#58a6ff',backgroundColor:'rgba(88,166,255,.08)',fill:true,tension:.3},
+    {label:'Loan',data:loanBal,borderColor:'#f85149',backgroundColor:'rgba(248,81,73,.08)',fill:true,tension:.3},
+    {label:'Cumul. Dividends',data:cumDiv,borderColor:'#3fb950',backgroundColor:'rgba(63,185,80,.08)',fill:true,tension:.3},
+    {label:'Zero',data:Array(Q).fill(0),borderColor:'#8b949e',borderDash:[4,4],pointRadius:0}
+  ];c2.update();
+  c3.data.datasets=[
+    {label:'Gross',data:gm,borderColor:'#3fb950',tension:.3},
+    {label:'Operating',data:om,borderColor:'#58a6ff',tension:.3},
+    {label:'Net',data:nm,borderColor:'#bc8cff',tension:.3}
+  ];c3.update();
+  c4.data.datasets=[
+    {label:'Dividends',data:divs,backgroundColor:'rgba(63,185,80,.7)'},
+    {label:'Loan Payment',data:loanPmt,backgroundColor:'rgba(248,81,73,.7)'}
+  ];c4.update();
+}
+
+function renderT(id,rows){
+  let h='<tr><th></th>'+QL.map(l=>`<th>${l}</th>`).join('')+'</tr>';
+  rows.forEach(r=>{h+=`<tr><td style="${r.b?'color:var(--tx);font-weight:600':''}">${r.l}</td>`;
+    for(let q=0;q<Q;q++){let v=r.d[q];h+=`<td class="${r.b?vc(v):'v'}" style="${r.b?'font-weight:600':''}">${fmt(v)}</td>`;}h+='</tr>';});
+  document.getElementById(id).innerHTML=h;
+}
+
+function buildAll(){buildProdCards();buildInp();recalc();}
+initC();buildAll();
+</script>
+
+
+<canvas class="fps-widget" width="100" height="100"></canvas></body></html>

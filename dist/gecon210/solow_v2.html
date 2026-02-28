@@ -1,1632 +1,1447 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>LT5 | The Solow Model</title>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
-  <link
-    href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Source+Serif+4:ital,wght@0,300;0,400;0,600;0,700;1,400&display=swap"
-    rel="stylesheet">
-  <style>
-    :root {
-      --bg: #faf8f4;
-      --surface: #ffffff;
-      --surface2: #f2efe9;
-      --border: #ddd8cf;
-      --border2: #c9c3b8;
-      --text: #1a1714;
-      --text2: #5c564c;
-      --text3: #8c857a;
-      --accent: #b44a2d;
-      --accent2: #2d5fb4;
-      --green: #2d8a4e;
-      --gold: #c4930a;
-      --red: #c43c3c;
-      --blue: #3574c4;
-      --teal: #2a8a8a;
-      --mono: 'DM Mono', monospace;
-      --serif: 'Source Serif 4', Georgia, serif;
-    }
-
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    body {
-      font-family: var(--serif);
-      background: var(--bg);
-      color: var(--text);
-    }
-
-    .top-bar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 16px 32px;
-      border-bottom: 2px solid var(--text);
-      background: var(--surface);
-    }
-
-    .top-bar h1 {
-      font-size: 18px;
-      font-weight: 700;
-      letter-spacing: -0.3px;
-    }
-
-    .top-bar h1 span {
-      color: var(--accent);
-    }
-
-    .top-bar .case-ref {
-      font-family: var(--mono);
-      font-size: 11px;
-      color: var(--text3);
-    }
-
-    .tabs {
-      display: flex;
-      border-bottom: 1px solid var(--border);
-      background: var(--surface);
-      padding: 0 32px;
-    }
-
-    .tab {
-      padding: 12px 20px;
-      border: none;
-      background: none;
-      cursor: pointer;
-      font-family: var(--mono);
-      font-size: 12px;
-      font-weight: 500;
-      color: var(--text3);
-      border-bottom: 2px solid transparent;
-      margin-bottom: -1px;
-      transition: all 0.15s;
-    }
-
-    .tab:hover {
-      color: var(--text);
-    }
-
-    .tab.active {
-      color: var(--accent);
-      border-bottom-color: var(--accent);
-    }
-
-    .tab-content {
-      display: none;
-      padding: 28px 32px;
-      max-width: 1400px;
-      margin: 0 auto;
-    }
-
-    .tab-content.active {
-      display: block;
-    }
-
-    h2 {
-      font-size: 22px;
-      font-weight: 700;
-      margin-bottom: 6px;
-    }
-
-    h3 {
-      font-size: 15px;
-      font-weight: 600;
-      margin-bottom: 4px;
-    }
-
-    .subtitle {
-      font-size: 13px;
-      color: var(--text2);
-      margin-bottom: 20px;
-      line-height: 1.5;
-    }
-
-    .grid-2 {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 24px;
-    }
-
-    .grid-3 {
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      gap: 20px;
-    }
-
-    .grid-sidebar {
-      display: grid;
-      grid-template-columns: 320px 1fr;
-      gap: 28px;
-    }
-
-    .card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      padding: 20px;
-      margin-bottom: 20px;
-    }
-
-    .card h3 {
-      font-family: var(--mono);
-      font-size: 13px;
-      font-weight: 500;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      margin-bottom: 10px;
-    }
-
-    .chart-box {
-      position: relative;
-      height: 280px;
-    }
-
-    .chart-box.tall {
-      height: 340px;
-    }
-
-    .equation {
-      font-family: var(--mono);
-      font-size: 14px;
-      background: var(--surface2);
-      border: 1px solid var(--border);
-      border-radius: 4px;
-      padding: 12px 18px;
-      text-align: center;
-      margin-bottom: 16px;
-      letter-spacing: 0.3px;
-    }
-
-    .equation em {
-      color: var(--accent);
-      font-style: normal;
-      font-weight: 500;
-    }
-
-    .callout {
-      border-left: 3px solid var(--accent);
-      background: rgba(180, 74, 45, 0.04);
-      padding: 12px 16px;
-      margin-bottom: 16px;
-      font-size: 13px;
-      color: var(--text2);
-      line-height: 1.6;
-      border-radius: 0 4px 4px 0;
-    }
-
-    .callout.blue {
-      border-left-color: var(--blue);
-      background: rgba(45, 95, 180, 0.04);
-    }
-
-    .callout.green {
-      border-left-color: var(--green);
-      background: rgba(45, 138, 78, 0.04);
-    }
-
-    .section-label {
-      font-family: var(--mono);
-      font-size: 10px;
-      text-transform: uppercase;
-      letter-spacing: 1.5px;
-      color: var(--text3);
-      margin: 20px 0 10px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .section-label::after {
-      content: '';
-      flex: 1;
-      height: 1px;
-      background: var(--border);
-    }
-
-    /* Controls */
-    .param-row {
-      margin-bottom: 12px;
-    }
-
-    .param-header {
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 3px;
-    }
-
-    .param-header span {
-      font-size: 12px;
-    }
-
-    .param-header .pval {
-      font-family: var(--mono);
-      font-weight: 500;
-      color: var(--accent);
-    }
-
-    input[type="range"] {
-      -webkit-appearance: none;
-      width: 100%;
-      height: 3px;
-      background: var(--border);
-      border-radius: 2px;
-      outline: none;
-    }
-
-    input[type="range"]::-webkit-slider-thumb {
-      -webkit-appearance: none;
-      width: 14px;
-      height: 14px;
-      border-radius: 50%;
-      background: var(--accent);
-      cursor: pointer;
-      border: 2px solid var(--surface);
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
-    }
-
-    .preset-btn {
-      display: block;
-      width: 100%;
-      padding: 8px 12px;
-      margin-bottom: 5px;
-      border: 1px solid var(--border);
-      background: var(--surface);
-      color: var(--text);
-      font-family: var(--serif);
-      font-size: 12px;
-      cursor: pointer;
-      border-radius: 4px;
-      text-align: left;
-      transition: all 0.12s;
-    }
-
-    .preset-btn:hover {
-      border-color: var(--accent);
-      background: rgba(180, 74, 45, 0.03);
-    }
-
-    .preset-btn strong {
-      display: block;
-      font-weight: 600;
-      margin-bottom: 1px;
-    }
-
-    .preset-btn span {
-      font-size: 11px;
-      color: var(--text3);
-    }
-
-    .ss-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-      margin-top: 12px;
-    }
-
-    .ss-box {
-      background: var(--surface2);
-      border-radius: 4px;
-      padding: 10px;
-      text-align: center;
-    }
-
-    .ss-box .val {
-      font-family: var(--mono);
-      font-size: 20px;
-      font-weight: 500;
-      color: var(--accent);
-    }
-
-    .ss-box .lbl {
-      font-size: 11px;
-      color: var(--text3);
-      margin-top: 2px;
-    }
-
-    /* Game Theory specific */
-    .payoff-matrix {
-      width: 100%;
-      border-collapse: collapse;
-      font-family: var(--mono);
-      font-size: 13px;
-      margin: 12px 0;
-    }
-
-    .payoff-matrix th {
-      padding: 10px 14px;
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      font-weight: 500;
-      color: var(--text2);
-      border-bottom: 2px solid var(--border);
-    }
-
-    .payoff-matrix td {
-      padding: 12px 14px;
-      border-bottom: 1px solid var(--border);
-      text-align: center;
-    }
-
-    .payoff-matrix .row-header {
-      text-align: left;
-      font-weight: 500;
-      background: var(--surface2);
-    }
-
-    .payoff-cell {
-      display: flex;
-      justify-content: center;
-      gap: 6px;
-    }
-
-    .payoff-a {
-      color: var(--accent);
-      font-weight: 500;
-    }
-
-    .payoff-b {
-      color: var(--blue);
-      font-weight: 500;
-    }
-
-    .nash-highlight {
-      background: rgba(45, 138, 78, 0.08);
-      outline: 2px solid var(--green);
-      outline-offset: -2px;
-    }
-
-    .ev-display {
-      font-family: var(--mono);
-      font-size: 16px;
-      font-weight: 500;
-      color: var(--accent);
-      text-align: center;
-      padding: 8px;
-    }
-
-    .decision-tree {
-      font-family: var(--mono);
-      font-size: 12px;
-      line-height: 2.2;
-      padding: 16px;
-      background: var(--surface2);
-      border-radius: 4px;
-    }
-
-    .tree-branch {
-      padding-left: 24px;
-      border-left: 2px solid var(--border);
-      margin-left: 8px;
-    }
-
-    .tree-node {
-      font-weight: 500;
-      color: var(--text);
-    }
-
-    .tree-outcome {
-      color: var(--accent);
-      font-weight: 500;
-    }
-
-    .tree-prob {
-      color: var(--text3);
-    }
-
-    /* Decomp table */
-    .data-table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 13px;
-    }
-
-    .data-table th {
-      padding: 8px 10px;
-      font-family: var(--mono);
-      font-size: 10px;
-      text-transform: uppercase;
-      letter-spacing: 0.8px;
-      color: var(--text3);
-      border-bottom: 2px solid var(--border);
-      text-align: right;
-      font-weight: 500;
-    }
-
-    .data-table th:first-child {
-      text-align: left;
-    }
-
-    .data-table td {
-      padding: 8px 10px;
-      border-bottom: 1px solid var(--border);
-      font-family: var(--mono);
-      font-size: 13px;
-      text-align: right;
-    }
-
-    .data-table td:first-child {
-      text-align: left;
-      font-weight: 500;
-    }
-
-    .bar-container {
-      height: 24px;
-      display: flex;
-      border-radius: 3px;
-      overflow: hidden;
-      margin: 4px 0;
-    }
-
-    .bar-container div {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-family: var(--mono);
-      font-size: 10px;
-      font-weight: 500;
-      color: white;
-      transition: width 0.3s;
-    }
-
-    .toggle-row {
-      display: flex;
-      gap: 6px;
-      margin-bottom: 16px;
-      flex-wrap: wrap;
-    }
-
-    .toggle-btn {
-      padding: 6px 14px;
-      border: 1px solid var(--border);
-      border-radius: 4px;
-      background: var(--surface);
-      font-family: var(--mono);
-      font-size: 11px;
-      cursor: pointer;
-      transition: all 0.12s;
-    }
-
-    .toggle-btn.on {
-      background: var(--text);
-      color: var(--surface);
-      border-color: var(--text);
-    }
-
-    @media (max-width: 960px) {
-
-      .grid-2,
-      .grid-3,
-      .grid-sidebar {
-        grid-template-columns: 1fr;
-      }
-
-      .tabs {
-        overflow-x: auto;
-      }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LT5 | The Solow Model</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Source+Serif+4:ital,wght@0,300;0,400;0,600;0,700;1,400&family=STIX+Two+Text:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #faf8f4;
+  --surface: #ffffff;
+  --surface2: #f2efe9;
+  --border: #ddd8cf;
+  --border2: #c9c3b8;
+  --text: #1a1714;
+  --text2: #5c564c;
+  --text3: #8c857a;
+  --accent: #b44a2d;
+  --accent2: #2d5fb4;
+  --green: #2d8a4e;
+  --gold: #c4930a;
+  --red: #c43c3c;
+  --blue: #3574c4;
+  --teal: #2a8a8a;
+  --mono: 'DM Mono', monospace;
+  --serif: 'Source Serif 4', Georgia, serif;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body { font-family: var(--serif); background: var(--bg); color: var(--text); }
+
+.top-bar {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 16px 32px; border-bottom: 2px solid var(--text);
+  background: var(--surface);
+}
+.top-bar h1 { font-size: 18px; font-weight: 700; letter-spacing: -0.3px; }
+.top-bar h1 span { color: var(--accent); }
+.top-bar .case-ref { font-family: var(--mono); font-size: 11px; color: var(--text3); }
+
+.tabs {
+  display: flex; border-bottom: 1px solid var(--border);
+  background: var(--surface); padding: 0 32px;
+}
+.tab {
+  padding: 12px 20px; border: none; background: none; cursor: pointer;
+  font-family: var(--mono); font-size: 12px; font-weight: 500; color: var(--text3);
+  border-bottom: 2px solid transparent; margin-bottom: -1px; transition: all 0.15s;
+}
+.tab:hover { color: var(--text); }
+.tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+.tab-content { display: none; padding: 28px 32px; max-width: 1400px; margin: 0 auto; }
+.tab-content.active { display: block; }
+
+h2 { font-size: 22px; font-weight: 700; margin-bottom: 6px; }
+h3 { font-size: 15px; font-weight: 600; margin-bottom: 4px; }
+.subtitle { font-size: 13px; color: var(--text2); margin-bottom: 20px; line-height: 1.5; }
+
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+.grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; }
+.grid-sidebar { display: grid; grid-template-columns: 320px 1fr; gap: 28px; }
+
+.card {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 6px;
+  padding: 20px; margin-bottom: 20px;
+}
+.card h3 { font-family: var(--mono); font-size: 13px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px; }
+
+.chart-box { position: relative; height: 280px; }
+.chart-box.tall { height: 340px; }
+
+.equation {
+  font-family: 'STIX Two Text', 'Cambria Math', 'Latin Modern Math', Georgia, serif;
+  font-size: 18px; background: var(--surface2);
+  border: 1px solid var(--border); border-radius: 4px; padding: 14px 20px;
+  text-align: center; margin-bottom: 16px; letter-spacing: 0.2px; line-height: 1.6;
+}
+.equation em { font-style: italic; font-weight: 400; color: var(--text); }
+.equation strong { font-weight: 600; font-style: normal; }
+.equation sub, .equation sup { font-size: 0.72em; }
+.equation .op { font-style: normal; font-weight: 400; color: var(--text2); }
+.eq-hero {
+  font-family: 'STIX Two Text', 'Cambria Math', 'Latin Modern Math', Georgia, serif;
+  font-size: 22px; background: var(--surface2);
+  border: 1px solid var(--border); border-radius: 6px; padding: 18px 24px;
+  text-align: center; margin-bottom: 20px; letter-spacing: 0.1px; line-height: 1.7;
+  color: var(--text);
+}
+.eq-hero em { font-style: italic; font-weight: 400; }
+.eq-hero .fv { font-style: italic; font-weight: 400; transition: color 0.15s, text-shadow 0.15s; cursor: default; }
+.eq-hero .fv.hl { color: var(--accent); text-shadow: 0 0 8px rgba(180,74,45,0.3); font-weight: 600; }
+.param-row[data-param] { transition: background 0.15s; }
+.param-row.hl { background: rgba(180,74,45,0.08); border-radius: 4px; margin-left: -6px; margin-right: -6px; padding: 0 6px; }
+.eq-hero sub, .eq-hero sup { font-size: 0.72em; }
+.eq-hero .sep { color: var(--text3); margin: 0 12px; font-style: normal; font-weight: 300; }
+
+.callout {
+  border-left: 3px solid var(--accent); background: rgba(180,74,45,0.04);
+  padding: 12px 16px; margin-bottom: 16px; font-size: 13px; color: var(--text2);
+  line-height: 1.6; border-radius: 0 4px 4px 0;
+}
+.callout.blue { border-left-color: var(--blue); background: rgba(45,95,180,0.04); }
+.callout.green { border-left-color: var(--green); background: rgba(45,138,78,0.04); }
+
+.section-label {
+  font-family: var(--mono); font-size: 10px; text-transform: uppercase;
+  letter-spacing: 1.5px; color: var(--text3); margin: 20px 0 10px;
+  display: flex; align-items: center; gap: 8px;
+}
+.section-label::after { content:''; flex:1; height:1px; background:var(--border); }
+
+/* Controls */
+.param-row { margin-bottom: 12px; }
+.param-header { display: flex; justify-content: space-between; margin-bottom: 3px; }
+.param-header span { font-size: 12px; }
+.param-header .pval { font-family: var(--mono); font-weight: 500; color: var(--accent); }
+
+input[type="range"] {
+  -webkit-appearance: none; width: 100%; height: 3px;
+  background: var(--border); border-radius: 2px; outline: none;
+}
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none; width: 14px; height: 14px; border-radius: 50%;
+  background: var(--accent); cursor: pointer; border: 2px solid var(--surface);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+}
+
+.preset-btn {
+  display: block; width: 100%; padding: 8px 12px; margin-bottom: 5px;
+  border: 1px solid var(--border); background: var(--surface); color: var(--text);
+  font-family: var(--serif); font-size: 12px; cursor: pointer;
+  border-radius: 4px; text-align: left; transition: all 0.12s;
+}
+.preset-btn:hover { border-color: var(--accent); background: rgba(180,74,45,0.03); }
+.preset-btn strong { display: block; font-weight: 600; margin-bottom: 1px; }
+.preset-btn span { font-size: 11px; color: var(--text3); }
+
+.ss-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 12px; }
+.ss-box {
+  background: var(--surface2); border-radius: 4px; padding: 10px; text-align: center;
+}
+.ss-box .val { font-family: var(--mono); font-size: 20px; font-weight: 500; color: var(--accent); }
+.ss-box .lbl { font-size: 11px; color: var(--text3); margin-top: 2px; }
+
+/* Game Theory specific */
+.payoff-matrix {
+  width: 100%; border-collapse: collapse; font-family: var(--mono); font-size: 13px;
+  margin: 12px 0;
+}
+.payoff-matrix th {
+  padding: 10px 14px; font-size: 11px; text-transform: uppercase;
+  letter-spacing: 0.5px; font-weight: 500; color: var(--text2);
+  border-bottom: 2px solid var(--border);
+}
+.payoff-matrix td {
+  padding: 12px 14px; border-bottom: 1px solid var(--border); text-align: center;
+}
+.payoff-matrix .row-header {
+  text-align: left; font-weight: 500; background: var(--surface2);
+}
+.payoff-cell {
+  display: flex; justify-content: center; gap: 6px;
+}
+.payoff-a { color: var(--accent); font-weight: 500; }
+.payoff-b { color: var(--blue); font-weight: 500; }
+.nash-highlight { background: rgba(45,138,78,0.08); outline: 2px solid var(--green); outline-offset: -2px; }
+
+.ev-display {
+  font-family: var(--mono); font-size: 16px; font-weight: 500;
+  color: var(--accent); text-align: center; padding: 8px;
+}
+
+.decision-tree {
+  font-family: var(--mono); font-size: 12px; line-height: 2.2;
+  padding: 16px; background: var(--surface2); border-radius: 4px;
+}
+.tree-branch { padding-left: 24px; border-left: 2px solid var(--border); margin-left: 8px; }
+.tree-node { font-weight: 500; color: var(--text); }
+.tree-outcome { color: var(--accent); font-weight: 500; }
+.tree-prob { color: var(--text3); }
+
+/* Decomp table */
+.data-table {
+  width: 100%; border-collapse: collapse; font-size: 13px;
+}
+.data-table th {
+  padding: 8px 10px; font-family: var(--mono); font-size: 10px;
+  text-transform: uppercase; letter-spacing: 0.8px; color: var(--text3);
+  border-bottom: 2px solid var(--border); text-align: right; font-weight: 500;
+}
+.data-table th:first-child { text-align: left; }
+.data-table td {
+  padding: 8px 10px; border-bottom: 1px solid var(--border);
+  font-family: var(--mono); font-size: 13px; text-align: right;
+}
+.data-table td:first-child { text-align: left; font-weight: 500; }
+
+.bar-container { height: 24px; display: flex; border-radius: 3px; overflow: hidden; margin: 4px 0; }
+.bar-container div {
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--mono); font-size: 10px; font-weight: 500; color: white;
+  transition: width 0.3s;
+}
+
+.toggle-row {
+  display: flex; gap: 6px; margin-bottom: 16px; flex-wrap: wrap;
+}
+.toggle-btn {
+  padding: 6px 14px; border: 1px solid var(--border); border-radius: 4px;
+  background: var(--surface); font-family: var(--mono); font-size: 11px;
+  cursor: pointer; transition: all 0.12s;
+}
+.toggle-btn.on { background: var(--text); color: var(--surface); border-color: var(--text); }
+
+@media (max-width: 960px) {
+  .grid-2, .grid-3, .grid-sidebar { grid-template-columns: 1fr; }
+  .tabs { overflow-x: auto; }
+}
+</style>
 </head>
-
 <body>
 
-  <div class="top-bar">
-    <h1>The Solow Model <span>Unleashed</span></h1>
-    <div class="case-ref">LT5 | EMBA2027 | Brizuela, Magbitang, Pascua, Valencia</div>
+<div class="top-bar">
+  <h1>The Solow Model <span>Unleashed</span></h1>
+  <div class="case-ref">LT5 | EMBA2027 | Brizuela, Magbitang, Pascua, Valencia</div>
+</div>
+
+<div class="tabs">
+  <button class="tab active" onclick="switchTab('solow')">Solow Model</button>
+  <button class="tab" onclick="switchTab('accounting')">Growth Accounting</button>
+  <button class="tab" onclick="switchTab('gametheory')">Game Theory</button>
+  <button class="tab" onclick="switchTab('convergence')">Convergence</button>
+  <button class="tab" onclick="switchTab('policy')">Policy Analysis</button>
+  <button class="tab" onclick="switchTab('refs')">References & PWT Guide</button>
+</div>
+
+<!-- ========== TAB 1: SOLOW MODEL ========== -->
+<div class="tab-content active" id="tab-solow">
+  <h2>Solow Growth Model Simulation</h2>
+  <div class="subtitle">Transition dynamics, steady state, and why France's growth slowed after the 1970s</div>
+
+  <div class="eq-hero">
+    <em>Y</em> = <span class="fv" data-param="sl_A">A</span> &middot; <span class="fv" data-param="sl_k">K</span><sup><span class="fv" data-param="sl_a">&alpha;</span></sup> &middot; <span class="fv" data-param="sl_l">L</span><sup>1&minus;<span class="fv" data-param="sl_a">&alpha;</span></sup>
+    <span class="sep">|</span>
+    &Delta;<span class="fv" data-param="sl_k">k&#x0303;</span> = <span class="fv" data-param="sl_s">s</span> &middot; <em>f</em>(<span class="fv" data-param="sl_k">k&#x0303;</span>) &minus; (<span class="fv" data-param="sl_n">n</span> + <span class="fv" data-param="sl_g">g</span> + <span class="fv" data-param="sl_d">&delta;</span>)<span class="fv" data-param="sl_k">k&#x0303;</span>
   </div>
 
-  <div class="tabs">
-    <button class="tab active" onclick="switchTab('solow')">Solow Model</button>
-    <button class="tab" onclick="switchTab('accounting')">Growth Accounting</button>
-    <button class="tab" onclick="switchTab('gametheory')">Game Theory</button>
-    <button class="tab" onclick="switchTab('convergence')">Convergence</button>
-    <button class="tab" onclick="switchTab('policy')">Policy Analysis</button>
-  </div>
-
-  <!-- ========== TAB 1: SOLOW MODEL ========== -->
-  <div class="tab-content active" id="tab-solow">
-    <h2>Solow Growth Model Simulation</h2>
-    <div class="subtitle">Transition dynamics, steady state, and why France's growth slowed after the 1970s</div>
-
-    <div class="equation">
-      <em>Y</em> = <em>A</em> &middot; <em>K</em><sup>&alpha;</sup> &middot; <em>L</em><sup>1-&alpha;</sup>
-      &nbsp;&nbsp;|&nbsp;&nbsp;
-      &Delta;<em>k&#x0303;</em> = <em>s</em>&middot;f(<em>k&#x0303;</em>) -
-      (<em>n</em>+<em>g</em>+<em>&delta;</em>)<em>k&#x0303;</em>
-    </div>
-
-    <div class="grid-sidebar">
-      <div>
-        <div class="section-label">Parameters</div>
-        <div id="solowParams">
-          <div class="param-row">
-            <div class="param-header"><span>Savings Rate (s)</span><span class="pval" id="sv_s">22%</span></div>
-            <input type="range" id="sl_s" min="5" max="60" step="0.5" value="22" oninput="solowUpdate()">
-          </div>
-          <div class="param-row">
-            <div class="param-header"><span>Depreciation (&delta;)</span><span class="pval" id="sv_d">4.4%</span></div>
-            <input type="range" id="sl_d" min="1" max="15" step="0.1" value="4.4" oninput="solowUpdate()">
-          </div>
-          <div class="param-row">
-            <div class="param-header"><span>Population Growth (n)</span><span class="pval" id="sv_n">1.0%</span></div>
-            <input type="range" id="sl_n" min="-1" max="5" step="0.1" value="1.0" oninput="solowUpdate()">
-          </div>
-          <div class="param-row">
-            <div class="param-header"><span>Technology Growth (g)</span><span class="pval" id="sv_g">2.5%</span></div>
-            <input type="range" id="sl_g" min="0" max="8" step="0.1" value="2.5" oninput="solowUpdate()">
-          </div>
-          <div class="param-row">
-            <div class="param-header"><span>Capital Share (&alpha;)</span><span class="pval" id="sv_a">0.30</span></div>
-            <input type="range" id="sl_a" min="0.10" max="0.60" step="0.01" value="0.30" oninput="solowUpdate()">
-          </div>
-          <div class="param-row">
-            <div class="param-header"><span>Initial TFP (A<sub>0</sub>)</span><span class="pval" id="sv_A">0.99</span>
-            </div>
-            <input type="range" id="sl_A" min="0.10" max="3.0" step="0.01" value="0.99" oninput="solowUpdate()">
-          </div>
-          <div class="param-row">
-            <div class="param-header"><span>Initial k&#x0303; (capital/eff. worker)</span><span class="pval"
-                id="sv_k">4.0</span></div>
-            <input type="range" id="sl_k" min="0.5" max="100" step="0.5" value="4" oninput="solowUpdate()">
-          </div>
-          <div class="param-row">
-            <div class="param-header"><span>Labor Participation (N/POP)</span><span class="pval" id="sv_l">1.25</span>
-            </div>
-            <input type="range" id="sl_l" min="0.30" max="1.40" step="0.01" value="1.25" oninput="solowUpdate()">
-          </div>
+  <div class="grid-sidebar">
+    <div>
+      <div class="section-label">Parameters</div>
+      <div id="solowParams">
+        <div class="param-row" data-param="sl_s">
+          <div class="param-header"><span>Savings Rate (s)</span><span class="pval" id="sv_s">22%</span></div>
+          <input type="range" id="sl_s" min="5" max="60" step="0.5" value="22" oninput="solowUpdate()">
         </div>
-
-        <div class="section-label">Case Presets</div>
-        <button class="preset-btn" onclick="loadSolowPreset('us50')"><strong>US 1950</strong><span>High capital, steady
-            baseline growth</span></button>
-        <button class="preset-btn" onclick="loadSolowPreset('fr50')"><strong>France 1950</strong><span>Low capital,
-            rapid catch-up (Durabuild boom)</span></button>
-        <button class="preset-btn" onclick="loadSolowPreset('fr80')"><strong>France 1980</strong><span>Near steady
-            state, labor declining</span></button>
-        <button class="preset-btn" onclick="loadSolowPreset('cn00')"><strong>China 2000</strong><span>45% savings, rapid
-            industrialization</span></button>
-        <button class="preset-btn" onclick="loadSolowPreset('cn1c')"><strong>China + One-Child</strong><span>Low pop
-            growth, higher k* per worker</span></button>
-
-        <div class="section-label">Philippines Scenarios</div>
-        <button class="preset-btn" onclick="loadSolowPreset('ph24')"><strong>PH Baseline (2024)</strong><span>s=24%, low
-            TFP, low capital, LFPR=64%</span></button>
-        <button class="preset-btn" onclick="loadSolowPreset('phbd')"><strong>PH + Brain Drain</strong><span>OFW exodus
-            lowers domestic TFP growth to 0.5%</span></button>
-        <button class="preset-btn" onclick="loadSolowPreset('phdd')"><strong>PH Demographic Dividend</strong><span>Young
-            population + human capital investment</span></button>
-        <button class="preset-btn" onclick="loadSolowPreset('phhi')"><strong>PH High Investment</strong><span>If PH
-            matched Vietnam/China investment rates</span></button>
-
-        <div class="section-label">Steady State</div>
-        <div class="ss-grid">
-          <div class="ss-box">
-            <div class="val" id="ss_k2">--</div>
-            <div class="lbl">k&#x0303;*</div>
-          </div>
-          <div class="ss-box">
-            <div class="val" id="ss_y2">--</div>
-            <div class="lbl">y&#x0303;*</div>
-          </div>
-          <div class="ss-box">
-            <div class="val" id="ss_gr">--</div>
-            <div class="lbl">SS Growth</div>
-          </div>
-          <div class="ss-box">
-            <div class="val" id="ss_yr">--</div>
-            <div class="lbl">Yrs to 90%</div>
-          </div>
+        <div class="param-row" data-param="sl_d">
+          <div class="param-header"><span>Depreciation (&delta;)</span><span class="pval" id="sv_d">4.4%</span></div>
+          <input type="range" id="sl_d" min="1" max="15" step="0.1" value="4.4" oninput="solowUpdate()">
+        </div>
+        <div class="param-row" data-param="sl_n">
+          <div class="param-header"><span>Population Growth (n)</span><span class="pval" id="sv_n">1.0%</span></div>
+          <input type="range" id="sl_n" min="-1" max="5" step="0.1" value="1.0" oninput="solowUpdate()">
+        </div>
+        <div class="param-row" data-param="sl_g">
+          <div class="param-header"><span>Technology Growth (g)</span><span class="pval" id="sv_g">2.5%</span></div>
+          <input type="range" id="sl_g" min="0" max="8" step="0.1" value="2.5" oninput="solowUpdate()">
+        </div>
+        <div class="param-row" data-param="sl_a">
+          <div class="param-header"><span>Capital Share (&alpha;)</span><span class="pval" id="sv_a">0.30</span></div>
+          <input type="range" id="sl_a" min="0.10" max="0.60" step="0.01" value="0.30" oninput="solowUpdate()">
+        </div>
+        <div class="param-row" data-param="sl_A">
+          <div class="param-header"><span>Initial TFP (A<sub>0</sub>)</span><span class="pval" id="sv_A">0.99</span></div>
+          <input type="range" id="sl_A" min="0.10" max="3.0" step="0.01" value="0.99" oninput="solowUpdate()">
+        </div>
+        <div class="param-row" data-param="sl_k">
+          <div class="param-header"><span>Initial k&#x0303; (capital/eff. worker)</span><span class="pval" id="sv_k">4.0</span></div>
+          <input type="range" id="sl_k" min="0.5" max="100" step="0.5" value="4" oninput="solowUpdate()">
+        </div>
+        <div class="param-row" data-param="sl_l">
+          <div class="param-header"><span>Labor Participation (N/POP)</span><span class="pval" id="sv_l">1.25</span></div>
+          <input type="range" id="sl_l" min="0.30" max="1.40" step="0.01" value="1.25" oninput="solowUpdate()">
         </div>
       </div>
 
-      <div>
-        <div class="card">
-          <h3>GDP per Capita Path</h3>
-          <div class="chart-box tall"><canvas id="cGDP"></canvas></div>
-        </div>
-        <div class="grid-2">
-          <div class="card">
-            <h3>Capital per Effective Worker</h3>
-            <div class="chart-box"><canvas id="cCap"></canvas></div>
-          </div>
-          <div class="card">
-            <h3>Solow Diagram</h3>
-            <div class="chart-box"><canvas id="cSolow"></canvas></div>
-          </div>
-        </div>
-        <div class="card">
-          <h3>GDP per Capita Growth Rate (%)</h3>
-          <div class="chart-box"><canvas id="cGrowth"></canvas></div>
-        </div>
+      <div class="section-label">Case Presets</div>
+      <button class="preset-btn" onclick="loadSolowPreset('us50')"><strong>US 1950</strong><span>Near steady state, baseline 2.2% growth</span></button>
+      <button class="preset-btn" onclick="loadSolowPreset('fr50')"><strong>France 1950</strong><span>Low capital, rapid catch-up (Durabuild boom)</span></button>
+      <button class="preset-btn" onclick="loadSolowPreset('fr80')"><strong>France 1980</strong><span>Near steady state, labor declining</span></button>
+      <button class="preset-btn" onclick="loadSolowPreset('cn00')"><strong>China 2000</strong><span>45% savings, rapid industrialization</span></button>
+      <button class="preset-btn" onclick="loadSolowPreset('cn1c')"><strong>China + One-Child</strong><span>Low pop growth, higher k* per worker</span></button>
+
+      <div class="section-label">Philippines Scenarios</div>
+      <button class="preset-btn" onclick="loadSolowPreset('ph24')"><strong>PH Baseline (2024)</strong><span>s=23%, n=0.8%, g=1.0%, LFPR=64%</span></button>
+      <button class="preset-btn" onclick="loadSolowPreset('phbd')"><strong>PH + Brain Drain</strong><span>OFW exodus suppresses domestic TFP growth to 0.3%</span></button>
+      <button class="preset-btn" onclick="loadSolowPreset('phdd')"><strong>PH Demographic Dividend</strong><span>Young population + human capital &rarr; g=2.0%, LFPR=75%</span></button>
+      <button class="preset-btn" onclick="loadSolowPreset('phhi')"><strong>PH High Investment</strong><span>If PH matched East Asian investment rates (s=38%)</span></button>
+
+      <div style="margin-top:10px;padding:10px 12px;background:var(--surface2);border-radius:4px;font-size:11px;color:var(--text3);line-height:1.6;">
+        <strong style="color:var(--text2);">PH Data Sources:</strong>
+        <strong>n=0.8%</strong>: PSA 2024 Census of Population (Proclamation 973), annualized growth 2020&ndash;2024.
+        <strong>s=23%</strong>: World Bank WDI, Gross Capital Formation 23.3% of GDP (2023).
+        <strong>LFPR=64%</strong>: CEIC/PSA Labour Force Survey, 63.6% (Q3 2025).
+        <strong>&delta;=5%</strong>: Standard developing-economy depreciation rate (PWT convention; case uses 4.4% for developed economies).
+        <strong>A<sub>0</sub>=0.35</strong>: Estimated from PH/US GDP per capita PPP ratio (~14%, $11,794 vs ~$85,000; World Bank 2024); backed out from production function.
+        <strong>g=1.0%</strong>: BSP Discussion Paper 2024-10 (Amodia et al.): TFP growth recovering post-pandemic but below pre-2019 trend of ~1.5%.
+        Brain Drain scenario <strong>g=0.3%</strong>: Cororaton (2005, <em>Asian Development Review</em>): TFP growth was negative for most of 1967&ndash;2000, averaging &minus;0.5% to +0.4%.
+        OFW remittances <strong>$38.3B = 8.3% of GDP</strong>: BSP, as reported by PSA for 2024.
+        GDP growth <strong>5.7%</strong>: World Bank, 2024 actual.
+        Population <strong>112.7M</strong>: PSA 2024 POPCEN.
+      </div>
+
+      <div class="section-label">Steady State</div>
+      <div class="ss-grid">
+        <div class="ss-box"><div class="val" id="ss_k2">--</div><div class="lbl">k&#x0303;*</div></div>
+        <div class="ss-box"><div class="val" id="ss_y2">--</div><div class="lbl">y&#x0303;*</div></div>
+        <div class="ss-box"><div class="val" id="ss_gr">--</div><div class="lbl">SS Growth</div></div>
+        <div class="ss-box"><div class="val" id="ss_yr">--</div><div class="lbl">Yrs to 90%</div></div>
       </div>
     </div>
-  </div>
 
-  <!-- ========== TAB 2: GROWTH ACCOUNTING ========== -->
-  <div class="tab-content" id="tab-accounting">
-    <h2>Growth Accounting Decomposition</h2>
-    <div class="subtitle">Using Exhibit 2 from the case: Y/POP = A &middot; (K/N)<sup>&alpha;</sup> &middot; (N/POP) --
-      decomposing the France/US gap</div>
-
-    <div class="callout">
-      The case shows France's GDP per capita went from 54% of the US (1950) to 86% (1980) then back down to 75% (2000).
-      The decomposition reveals capital deepening drove the catch-up, while declining labor participation caused the
-      reversal.
-      TFP remained roughly equal -- France had access to the same technology.
-    </div>
-
-    <div class="grid-2">
+    <div>
       <div class="card">
-        <h3>Exhibit 2: France/US Ratios</h3>
-        <table class="data-table">
-          <tr>
-            <th>Year</th>
-            <th>Y/POP</th>
-            <th>A (TFP)</th>
-            <th>(K/N)^0.3</th>
-            <th>N/POP</th>
-          </tr>
-          <tr>
-            <td>1950</td>
-            <td>0.54</td>
-            <td>0.99</td>
-            <td>0.44</td>
-            <td>1.25</td>
-          </tr>
-          <tr>
-            <td>1980</td>
-            <td>0.86</td>
-            <td>1.05</td>
-            <td>0.88</td>
-            <td>0.93</td>
-          </tr>
-          <tr>
-            <td>2000</td>
-            <td>0.75</td>
-            <td>1.02</td>
-            <td>1.01</td>
-            <td>0.72</td>
-          </tr>
-        </table>
-        <div style="margin-top:14px;font-size:12px;color:var(--text2)">
-          Verification: 0.99 &times; 0.44 &times; 1.25 = 0.54 &check;<br>
-          1.05 &times; 0.88 &times; 0.93 = 0.86 &check;<br>
-          1.02 &times; 1.01 &times; 0.72 = 0.74 &approx; 0.75 &check;
+        <h3>GDP per Capita Path</h3>
+        <div class="chart-box tall"><canvas id="cGDP"></canvas></div>
+      </div>
+      <div class="grid-2">
+        <div class="card">
+          <h3>Capital per Effective Worker</h3>
+          <div class="chart-box"><canvas id="cCap"></canvas></div>
+        </div>
+        <div class="card">
+          <h3>Solow Diagram</h3>
+          <div class="chart-box"><canvas id="cSolow"></canvas></div>
         </div>
       </div>
       <div class="card">
-        <h3>Decomposition of France/US GDP Gap</h3>
-        <div class="chart-box"><canvas id="cDecomp"></canvas></div>
+        <h3>GDP per Capita Growth Rate (%)</h3>
+        <div class="chart-box"><canvas id="cGrowth"></canvas></div>
       </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== TAB 2: GROWTH ACCOUNTING ========== -->
+<div class="tab-content" id="tab-accounting">
+  <h2>Growth Accounting Decomposition</h2>
+  <div class="subtitle">Using Exhibit 2 from the case: <span style="font-family:'STIX Two Text',Georgia,serif;font-size:15px;"><em>Y</em>/<em>POP</em> = <em>A</em> &middot; (<em>K</em>/<em>N</em>)<sup>&alpha;</sup> &middot; (<em>N</em>/<em>POP</em>)</span> -- decomposing the France/US gap</div>
+
+  <div class="callout">
+    The case shows France's GDP per capita went from 54% of the US (1950) to 86% (1980) then back down to 75% (2000).
+    The decomposition reveals capital deepening drove the catch-up, while declining labor participation caused the reversal.
+    TFP remained roughly equal -- France had access to the same technology.
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <h3>Exhibit 2: France/US Ratios</h3>
+      <table class="data-table">
+        <tr><th>Year</th><th>Y/POP</th><th>A (TFP)</th><th>(K/N)^0.3</th><th>N/POP</th></tr>
+        <tr><td>1950</td><td>0.54</td><td>0.99</td><td>0.44</td><td>1.25</td></tr>
+        <tr><td>1980</td><td>0.86</td><td>1.05</td><td>0.88</td><td>0.93</td></tr>
+        <tr><td>2000</td><td>0.75</td><td>1.02</td><td>1.01</td><td>0.72</td></tr>
+      </table>
+      <div style="margin-top:14px;font-size:12px;color:var(--text2)">
+        Verification: 0.99 &times; 0.44 &times; 1.25 = 0.54 &check;<br>
+        1.05 &times; 0.88 &times; 0.93 = 0.86 &check;<br>
+        1.02 &times; 1.01 &times; 0.72 = 0.74 &approx; 0.75 &check;
+      </div>
+    </div>
+    <div class="card">
+      <h3>Decomposition of France/US GDP Gap</h3>
+      <div class="chart-box"><canvas id="cDecomp"></canvas></div>
+    </div>
+  </div>
+
+  <div class="grid-3">
+    <div class="card">
+      <h3>1950: Why France was at 54%</h3>
+      <div id="bar1950"></div>
+      <div style="font-size:12px;color:var(--text2);margin-top:8px;line-height:1.5;">
+        Post-war destruction left France with extremely low capital stock ((K/N)^0.3 = 0.44).
+        But France had <em>higher</em> labor participation (1.25) -- everyone was working to rebuild.
+        TFP was essentially equal (0.99).
+      </div>
+    </div>
+    <div class="card">
+      <h3>1980: Peak Convergence at 86%</h3>
+      <div id="bar1980"></div>
+      <div style="font-size:12px;color:var(--text2);margin-top:8px;line-height:1.5;">
+        Capital deepened dramatically (0.44 &rarr; 0.88). This is the Solow transition.
+        But labor participation already started declining (1.25 &rarr; 0.93).
+        This is when Grandpa Frank should have recognized the slowdown.
+      </div>
+    </div>
+    <div class="card">
+      <h3>2000: Reversal to 75%</h3>
+      <div id="bar2000"></div>
+      <div style="font-size:12px;color:var(--text2);margin-top:8px;line-height:1.5;">
+        Capital fully caught up ((K/N)^0.3 = 1.01). TFP still equal (1.02).
+        The entire gap is now labor: N/POP = 0.72.
+        35-hour work week, 5-week vacation, high unemployment (11%).
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Growth Rate Decomposition Over Time</h3>
+    <div class="chart-box tall"><canvas id="cAccounting"></canvas></div>
+  </div>
+</div>
+
+<!-- ========== TAB 3: GAME THEORY ========== -->
+<div class="tab-content" id="tab-gametheory">
+  <h2>Game Theory: China Market Entry Decision</h2>
+  <div class="subtitle">Applying strategic analysis to Durabuild's decision whether to expand into China -- the question Lisa faces at the end of the case</div>
+
+  <div class="callout blue">
+    Lisa must decide: does China present long-term potential, or will its growth phase peter out like France?
+    The case notes China's extraordinarily high investment rate, difficult regulatory environment, and questions about
+    technology adoption and the one-child policy's demographic effects.
+  </div>
+
+  <div class="grid-2">
+
+    <!-- GAME 1: Decision under uncertainty -->
+    <div class="card">
+      <h3>1. Decision Under Uncertainty</h3>
+      <p style="font-size:12px;color:var(--text2);margin-bottom:12px;">
+        Durabuild chooses Enter or Stay Out. Nature determines if China sustains high growth or slows (like France did).
+        Adjust the probability and payoffs to see how the expected value changes.
+      </p>
+
+      <div class="param-row">
+        <div class="param-header"><span>P(High Growth Continues)</span><span class="pval" id="gv_p">60%</span></div>
+        <input type="range" id="gl_p" min="0" max="100" step="1" value="60" oninput="gameUpdate()">
+      </div>
+      <div class="param-row">
+        <div class="param-header"><span>Payoff: Enter + High Growth</span><span class="pval" id="gv_eh">150</span></div>
+        <input type="range" id="gl_eh" min="0" max="300" step="5" value="150" oninput="gameUpdate()">
+      </div>
+      <div class="param-row">
+        <div class="param-header"><span>Payoff: Enter + Slowdown</span><span class="pval" id="gv_el">-80</span></div>
+        <input type="range" id="gl_el" min="-200" max="50" step="5" value="-80" oninput="gameUpdate()">
+      </div>
+      <div class="param-row">
+        <div class="param-header"><span>Payoff: Stay Out</span><span class="pval" id="gv_so">0</span></div>
+        <input type="range" id="gl_so" min="-50" max="100" step="5" value="0" oninput="gameUpdate()">
+      </div>
+
+      <div style="margin-top:12px;background:var(--surface2);border-radius:4px;padding:14px;">
+        <div style="font-family:var(--mono);font-size:11px;color:var(--text3);margin-bottom:6px;">EXPECTED VALUES</div>
+        <div class="ev-display">E[Enter] = <span id="ev_enter">58.0</span></div>
+        <div class="ev-display" style="color:var(--blue)">E[Stay Out] = <span id="ev_out">0.0</span></div>
+        <div style="text-align:center;font-family:var(--mono);font-size:13px;font-weight:500;margin-top:8px;padding-top:8px;border-top:1px solid var(--border);">
+          Optimal: <span id="ev_optimal" style="color:var(--green)">ENTER</span>
+        </div>
+      </div>
+
+      <div style="margin-top:14px;">
+        <div style="font-family:var(--mono);font-size:11px;color:var(--text3);margin-bottom:6px;">BREAK-EVEN PROBABILITY</div>
+        <div style="font-family:var(--mono);font-size:14px;font-weight:500;color:var(--accent);" id="breakeven_p">--</div>
+        <div style="font-size:11px;color:var(--text3);margin-top:2px;">Minimum P(High Growth) needed for entry to be rational</div>
+      </div>
+    </div>
+
+    <!-- GAME 2: Strategic Entry Game -->
+    <div class="card">
+      <h3>2. Strategic Entry Game (2-Player)</h3>
+      <p style="font-size:12px;color:var(--text2);margin-bottom:12px;">
+        Durabuild and a Competitor simultaneously decide whether to enter China. Payoffs depend on market crowding.
+        Green highlight = Nash Equilibrium.
+      </p>
+
+      <div class="param-row">
+        <div class="param-header"><span>Both Enter (each)</span><span class="pval" id="gv_be">30</span></div>
+        <input type="range" id="gl_be" min="-100" max="200" step="5" value="30" oninput="gameUpdate()">
+      </div>
+      <div class="param-row">
+        <div class="param-header"><span>Only You Enter</span><span class="pval" id="gv_ye">120</span></div>
+        <input type="range" id="gl_ye" min="0" max="300" step="5" value="120" oninput="gameUpdate()">
+      </div>
+      <div class="param-row">
+        <div class="param-header"><span>Only Rival Enters (you stay)</span><span class="pval" id="gv_re">-10</span></div>
+        <input type="range" id="gl_re" min="-100" max="100" step="5" value="-10" oninput="gameUpdate()">
+      </div>
+      <div class="param-row">
+        <div class="param-header"><span>Neither Enters</span><span class="pval" id="gv_ne">0</span></div>
+        <input type="range" id="gl_ne" min="-50" max="100" step="5" value="0" oninput="gameUpdate()">
+      </div>
+
+      <table class="payoff-matrix" id="payoffTable">
+        <tr><th></th><th>Competitor: Enter</th><th>Competitor: Stay Out</th></tr>
+        <tr>
+          <td class="row-header">Durabuild: Enter</td>
+          <td id="cell_ee"><span class="payoff-a">30</span>, <span class="payoff-b">30</span></td>
+          <td id="cell_eo"><span class="payoff-a">120</span>, <span class="payoff-b">-10</span></td>
+        </tr>
+        <tr>
+          <td class="row-header">Durabuild: Stay Out</td>
+          <td id="cell_se"><span class="payoff-a">-10</span>, <span class="payoff-b">120</span></td>
+          <td id="cell_so"><span class="payoff-a">0</span>, <span class="payoff-b">0</span></td>
+        </tr>
+      </table>
+
+      <div id="nashAnalysis" style="font-size:12px;color:var(--text2);line-height:1.6;margin-top:8px;"></div>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <!-- Decision Tree -->
+    <div class="card">
+      <h3>3. Sequential Decision Tree</h3>
+      <p style="font-size:12px;color:var(--text2);margin-bottom:12px;">
+        If Durabuild moves first (invest in China assessment), then decides to enter or not based on findings.
+      </p>
+      <div id="decisionTree" class="decision-tree"></div>
+    </div>
+
+    <!-- Mixed Strategy -->
+    <div class="card">
+      <h3>4. Mixed Strategy Equilibrium</h3>
+      <p style="font-size:12px;color:var(--text2);margin-bottom:12px;">
+        If the entry game has no pure-strategy NE, what probability should each player enter with?
+      </p>
+      <div id="mixedStrategy"></div>
+      <div class="chart-box" style="height:220px;margin-top:12px;"><canvas id="cMixed"></canvas></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>5. Sensitivity: Entry EV vs Probability of High Growth</h3>
+    <div style="font-size:12px;color:var(--text2);margin-bottom:8px;">
+      How the expected value of entering China changes as you vary P(growth continues).
+      The vertical line marks the break-even probability.
+    </div>
+    <div class="chart-box tall"><canvas id="cSensitivity"></canvas></div>
+  </div>
+</div>
+
+<!-- ========== TAB 4: CONVERGENCE ========== -->
+<div class="tab-content" id="tab-convergence">
+  <h2>Convergence Analysis</h2>
+  <div class="subtitle">The Solow model predicts conditional convergence: countries with similar fundamentals converge to the same steady state. Absolute convergence is not guaranteed.</div>
+
+  <div class="callout green">
+    The case demonstrates conditional convergence perfectly: France converged to the US in capital intensity (K/N ratio matched by 2000)
+    but NOT in GDP per capita -- because they had different labor market institutions (the "conditions" diverged).
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <h3>Comparative GDP per Capita (Index = 100 at Year 0)</h3>
+      <div class="chart-box tall"><canvas id="cConverge"></canvas></div>
+    </div>
+    <div class="card">
+      <h3>Growth Rate Convergence</h3>
+      <div style="font-size:12px;color:var(--text2);margin-bottom:8px;">
+        Poorer countries grow faster initially (higher marginal product of capital) then slow toward steady-state growth rate g.
+      </div>
+      <div class="chart-box tall"><canvas id="cConvGrowth"></canvas></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Capital-to-Labor Ratio Convergence</h3>
+    <div style="font-size:12px;color:var(--text2);margin-bottom:8px;">
+      France started at &lt;10% of US capital-to-labor ratio in 1950 and fully caught up by 2000.
+      The Solow model predicts this: with similar savings rates, capital per worker converges regardless of starting point.
+    </div>
+    <div class="chart-box"><canvas id="cCapConv"></canvas></div>
+  </div>
+
+  <div class="card">
+    <h3>Why France Never Fully Caught Up: Conditional vs Absolute Convergence</h3>
+    <div class="grid-3" style="margin-top:12px;">
+      <div style="text-align:center;">
+        <div style="font-family:var(--mono);font-size:28px;font-weight:500;color:var(--green);">1.01</div>
+        <div style="font-size:12px;color:var(--text2);margin-top:4px;">(K/N)^0.3 ratio in 2000</div>
+        <div style="font-size:11px;color:var(--text3);">Capital: CONVERGED</div>
+      </div>
+      <div style="text-align:center;">
+        <div style="font-family:var(--mono);font-size:28px;font-weight:500;color:var(--green);">1.02</div>
+        <div style="font-size:12px;color:var(--text2);margin-top:4px;">TFP ratio in 2000</div>
+        <div style="font-size:11px;color:var(--text3);">Technology: CONVERGED</div>
+      </div>
+      <div style="text-align:center;">
+        <div style="font-family:var(--mono);font-size:28px;font-weight:500;color:var(--red);">0.72</div>
+        <div style="font-size:12px;color:var(--text2);margin-top:4px;">N/POP ratio in 2000</div>
+        <div style="font-size:11px;color:var(--text3);">Labor: DIVERGED</div>
+      </div>
+    </div>
+    <div style="margin-top:16px;font-size:13px;color:var(--text2);line-height:1.6;">
+      The Solow model predicts convergence in capital and technology -- and it happened.
+      But the model also tells us that steady-state output depends on labor inputs, which are shaped by
+      institutional factors: the 35-hour work week, mandatory 5-week vacation, 60% wage replacement unemployment insurance,
+      high marginal tax rates, strict firing regulations, and high minimum wage.
+      These are the "conditions" that make France's steady state lower than the US's.
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Philippines in the Convergence Framework</h3>
+    <div class="grid-3" style="margin-top:12px;">
+      <div style="text-align:center;">
+        <div style="font-family:var(--mono);font-size:28px;font-weight:500;color:var(--red);">~0.14</div>
+        <div style="font-size:12px;color:var(--text2);margin-top:4px;">PH/US GDP per capita (PPP)</div>
+        <div style="font-size:11px;color:var(--text3);">$11,794 vs ~$85,000 (World Bank 2024)</div>
+      </div>
+      <div style="text-align:center;">
+        <div style="font-family:var(--mono);font-size:28px;font-weight:500;color:var(--red);">~0.35</div>
+        <div style="font-size:12px;color:var(--text2);margin-top:4px;">Relative TFP (est.)</div>
+        <div style="font-size:11px;color:var(--text3);">BSP DP 2024-10: post-pandemic recovery</div>
+      </div>
+      <div style="text-align:center;">
+        <div style="font-family:var(--mono);font-size:28px;font-weight:500;color:var(--gold);">0.64</div>
+        <div style="font-size:12px;color:var(--text2);margin-top:4px;">Labor Force Participation</div>
+        <div style="font-size:11px;color:var(--text3);">CEIC/PSA LFS, Q3 2025</div>
+      </div>
+    </div>
+    <div style="margin-top:16px;font-size:13px;color:var(--text2);line-height:1.6;">
+      The Philippines presents a different convergence puzzle than France. Where France converged in capital but diverged in labor,
+      the PH is far from convergence on <em>all</em> fronts: low capital stock, low TFP, and moderate labor participation.
+      The Solow model predicts this should mean high growth potential -- the marginal product of capital is high when k is low.
+      But three structural issues suppress the transition: (1) gross capital formation is only ~23% of GDP (World Bank 2023),
+      well below China's 43% or Vietnam's 33%; (2) TFP growth was historically negative for most of 1967-2000 (Cororaton 2005,
+      <em>Asian Development Review</em>), only turning mildly positive after 1990s reforms, and recovering post-pandemic but still
+      below pre-2019 trends (BSP DP 2024-10); (3) brain drain through OFW migration exports productive workers -- remittances
+      reached $38.3B in 2024 (8.3% of GDP, BSP) but flow primarily to household consumption rather than investment.
+    </div>
+    <div style="margin-top:10px;font-size:13px;color:var(--text2);line-height:1.6;">
+      The key insight: the Philippines has the <em>initial conditions</em> for catch-up growth (low k, high MPK),
+      but not yet the <em>structural conditions</em> (savings, TFP growth, human capital retention) to realize it.
+      Note also that population growth has slowed sharply to 0.8% annually (PSA 2024 Census, down from 1.63% in 2015-2020),
+      which mechanically raises k* -- fewer workers to share capital across -- potentially aiding convergence if sustained.
+    </div>
+  </div>
+</div>
+
+<!-- ========== TAB 5: POLICY ========== -->
+<div class="tab-content" id="tab-policy">
+  <h2>Policy Analysis & China Application</h2>
+  <div class="subtitle">How changes in savings, labor policy, and technology adoption affect long-run GDP -- applying lessons from France to evaluate China</div>
+
+  <div class="callout">
+    Lisa's key question: will China's high growth persist? The Solow model gives a clear framework.
+    Growth from capital accumulation is temporary (transitional). Only TFP growth is permanent.
+    China's 45% savings rate drives fast transition, but the steady state depends on g, n, and institutional quality.
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <h3>Policy Lever: Savings Rate</h3>
+      <div style="font-size:12px;color:var(--text2);margin-bottom:8px;">
+        Higher s raises the steady-state k* and y*, but has diminishing returns due to &alpha; &lt; 1.
+        China's s=45% is historically unprecedented.
+      </div>
+      <div class="chart-box"><canvas id="cPolSavings"></canvas></div>
+    </div>
+    <div class="card">
+      <h3>Policy Lever: Labor Participation</h3>
+      <div style="font-size:12px;color:var(--text2);margin-bottom:8px;">
+        GDP per capita = A &middot; f(k) &middot; (N/POP). Labor participation is a direct multiplier.
+        France lost 28% of its GDP gap to the US from labor alone.
+      </div>
+      <div class="chart-box"><canvas id="cPolLabor"></canvas></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>China Scenario Builder</h3>
+    <div style="font-size:12px;color:var(--text2);margin-bottom:14px;">
+      Adjust China-specific parameters to project different outcomes for Durabuild's potential market.
     </div>
 
     <div class="grid-3">
-      <div class="card">
-        <h3>1950: Why France was at 54%</h3>
-        <div id="bar1950"></div>
-        <div style="font-size:12px;color:var(--text2);margin-top:8px;line-height:1.5;">
-          Post-war destruction left France with extremely low capital stock ((K/N)^0.3 = 0.44).
-          But France had <em>higher</em> labor participation (1.25) -- everyone was working to rebuild.
-          TFP was essentially equal (0.99).
-        </div>
-      </div>
-      <div class="card">
-        <h3>1980: Peak Convergence at 86%</h3>
-        <div id="bar1980"></div>
-        <div style="font-size:12px;color:var(--text2);margin-top:8px;line-height:1.5;">
-          Capital deepened dramatically (0.44 &rarr; 0.88). This is the Solow transition.
-          But labor participation already started declining (1.25 &rarr; 0.93).
-          This is when Grandpa Frank should have recognized the slowdown.
-        </div>
-      </div>
-      <div class="card">
-        <h3>2000: Reversal to 75%</h3>
-        <div id="bar2000"></div>
-        <div style="font-size:12px;color:var(--text2);margin-top:8px;line-height:1.5;">
-          Capital fully caught up ((K/N)^0.3 = 1.01). TFP still equal (1.02).
-          The entire gap is now labor: N/POP = 0.72.
-          35-hour work week, 5-week vacation, high unemployment (11%).
-        </div>
-      </div>
-    </div>
-
-    <div class="card">
-      <h3>Growth Rate Decomposition Over Time</h3>
-      <div class="chart-box tall"><canvas id="cAccounting"></canvas></div>
-    </div>
-  </div>
-
-  <!-- ========== TAB 3: GAME THEORY ========== -->
-  <div class="tab-content" id="tab-gametheory">
-    <h2>Game Theory: China Market Entry Decision</h2>
-    <div class="subtitle">Applying strategic analysis to Durabuild's decision whether to expand into China -- the
-      question Lisa faces at the end of the case</div>
-
-    <div class="callout blue">
-      Lisa must decide: does China present long-term potential, or will its growth phase peter out like France?
-      The case notes China's extraordinarily high investment rate, difficult regulatory environment, and questions about
-      technology adoption and the one-child policy's demographic effects.
-    </div>
-
-    <div class="grid-2">
-
-      <!-- GAME 1: Decision under uncertainty -->
-      <div class="card">
-        <h3>1. Decision Under Uncertainty</h3>
-        <p style="font-size:12px;color:var(--text2);margin-bottom:12px;">
-          Durabuild chooses Enter or Stay Out. Nature determines if China sustains high growth or slows (like France
-          did).
-          Adjust the probability and payoffs to see how the expected value changes.
-        </p>
-
+      <div>
         <div class="param-row">
-          <div class="param-header"><span>P(High Growth Continues)</span><span class="pval" id="gv_p">60%</span></div>
-          <input type="range" id="gl_p" min="0" max="100" step="1" value="60" oninput="gameUpdate()">
+          <div class="param-header"><span>China Savings Rate</span><span class="pval" id="pv_cs">45%</span></div>
+          <input type="range" id="pl_cs" min="10" max="60" step="1" value="45" oninput="policyUpdate()">
         </div>
         <div class="param-row">
-          <div class="param-header"><span>Payoff: Enter + High Growth</span><span class="pval" id="gv_eh">150</span>
-          </div>
-          <input type="range" id="gl_eh" min="0" max="300" step="5" value="150" oninput="gameUpdate()">
+          <div class="param-header"><span>China TFP Growth</span><span class="pval" id="pv_cg">3.5%</span></div>
+          <input type="range" id="pl_cg" min="0" max="8" step="0.1" value="3.5" oninput="policyUpdate()">
+        </div>
+      </div>
+      <div>
+        <div class="param-row">
+          <div class="param-header"><span>China Pop Growth</span><span class="pval" id="pv_cn">0.5%</span></div>
+          <input type="range" id="pl_cn" min="-1" max="3" step="0.1" value="0.5" oninput="policyUpdate()">
         </div>
         <div class="param-row">
-          <div class="param-header"><span>Payoff: Enter + Slowdown</span><span class="pval" id="gv_el">-80</span></div>
-          <input type="range" id="gl_el" min="-200" max="50" step="5" value="-80" oninput="gameUpdate()">
+          <div class="param-header"><span>Regulatory Friction</span><span class="pval" id="pv_cr">0.85</span></div>
+          <input type="range" id="pl_cr" min="0.40" max="1.00" step="0.01" value="0.85" oninput="policyUpdate()">
+        </div>
+      </div>
+      <div>
+        <div class="param-row">
+          <div class="param-header"><span>Technology Adoption</span><span class="pval" id="pv_ct">0.70</span></div>
+          <input type="range" id="pl_ct" min="0.20" max="1.00" step="0.01" value="0.70" oninput="policyUpdate()">
         </div>
         <div class="param-row">
-          <div class="param-header"><span>Payoff: Stay Out</span><span class="pval" id="gv_so">0</span></div>
-          <input type="range" id="gl_so" min="-50" max="100" step="5" value="0" oninput="gameUpdate()">
+          <div class="param-header"><span>One-Child Pop Effect (yrs)</span><span class="pval" id="pv_co">15</span></div>
+          <input type="range" id="pl_co" min="0" max="30" step="1" value="15" oninput="policyUpdate()">
         </div>
-
-        <div style="margin-top:12px;background:var(--surface2);border-radius:4px;padding:14px;">
-          <div style="font-family:var(--mono);font-size:11px;color:var(--text3);margin-bottom:6px;">EXPECTED VALUES
-          </div>
-          <div class="ev-display">E[Enter] = <span id="ev_enter">58.0</span></div>
-          <div class="ev-display" style="color:var(--blue)">E[Stay Out] = <span id="ev_out">0.0</span></div>
-          <div
-            style="text-align:center;font-family:var(--mono);font-size:13px;font-weight:500;margin-top:8px;padding-top:8px;border-top:1px solid var(--border);">
-            Optimal: <span id="ev_optimal" style="color:var(--green)">ENTER</span>
-          </div>
-        </div>
-
-        <div style="margin-top:14px;">
-          <div style="font-family:var(--mono);font-size:11px;color:var(--text3);margin-bottom:6px;">BREAK-EVEN
-            PROBABILITY</div>
-          <div style="font-family:var(--mono);font-size:14px;font-weight:500;color:var(--accent);" id="breakeven_p">--
-          </div>
-          <div style="font-size:11px;color:var(--text3);margin-top:2px;">Minimum P(High Growth) needed for entry to be
-            rational</div>
-        </div>
-      </div>
-
-      <!-- GAME 2: Strategic Entry Game -->
-      <div class="card">
-        <h3>2. Strategic Entry Game (2-Player)</h3>
-        <p style="font-size:12px;color:var(--text2);margin-bottom:12px;">
-          Durabuild and a Competitor simultaneously decide whether to enter China. Payoffs depend on market crowding.
-          Green highlight = Nash Equilibrium.
-        </p>
-
-        <div class="param-row">
-          <div class="param-header"><span>Both Enter (each)</span><span class="pval" id="gv_be">30</span></div>
-          <input type="range" id="gl_be" min="-100" max="200" step="5" value="30" oninput="gameUpdate()">
-        </div>
-        <div class="param-row">
-          <div class="param-header"><span>Only You Enter</span><span class="pval" id="gv_ye">120</span></div>
-          <input type="range" id="gl_ye" min="0" max="300" step="5" value="120" oninput="gameUpdate()">
-        </div>
-        <div class="param-row">
-          <div class="param-header"><span>Only Rival Enters (you stay)</span><span class="pval" id="gv_re">-10</span>
-          </div>
-          <input type="range" id="gl_re" min="-100" max="100" step="5" value="-10" oninput="gameUpdate()">
-        </div>
-        <div class="param-row">
-          <div class="param-header"><span>Neither Enters</span><span class="pval" id="gv_ne">0</span></div>
-          <input type="range" id="gl_ne" min="-50" max="100" step="5" value="0" oninput="gameUpdate()">
-        </div>
-
-        <table class="payoff-matrix" id="payoffTable">
-          <tr>
-            <th></th>
-            <th>Competitor: Enter</th>
-            <th>Competitor: Stay Out</th>
-          </tr>
-          <tr>
-            <td class="row-header">Durabuild: Enter</td>
-            <td id="cell_ee"><span class="payoff-a">30</span>, <span class="payoff-b">30</span></td>
-            <td id="cell_eo"><span class="payoff-a">120</span>, <span class="payoff-b">-10</span></td>
-          </tr>
-          <tr>
-            <td class="row-header">Durabuild: Stay Out</td>
-            <td id="cell_se"><span class="payoff-a">-10</span>, <span class="payoff-b">120</span></td>
-            <td id="cell_so"><span class="payoff-a">0</span>, <span class="payoff-b">0</span></td>
-          </tr>
-        </table>
-
-        <div id="nashAnalysis" style="font-size:12px;color:var(--text2);line-height:1.6;margin-top:8px;"></div>
       </div>
     </div>
 
-    <div class="grid-2">
-      <!-- Decision Tree -->
-      <div class="card">
-        <h3>3. Sequential Decision Tree</h3>
-        <p style="font-size:12px;color:var(--text2);margin-bottom:12px;">
-          If Durabuild moves first (invest in China assessment), then decides to enter or not based on findings.
-        </p>
-        <div id="decisionTree" class="decision-tree"></div>
-      </div>
+    <div class="chart-box tall"><canvas id="cChina"></canvas></div>
 
-      <!-- Mixed Strategy -->
-      <div class="card">
-        <h3>4. Mixed Strategy Equilibrium</h3>
-        <p style="font-size:12px;color:var(--text2);margin-bottom:12px;">
-          If the entry game has no pure-strategy NE, what probability should each player enter with?
-        </p>
-        <div id="mixedStrategy"></div>
-        <div class="chart-box" style="height:220px;margin-top:12px;"><canvas id="cMixed"></canvas></div>
+    <div class="grid-3" style="margin-top:16px;">
+      <div class="ss-box">
+        <div class="val" id="cn_ss_k">--</div>
+        <div class="lbl">China Projected k*</div>
       </div>
-    </div>
-
-    <div class="card">
-      <h3>5. Sensitivity: Entry EV vs Probability of High Growth</h3>
-      <div style="font-size:12px;color:var(--text2);margin-bottom:8px;">
-        How the expected value of entering China changes as you vary P(growth continues).
-        The vertical line marks the break-even probability.
+      <div class="ss-box">
+        <div class="val" id="cn_ss_y">--</div>
+        <div class="lbl">China Projected y*</div>
       </div>
-      <div class="chart-box tall"><canvas id="cSensitivity"></canvas></div>
-    </div>
-  </div>
-
-  <!-- ========== TAB 4: CONVERGENCE ========== -->
-  <div class="tab-content" id="tab-convergence">
-    <h2>Convergence Analysis</h2>
-    <div class="subtitle">The Solow model predicts conditional convergence: countries with similar fundamentals converge
-      to the same steady state. Absolute convergence is not guaranteed.</div>
-
-    <div class="callout green">
-      The case demonstrates conditional convergence perfectly: France converged to the US in capital intensity (K/N
-      ratio matched by 2000)
-      but NOT in GDP per capita -- because they had different labor market institutions (the "conditions" diverged).
-    </div>
-
-    <div class="grid-2">
-      <div class="card">
-        <h3>Comparative GDP per Capita (Index = 100 at Year 0)</h3>
-        <div class="chart-box tall"><canvas id="cConverge"></canvas></div>
-      </div>
-      <div class="card">
-        <h3>Growth Rate Convergence</h3>
-        <div style="font-size:12px;color:var(--text2);margin-bottom:8px;">
-          Poorer countries grow faster initially (higher marginal product of capital) then slow toward steady-state
-          growth rate g.
-        </div>
-        <div class="chart-box tall"><canvas id="cConvGrowth"></canvas></div>
-      </div>
-    </div>
-
-    <div class="card">
-      <h3>Capital-to-Labor Ratio Convergence</h3>
-      <div style="font-size:12px;color:var(--text2);margin-bottom:8px;">
-        France started at &lt;10% of US capital-to-labor ratio in 1950 and fully caught up by 2000.
-        The Solow model predicts this: with similar savings rates, capital per worker converges regardless of starting
-        point.
-      </div>
-      <div class="chart-box"><canvas id="cCapConv"></canvas></div>
-    </div>
-
-    <div class="card">
-      <h3>Why France Never Fully Caught Up: Conditional vs Absolute Convergence</h3>
-      <div class="grid-3" style="margin-top:12px;">
-        <div style="text-align:center;">
-          <div style="font-family:var(--mono);font-size:28px;font-weight:500;color:var(--green);">1.01</div>
-          <div style="font-size:12px;color:var(--text2);margin-top:4px;">(K/N)^0.3 ratio in 2000</div>
-          <div style="font-size:11px;color:var(--text3);">Capital: CONVERGED</div>
-        </div>
-        <div style="text-align:center;">
-          <div style="font-family:var(--mono);font-size:28px;font-weight:500;color:var(--green);">1.02</div>
-          <div style="font-size:12px;color:var(--text2);margin-top:4px;">TFP ratio in 2000</div>
-          <div style="font-size:11px;color:var(--text3);">Technology: CONVERGED</div>
-        </div>
-        <div style="text-align:center;">
-          <div style="font-family:var(--mono);font-size:28px;font-weight:500;color:var(--red);">0.72</div>
-          <div style="font-size:12px;color:var(--text2);margin-top:4px;">N/POP ratio in 2000</div>
-          <div style="font-size:11px;color:var(--text3);">Labor: DIVERGED</div>
-        </div>
-      </div>
-      <div style="margin-top:16px;font-size:13px;color:var(--text2);line-height:1.6;">
-        The Solow model predicts convergence in capital and technology -- and it happened.
-        But the model also tells us that steady-state output depends on labor inputs, which are shaped by
-        institutional factors: the 35-hour work week, mandatory 5-week vacation, 60% wage replacement unemployment
-        insurance,
-        high marginal tax rates, strict firing regulations, and high minimum wage.
-        These are the "conditions" that make France's steady state lower than the US's.
-      </div>
-    </div>
-
-    <div class="card">
-      <h3>Philippines in the Convergence Framework</h3>
-      <div class="grid-3" style="margin-top:12px;">
-        <div style="text-align:center;">
-          <div style="font-family:var(--mono);font-size:28px;font-weight:500;color:var(--red);">~0.14</div>
-          <div style="font-size:12px;color:var(--text2);margin-top:4px;">PH/US GDP per capita (PPP)</div>
-          <div style="font-size:11px;color:var(--text3);">$11,794 vs $85,000</div>
-        </div>
-        <div style="text-align:center;">
-          <div style="font-family:var(--mono);font-size:28px;font-weight:500;color:var(--red);">~0.35</div>
-          <div style="font-size:12px;color:var(--text2);margin-top:4px;">Relative TFP (est.)</div>
-          <div style="font-size:11px;color:var(--text3);">Low but improving post-reforms</div>
-        </div>
-        <div style="text-align:center;">
-          <div style="font-family:var(--mono);font-size:28px;font-weight:500;color:var(--gold);">0.64</div>
-          <div style="font-size:12px;color:var(--text2);margin-top:4px;">Labor Force Participation</div>
-          <div style="font-size:11px;color:var(--text3);">vs US ~62%, but young population</div>
-        </div>
-      </div>
-      <div style="margin-top:16px;font-size:13px;color:var(--text2);line-height:1.6;">
-        The Philippines presents a different convergence puzzle than France. Where France converged in capital but
-        diverged in labor,
-        the PH is far from convergence on <em>all</em> fronts: low capital stock, low TFP, and moderate labor
-        participation.
-        The Solow model predicts this should mean high growth potential -- the marginal product of capital is high when
-        k is low.
-        But three structural issues suppress the transition: (1) the domestic savings rate is only ~9% of GDP, with
-        remittances
-        ($38B in 2024, 8.3% of GDP) filling the gap but flowing more to consumption than investment; (2) TFP growth was
-        historically
-        negative for 35 years (BSP DP 2024-10), only turning positive after 1990s reforms; (3) brain drain through OFW
-        migration
-        exports the most productive workers, directly reducing domestic A.
-        The key insight: the Philippines has the <em>initial conditions</em> for catch-up growth (low k, high MPK),
-        but not yet the <em>structural conditions</em> (savings, TFP growth, human capital retention) to realize it.
+      <div class="ss-box">
+        <div class="val" id="cn_peak_gr">--</div>
+        <div class="lbl">Peak Growth Rate</div>
       </div>
     </div>
   </div>
+</div>
 
-  <!-- ========== TAB 5: POLICY ========== -->
-  <div class="tab-content" id="tab-policy">
-    <h2>Policy Analysis & China Application</h2>
-    <div class="subtitle">How changes in savings, labor policy, and technology adoption affect long-run GDP -- applying
-      lessons from France to evaluate China</div>
+<!-- ========== TAB 6: REFERENCES & PWT GUIDE ========== -->
+<div class="tab-content" id="tab-refs">
+  <h2>References & Penn World Table Guide</h2>
+  <div class="subtitle">Data sources, references, and how to use PWT 11.0 to solve the Durabuild case</div>
 
-    <div class="callout">
-      Lisa's key question: will China's high growth persist? The Solow model gives a clear framework.
-      Growth from capital accumulation is temporary (transitional). Only TFP growth is permanent.
-      China's 45% savings rate drives fast transition, but the steady state depends on g, n, and institutional quality.
-    </div>
+  <div class="callout" style="border-left-color:var(--accent);">
+    The case uses Penn World Tables 7.1 (Exhibit 1 & 2 source notes). Students should replicate and extend the analysis
+    using <strong>PWT 11.0</strong> (released October 7, 2025), which covers 185 countries through 2023 and incorporates
+    the 2021 ICP purchasing power parity benchmarks.
+  </div>
 
-    <div class="grid-2">
-      <div class="card">
-        <h3>Policy Lever: Savings Rate</h3>
-        <div style="font-size:12px;color:var(--text2);margin-bottom:8px;">
-          Higher s raises the steady-state k* and y*, but has diminishing returns due to &alpha; &lt; 1.
-          China's s=45% is historically unprecedented.
-        </div>
-        <div class="chart-box"><canvas id="cPolSavings"></canvas></div>
-      </div>
-      <div class="card">
-        <h3>Policy Lever: Labor Participation</h3>
-        <div style="font-size:12px;color:var(--text2);margin-bottom:8px;">
-          GDP per capita = A &middot; f(k) &middot; (N/POP). Labor participation is a direct multiplier.
-          France lost 28% of its GDP gap to the US from labor alone.
-        </div>
-        <div class="chart-box"><canvas id="cPolLabor"></canvas></div>
+  <div class="grid-2">
+    <div class="card">
+      <h3>Penn World Table 11.0</h3>
+      <div style="font-size:13px;color:var(--text2);line-height:1.7;">
+        <p style="margin-bottom:10px;">PWT 11.0 is the latest version, published October 7, 2025 by the Groningen Growth and Development Centre (GGDC),
+        University of Groningen. It is a major update from PWT 10.01, extending coverage to 185 countries through 2023
+        with new 2021 ICP PPP benchmarks.</p>
+
+        <p style="margin-bottom:10px;"><strong>Access the data:</strong></p>
+        <p style="margin-bottom:6px;font-family:var(--mono);font-size:12px;">
+          <a href="https://www.rug.nl/ggdc/productivity/pwt/" target="_blank" style="color:var(--accent);">https://www.rug.nl/ggdc/productivity/pwt/</a>
+        </p>
+        <p style="margin-bottom:6px;font-family:var(--mono);font-size:12px;">
+          DOI: <a href="https://doi.org/10.34894/FABVLR" target="_blank" style="color:var(--accent);">10.34894/FABVLR</a> (DataverseNL)
+        </p>
+        <p style="margin-bottom:6px;font-family:var(--mono);font-size:12px;">
+          FRED: <a href="https://fred.stlouisfed.org/release?rid=285" target="_blank" style="color:var(--accent);">fred.stlouisfed.org/release?rid=285</a>
+        </p>
+
+        <p style="margin-bottom:10px;margin-top:14px;"><strong>Required citation:</strong></p>
+        <p style="font-size:12px;color:var(--text3);font-style:italic;">
+          Feenstra, Robert C., Robert Inklaar and Marcel P. Timmer (2015),
+          "The Next Generation of the Penn World Table,"
+          <em>American Economic Review</em>, 105(10), 3150-3182.
+        </p>
+
+        <p style="margin-top:14px;"><strong>What changed from PWT 7.1 (used in the case)?</strong></p>
+        <p style="margin-top:4px;">PWT 11.0 incorporates revised 2017 and 2021 ICP PPP benchmarks, extends data to 2023,
+        uses official China national accounts (replacing the Maddison/Wu adjusted series), and adds refined TFP series.
+        Results for France and the US may differ slightly from the case's Exhibit 2 values due to these revisions.</p>
       </div>
     </div>
 
     <div class="card">
-      <h3>China Scenario Builder</h3>
-      <div style="font-size:12px;color:var(--text2);margin-bottom:14px;">
-        Adjust China-specific parameters to project different outcomes for Durabuild's potential market.
-      </div>
-
-      <div class="grid-3">
-        <div>
-          <div class="param-row">
-            <div class="param-header"><span>China Savings Rate</span><span class="pval" id="pv_cs">45%</span></div>
-            <input type="range" id="pl_cs" min="10" max="60" step="1" value="45" oninput="policyUpdate()">
-          </div>
-          <div class="param-row">
-            <div class="param-header"><span>China TFP Growth</span><span class="pval" id="pv_cg">3.5%</span></div>
-            <input type="range" id="pl_cg" min="0" max="8" step="0.1" value="3.5" oninput="policyUpdate()">
-          </div>
-        </div>
-        <div>
-          <div class="param-row">
-            <div class="param-header"><span>China Pop Growth</span><span class="pval" id="pv_cn">0.5%</span></div>
-            <input type="range" id="pl_cn" min="-1" max="3" step="0.1" value="0.5" oninput="policyUpdate()">
-          </div>
-          <div class="param-row">
-            <div class="param-header"><span>Regulatory Friction</span><span class="pval" id="pv_cr">0.85</span></div>
-            <input type="range" id="pl_cr" min="0.40" max="1.00" step="0.01" value="0.85" oninput="policyUpdate()">
-          </div>
-        </div>
-        <div>
-          <div class="param-row">
-            <div class="param-header"><span>Technology Adoption</span><span class="pval" id="pv_ct">0.70</span></div>
-            <input type="range" id="pl_ct" min="0.20" max="1.00" step="0.01" value="0.70" oninput="policyUpdate()">
-          </div>
-          <div class="param-row">
-            <div class="param-header"><span>One-Child Pop Effect (yrs)</span><span class="pval" id="pv_co">15</span>
-            </div>
-            <input type="range" id="pl_co" min="0" max="30" step="1" value="15" oninput="policyUpdate()">
-          </div>
-        </div>
-      </div>
-
-      <div class="chart-box tall"><canvas id="cChina"></canvas></div>
-
-      <div class="grid-3" style="margin-top:16px;">
-        <div class="ss-box">
-          <div class="val" id="cn_ss_k">--</div>
-          <div class="lbl">China Projected k*</div>
-        </div>
-        <div class="ss-box">
-          <div class="val" id="cn_ss_y">--</div>
-          <div class="lbl">China Projected y*</div>
-        </div>
-        <div class="ss-box">
-          <div class="val" id="cn_peak_gr">--</div>
-          <div class="lbl">Peak Growth Rate</div>
-        </div>
-      </div>
+      <h3>Key PWT Variables for This Case</h3>
+      <table class="data-table">
+        <tr><th style="text-align:left;">Variable</th><th style="text-align:left;">Description</th><th style="text-align:left;">Use in Solow</th></tr>
+        <tr><td style="font-family:var(--mono);color:var(--accent);">rgdpna</td><td style="text-align:left;">Real GDP at constant national prices (mil. 2017 US$)</td><td style="text-align:left;">Y -- compute y = rgdpna/emp</td></tr>
+        <tr><td style="font-family:var(--mono);color:var(--accent);">rnna</td><td style="text-align:left;">Capital stock at constant national prices (mil. 2017 US$)</td><td style="text-align:left;">K -- compute k = rnna/emp</td></tr>
+        <tr><td style="font-family:var(--mono);color:var(--accent);">emp</td><td style="text-align:left;">Number of persons engaged (millions)</td><td style="text-align:left;">L -- labor input</td></tr>
+        <tr><td style="font-family:var(--mono);color:var(--accent);">avh</td><td style="text-align:left;">Average annual hours worked per worker</td><td style="text-align:left;">N -- total hours = emp * avh</td></tr>
+        <tr><td style="font-family:var(--mono);color:var(--accent);">pop</td><td style="text-align:left;">Population (millions)</td><td style="text-align:left;">POP -- for Y/POP, N/POP</td></tr>
+        <tr><td style="font-family:var(--mono);color:var(--accent);">labsh</td><td style="text-align:left;">Share of labour compensation in GDP</td><td style="text-align:left;">1 - &alpha; (so &alpha; = 1 - labsh)</td></tr>
+        <tr><td style="font-family:var(--mono);color:var(--accent);">rtfpna</td><td style="text-align:left;">TFP at constant national prices (2017=1)</td><td style="text-align:left;">A -- total factor productivity index</td></tr>
+        <tr><td style="font-family:var(--mono);color:var(--accent);">ctfp</td><td style="text-align:left;">TFP level at current PPPs (USA=1)</td><td style="text-align:left;">A -- cross-country TFP comparison</td></tr>
+        <tr><td style="font-family:var(--mono);color:var(--accent);">delta</td><td style="text-align:left;">Average depreciation rate of capital stock</td><td style="text-align:left;">&delta; -- directly usable</td></tr>
+        <tr><td style="font-family:var(--mono);color:var(--accent);">csh_i</td><td style="text-align:left;">Share of gross capital formation in GDP (expenditure)</td><td style="text-align:left;">s -- investment/savings rate</td></tr>
+        <tr><td style="font-family:var(--mono);color:var(--accent);">hc</td><td style="text-align:left;">Human capital index (based on years of schooling + returns)</td><td style="text-align:left;">Augmented Solow (MRW 1992)</td></tr>
+      </table>
     </div>
   </div>
 
-  <script>
-    // ============ UTILITY ============
-    const $ = id => document.getElementById(id);
+  <div class="card">
+    <h3>How to Replicate Exhibit 2 Using PWT 11.0</h3>
+    <div style="font-size:13px;color:var(--text2);line-height:1.8;">
+      <p style="margin-bottom:12px;">The case decomposes France/US GDP per capita as: <span style="font-family:'STIX Two Text',Georgia,serif;font-size:16px;"><em>Y</em>/<em>POP</em> = <em>A</em> &middot; (<em>K</em>/<em>N</em>)<sup>&alpha;</sup> &middot; (<em>N</em>/<em>POP</em>)</span></p>
 
-    const chartDefaults = {
-      responsive: true, maintainAspectRatio: false,
-      animation: {duration: 200},
-      plugins: {
-        legend: {labels: {font: {family: 'DM Mono', size: 10}, color: '#8c857a', boxWidth: 10, padding: 10}},
-        tooltip: {titleFont: {family: 'DM Mono', size: 11}, bodyFont: {family: 'DM Mono', size: 11}, backgroundColor: '#1a1714', borderColor: '#ddd8cf', borderWidth: 1, padding: 8, cornerRadius: 4}
-      },
-      scales: {
-        x: {grid: {color: 'rgba(221,216,207,0.4)', drawBorder: false}, ticks: {font: {family: 'DM Mono', size: 10}, color: '#8c857a'}},
-        y: {grid: {color: 'rgba(221,216,207,0.4)', drawBorder: false}, ticks: {font: {family: 'DM Mono', size: 10}, color: '#8c857a'}}
-      }
-    };
+      <p style="margin-bottom:6px;"><strong>Step 1: Extract data for France (FRA) and the United States (USA)</strong></p>
+      <p style="margin-bottom:12px;">Download PWT 11.0. Filter for country codes FRA and USA. Select years of interest (1950, 1980, 2000, and extend to 2019 or 2023).</p>
 
-    function makeChart(id, type, datasets, labels, opts = {}) {
-      return new Chart($(id), {
-        type, data: {labels, datasets},
-        options: {...chartDefaults, ...opts}
-      });
-    }
+      <p style="margin-bottom:6px;"><strong>Step 2: Compute total hours per capita (N/POP)</strong></p>
+      <div class="equation"><em>N</em> / <em>POP</em> = (<em>emp</em> &times; <em>avh</em>) / <em>pop</em></div>
+      <p style="margin-bottom:12px;">Then compute the France/US ratio: (N/POP)<sub>FRA</sub> / (N/POP)<sub>USA</sub></p>
 
-    function solowSim(s, delta, n, g, alpha, A0, k0, labor, years = 50) {
-      const brk = n + g + delta;
-      const kStar = Math.pow(s / brk, 1 / (1 - alpha));
-      const yStar = Math.pow(kStar, alpha);
-      let k = k0;
-      const d = [];
-      for (let t = 0; t <= years; t++) {
-        const At = A0 * Math.pow(1 + g, t);
-        const yt = Math.pow(k, alpha);
-        const yAct = At * yt * labor;
-        const inv = s * yt;
-        const brkI = brk * k;
-        const dk = inv - brkI;
-        let gr = 0;
-        if (t > 0 && d.length > 0) gr = (yAct / d[t - 1].yAct - 1) * 100;
-        d.push({t, k, yt, yAct, At, inv, brkI, dk, gr});
-        k = Math.max(k + dk, 0.01);
-      }
-      let y90 = years;
-      const tgt = kStar * 0.9;
-      for (let i = 0; i < d.length; i++) if (d[i].k >= tgt) {y90 = i; break;}
-      return {d, kStar, yStar, y90, brk};
-    }
+      <p style="margin-bottom:6px;"><strong>Step 3: Compute capital-to-labor ratio</strong></p>
+      <div class="equation"><em>K</em> / <em>N</em> = <em>rnna</em> / (<em>emp</em> &times; <em>avh</em>)</div>
+      <p style="margin-bottom:12px;">Then compute (K/N)<sub>FRA</sub>/(K/N)<sub>USA</sub> and raise to the power &alpha;. The case uses &alpha; = 0.3; alternatively use &alpha; = 1 - labsh from PWT directly.</p>
 
-    // ============ TAB SWITCHING ============
-    function switchTab(name) {
-      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-      document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-      document.querySelector(`.tab-content#tab-${name}`).classList.add('active');
-      event.target.classList.add('active');
-      if (name === 'accounting') initAccounting();
-      if (name === 'gametheory') initGameTheory();
-      if (name === 'convergence') initConvergence();
-      if (name === 'policy') initPolicy();
-    }
+      <p style="margin-bottom:6px;"><strong>Step 4: Back out TFP (A) as a residual</strong></p>
+      <div class="equation"><em>A</em> = (<em>Y</em> / <em>POP</em>) / [(<em>K</em> / <em>N</em>)<sup>&alpha;</sup> &middot; (<em>N</em> / <em>POP</em>)]</div>
+      <p style="margin-bottom:12px;">Or use the <span style="font-family:var(--mono);color:var(--accent);">ctfp</span> variable directly for the cross-country TFP level comparison (USA=1).</p>
 
-    // ============ TAB 1: SOLOW ============
-    let sCharts = {};
+      <p style="margin-bottom:6px;"><strong>Step 5: Verify the decomposition</strong></p>
+      <div class="equation">(<em>Y</em> / <em>POP</em>)<sub>ratio</sub> = <em>A</em><sub>ratio</sub> &middot; (<em>K</em> / <em>N</em>)<sup>&alpha;</sup><sub>ratio</sub> &middot; (<em>N</em> / <em>POP</em>)<sub>ratio</sub></div>
+      <p style="margin-bottom:12px;">The product of the three right-hand terms should equal the left-hand term. This is an accounting identity -- it must hold.</p>
 
-    const SPRESETS = {
-      us50: {s: 20, d: 4.4, n: 1.4, g: 1.8, a: 0.30, A: 1.0, k: 40, l: 1.0},
-      fr50: {s: 22, d: 4.4, n: 1.0, g: 2.5, a: 0.30, A: 0.99, k: 4, l: 1.25},
-      fr80: {s: 20, d: 4.4, n: 0.5, g: 1.2, a: 0.30, A: 1.05, k: 35, l: 0.93},
-      cn00: {s: 45, d: 5.0, n: 0.8, g: 3.5, a: 0.30, A: 0.40, k: 3, l: 1.10},
-      cn1c: {s: 45, d: 5.0, n: 0.3, g: 3.5, a: 0.30, A: 0.40, k: 3, l: 1.10},
-      ph24: {s: 24, d: 5.0, n: 1.5, g: 1.2, a: 0.30, A: 0.35, k: 5, l: 0.64},
-      phbd: {s: 24, d: 5.0, n: 1.5, g: 0.5, a: 0.30, A: 0.35, k: 5, l: 0.60},
-      phdd: {s: 24, d: 5.0, n: 1.5, g: 2.0, a: 0.30, A: 0.35, k: 5, l: 0.80},
-      phhi: {s: 38, d: 5.0, n: 1.5, g: 2.5, a: 0.30, A: 0.35, k: 5, l: 0.75},
-    };
+      <p style="margin-bottom:6px;"><strong>Step 6: Extend to the Philippines (PHL) and China (CHN)</strong></p>
+      <p>Repeat the same decomposition for PHL/USA and CHN/USA ratios. This lets you apply the case's analytical framework beyond France and answer Lisa's question about China -- and apply it to the Philippine context for class discussion.</p>
+    </div>
+  </div>
 
-    function loadSolowPreset(p) {
-      const v = SPRESETS[p];
-      $('sl_s').value = v.s; $('sl_d').value = v.d; $('sl_n').value = v.n; $('sl_g').value = v.g;
-      $('sl_a').value = v.a; $('sl_A').value = v.A; $('sl_k').value = v.k; $('sl_l').value = v.l;
-      solowUpdate();
-    }
+  <div class="card">
+    <h3>Growth Accounting with PWT (Solow Residual Method)</h3>
+    <div style="font-size:13px;color:var(--text2);line-height:1.8;">
+      <p style="margin-bottom:10px;">To decompose growth rates over time (not just level differences), use the growth accounting equation:</p>
+      <div class="equation"><em>g</em><sub><em>Y</em>/<em>L</em></sub> = <em>&alpha;</em> &middot; <em>g</em><sub><em>K</em>/<em>L</em></sub> + <em>g</em><sub><em>A</em></sub> &nbsp;&nbsp;&nbsp; (Solow residual: <em>g</em><sub><em>A</em></sub> = <em>g</em><sub><em>Y</em>/<em>L</em></sub> &minus; <em>&alpha;</em> &middot; <em>g</em><sub><em>K</em>/<em>L</em></sub>)</div>
 
-    function solowUpdate() {
-      const s = +$('sl_s').value / 100, d = +$('sl_d').value / 100, n = +$('sl_n').value / 100,
-        g = +$('sl_g').value / 100, a = +$('sl_a').value, A = +$('sl_A').value, k = +$('sl_k').value, l = +$('sl_l').value;
-      $('sv_s').textContent = $('sl_s').value + '%'; $('sv_d').textContent = $('sl_d').value + '%';
-      $('sv_n').textContent = $('sl_n').value + '%'; $('sv_g').textContent = $('sl_g').value + '%';
-      $('sv_a').textContent = (+$('sl_a').value).toFixed(2); $('sv_A').textContent = (+$('sl_A').value).toFixed(2);
-      $('sv_k').textContent = (+$('sl_k').value).toFixed(1); $('sv_l').textContent = (+$('sl_l').value).toFixed(2);
+      <p style="margin-bottom:10px;">Using PWT variables:</p>
+      <div style="font-family:var(--mono);font-size:12px;background:var(--surface2);padding:14px;border-radius:4px;line-height:2;">
+        y = log(rgdpna / emp) &nbsp;&nbsp;&nbsp;# log GDP per worker<br>
+        k = log(rnna / emp) &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# log capital per worker<br>
+        &alpha; = 1 - labsh &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# capital share<br>
+        g_y = &Delta;y &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# growth of output per worker<br>
+        g_k = &Delta;k &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# growth of capital per worker<br>
+        g_A = g_y - &alpha; * g_k &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# TFP growth (Solow residual)
+      </div>
 
-      const r = solowSim(s, d, n, g, a, A, k, l, 50);
-      const {d: data, kStar, yStar, y90} = r;
-      const yrs = data.map(x => x.t);
+      <p style="margin-top:12px;">This is the method used in Solow (1957). The R code walkthrough using PWT is available at
+        <a href="https://www.r-econometrics.com/2018/12/30/an-exercise-in-growth-accounting/" target="_blank" style="color:var(--accent);">r-econometrics.com</a>.
+      </p>
+    </div>
+  </div>
 
-      $('ss_k2').textContent = kStar.toFixed(1); $('ss_y2').textContent = yStar.toFixed(2);
-      $('ss_gr').textContent = (g * 100).toFixed(1) + '%'; $('ss_yr').textContent = y90 >= 50 ? '50+' : y90;
+  <div class="card">
+      <h3>Cited in the Case</h3>
+      <div style="font-size:13px;color:var(--text2);line-height:1.8;">
+        <p style="margin-bottom:10px;font-weight:600;color:var(--text);">Labor Market & French Slowdown (Endnote 1)</p>
+        <p style="margin-bottom:8px;">Solow, R.M. (2000). "Unemployment in the United States and in Europe: A Contrast and the Reasons." <em>Working Paper</em> no. 231.</p>
+        <p style="margin-bottom:8px;">Blanchard, O.J. (2004). "Explaining European Unemployment." <em>NBER Reporter: Research Summary</em>.</p>
+        <p style="margin-bottom:14px;">Rogerson, R. (2006). "Understanding Differences in Hours Worked." <em>Review of Economic Dynamics</em>, 9(3).</p>
 
-      // GDP
-      const ssPath = data.map(x => A * Math.pow(1 + g, x.t) * yStar * l);
-      sCharts.gdp.data.labels = yrs;
-      sCharts.gdp.data.datasets[0].data = data.map(x => x.yAct);
-      sCharts.gdp.data.datasets[1].data = ssPath;
-      sCharts.gdp.update();
+        <p style="margin-bottom:10px;font-weight:600;color:var(--text);">Game Theory Foundations</p>
+        <p style="margin-bottom:8px;">Von Neumann, J. and O. Morgenstern (1944). <em>Theory of Games and Economic Behavior</em>. Princeton University Press.</p>
+        <p style="margin-bottom:8px;">Nash, J. (1950). "Equilibrium Points in N-Person Games." <em>PNAS</em>, 36(1), 48-49.</p>
+        <p style="margin-bottom:14px;">Selten, R. (1965). "Spieltheoretische Behandlung eines Oligopolmodells mit Nachfragetragheit." <em>Zeitschrift fur die Gesamte Staatswissenschaft</em>, 121, 301-324.</p>
 
-      // Capital
-      sCharts.cap.data.labels = yrs;
-      sCharts.cap.data.datasets[0].data = data.map(x => x.k);
-      sCharts.cap.data.datasets[1].data = yrs.map(() => kStar);
-      sCharts.cap.update();
+        <p style="margin-bottom:10px;font-weight:600;color:var(--text);">Philippines TFP</p>
+        <p style="margin-bottom:8px;">Amodia, R.A. et al. (2024). "Estimating the Philippines' Total Factor Productivity Growth." <em>BSP Discussion Paper</em> No. 2024-10.</p>
+        <p style="margin-bottom:8px;">Cororaton, C.B. (2005). "Total Factor Productivity Growth in the Philippines." <em>Asian Development Review</em>, 22(1), 97-113.</p>
 
-      // Solow diagram
-      const maxK = Math.max(kStar * 1.5, k * 1.3, 5);
-      const kR = []; for (let i = 0; i <= maxK; i += maxK / 50) kR.push(i);
-      sCharts.solow.data.labels = kR.map(x => x.toFixed(1));
-      sCharts.solow.data.datasets[0].data = kR.map(x => s * Math.pow(x, a));
-      sCharts.solow.data.datasets[1].data = kR.map(x => (n + g + d) * x);
-      sCharts.solow.data.datasets[2].data = kR.map(x => Math.abs(x - k) < maxK / 45 ? s * Math.pow(k, a) : null);
-      sCharts.solow.update();
+        <p style="margin-bottom:10px;font-weight:600;color:var(--text);">Stylized Facts</p>
+        <p style="margin-bottom:8px;">Kaldor, N. (1961). "Capital Accumulation and Economic Growth." In F.A. Lutz and D.C. Hague (eds.), <em>The Theory of Capital</em>.</p>
+      </div>
+    </div>
 
-      // Growth
-      sCharts.growth.data.labels = yrs.slice(1);
-      sCharts.growth.data.datasets[0].data = data.slice(1).map(x => x.gr);
-      sCharts.growth.data.datasets[1].data = yrs.slice(1).map(() => g * 100);
-      sCharts.growth.update();
-    }
+</div>
 
-    function initSolow() {
-      sCharts.gdp = makeChart('cGDP', 'line', [
-        {label: 'GDP per Capita', data: [], borderColor: '#b44a2d', borderWidth: 2, pointRadius: 0, fill: true, backgroundColor: 'rgba(180,74,45,0.06)'},
-        {label: 'Steady State Path', data: [], borderColor: '#c4930a', borderWidth: 1.5, borderDash: [6, 4], pointRadius: 0}
-      ], []);
-      sCharts.cap = makeChart('cCap', 'line', [
-        {label: 'k_tilde', data: [], borderColor: '#b44a2d', borderWidth: 2, pointRadius: 0, fill: true, backgroundColor: 'rgba(180,74,45,0.06)'},
-        {label: 'k*', data: [], borderColor: '#c4930a', borderWidth: 1.5, borderDash: [6, 4], pointRadius: 0}
-      ], [], {plugins: {...chartDefaults.plugins, legend: {display: false}}});
-      sCharts.solow = makeChart('cSolow', 'line', [
-        {label: 's*f(k)', data: [], borderColor: '#2d8a4e', borderWidth: 2, pointRadius: 0},
-        {label: '(n+g+d)*k', data: [], borderColor: '#c43c3c', borderWidth: 2, pointRadius: 0},
-        {label: 'Current k', data: [], borderColor: '#c4930a', borderWidth: 0, pointRadius: 8, pointBackgroundColor: '#c4930a'}
-      ], []);
-      sCharts.growth = makeChart('cGrowth', 'line', [
-        {label: 'Growth %', data: [], borderColor: '#b44a2d', borderWidth: 2, pointRadius: 0, fill: true, backgroundColor: 'rgba(180,74,45,0.06)'},
-        {label: 'SS Growth (g)', data: [], borderColor: '#c4930a', borderWidth: 1.5, borderDash: [6, 4], pointRadius: 0}
-      ], []);
-      loadSolowPreset('fr50');
-    }
+<script>
+// ============ UTILITY ============
+const $ = id => document.getElementById(id);
 
-    // ============ TAB 2: ACCOUNTING ============
-    let aInited = false;
-    function initAccounting() {
-      if (aInited) return; aInited = true;
+const chartDefaults = {
+  responsive: true, maintainAspectRatio: false,
+  animation: { duration: 200 },
+  plugins: {
+    legend: { labels: { font: { family: 'DM Mono', size: 10 }, color: '#8c857a', boxWidth: 10, padding: 10 } },
+    tooltip: { titleFont: { family:'DM Mono', size:11 }, bodyFont: { family:'DM Mono', size:11 }, backgroundColor:'#1a1714', borderColor:'#ddd8cf', borderWidth:1, padding:8, cornerRadius:4 }
+  },
+  scales: {
+    x: { grid: { color:'rgba(221,216,207,0.4)', drawBorder:false }, ticks: { font:{family:'DM Mono',size:10}, color:'#8c857a' } },
+    y: { grid: { color:'rgba(221,216,207,0.4)', drawBorder:false }, ticks: { font:{family:'DM Mono',size:10}, color:'#8c857a' } }
+  }
+};
 
-      // Decomposition bar charts
-      const years = ['1950', '1980', '2000'];
-      const data = [
-        {A: 0.99, KN: 0.44, NPOP: 1.25, YPOP: 0.54},
-        {A: 1.05, KN: 0.88, NPOP: 0.93, YPOP: 0.86},
-        {A: 1.02, KN: 1.01, NPOP: 0.72, YPOP: 0.75}
-      ];
+function makeChart(id, type, datasets, labels, opts={}) {
+  return new Chart($(id), {
+    type, data: { labels, datasets },
+    options: { ...chartDefaults, ...opts }
+  });
+}
 
-      // Grouped bar
-      makeChart('cDecomp', 'bar', [
-        {label: 'Y/POP', data: data.map(d => d.YPOP), backgroundColor: '#b44a2d'},
-        {label: 'A (TFP)', data: data.map(d => d.A), backgroundColor: '#3574c4'},
-        {label: '(K/N)^0.3', data: data.map(d => d.KN), backgroundColor: '#2d8a4e'},
-        {label: 'N/POP', data: data.map(d => d.NPOP), backgroundColor: '#c4930a'}
-      ], years);
+function solowSim(s, delta, n, g, alpha, A0, k0, labor, years=50) {
+  const brk = n+g+delta;
+  const kStar = Math.pow(s/brk, 1/(1-alpha));
+  const yStar = Math.pow(kStar, alpha);
+  let k = k0;
+  const d = [];
+  for (let t=0; t<=years; t++) {
+    const At = A0*Math.pow(1+g,t);
+    const yt = Math.pow(k, alpha);
+    const yAct = At*yt*labor;
+    const inv = s*yt;
+    const brkI = brk*k;
+    const dk = inv - brkI;
+    let gr = 0;
+    if (t>0 && d.length>0) gr = (yAct/d[t-1].yAct-1)*100;
+    d.push({t, k, yt, yAct, At, inv, brkI, dk, gr});
+    k = Math.max(k+dk, 0.01);
+  }
+  let y90 = years;
+  const tgt = kStar*0.9;
+  for (let i=0;i<d.length;i++) if(d[i].k>=tgt){y90=i;break;}
+  return {d, kStar, yStar, y90, brk};
+}
 
-      // Horizontal decomp bars
-      data.forEach((d, i) => {
-        const yr = years[i];
-        // log decomposition: ln(Y/POP) = ln(A) + ln((K/N)^0.3) + ln(N/POP)
-        const lnY = Math.log(d.YPOP);
-        const lnA = Math.log(d.A);
-        const lnK = Math.log(d.KN);
-        const lnN = Math.log(d.NPOP);
-        // Contribution shares (handle negative logs)
-        const total = Math.abs(lnA) + Math.abs(lnK) + Math.abs(lnN);
-        const pctA = (lnA / lnY * 100);
-        const pctK = (lnK / lnY * 100);
-        const pctN = (lnN / lnY * 100);
+// ============ TAB SWITCHING ============
+function switchTab(name) {
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));
+  document.querySelector(`.tab-content#tab-${name}`).classList.add('active');
+  event.target.classList.add('active');
+  if (name==='accounting') initAccounting();
+  if (name==='gametheory') initGameTheory();
+  if (name==='convergence') initConvergence();
+  if (name==='policy') initPolicy();
+}
 
-        $(`bar${yr}`).innerHTML = `
+// ============ TAB 1: SOLOW ============
+let sCharts = {};
+
+const SPRESETS = {
+  us50: {s:20,d:4.4,n:1.4,g:1.8,a:0.30,A:1.0,k:3.2,l:1.0},
+  fr50: {s:22,d:4.4,n:1.0,g:2.5,a:0.30,A:0.99,k:2.3,l:1.25},
+  fr80: {s:20,d:4.4,n:0.5,g:1.2,a:0.30,A:1.05,k:4.1,l:0.93},
+  cn00: {s:45,d:5.0,n:0.8,g:3.5,a:0.30,A:0.40,k:2.4,l:1.10},
+  cn1c: {s:45,d:5.0,n:0.3,g:3.5,a:0.30,A:0.40,k:2.2,l:1.10},
+  ph24: {s:23,d:5.0,n:0.8,g:1.0,a:0.30,A:0.35,k:1.0,l:0.64},
+  phbd: {s:23,d:5.0,n:0.8,g:0.3,a:0.30,A:0.35,k:1.8,l:0.60},
+  phdd: {s:23,d:5.0,n:0.8,g:2.0,a:0.30,A:0.35,k:1.0,l:0.75},
+  phhi: {s:38,d:5.0,n:0.8,g:2.5,a:0.30,A:0.35,k:1.8,l:0.75},
+};
+
+function loadSolowPreset(p) {
+  const v = SPRESETS[p];
+  $('sl_s').value=v.s; $('sl_d').value=v.d; $('sl_n').value=v.n; $('sl_g').value=v.g;
+  $('sl_a').value=v.a; $('sl_A').value=v.A; $('sl_k').value=v.k; $('sl_l').value=v.l;
+  solowUpdate();
+}
+
+function solowUpdate() {
+  const s=+$('sl_s').value/100, d=+$('sl_d').value/100, n=+$('sl_n').value/100,
+    g=+$('sl_g').value/100, a=+$('sl_a').value, A=+$('sl_A').value, k=+$('sl_k').value, l=+$('sl_l').value;
+  $('sv_s').textContent=$('sl_s').value+'%'; $('sv_d').textContent=$('sl_d').value+'%';
+  $('sv_n').textContent=$('sl_n').value+'%'; $('sv_g').textContent=$('sl_g').value+'%';
+  $('sv_a').textContent=(+$('sl_a').value).toFixed(2); $('sv_A').textContent=(+$('sl_A').value).toFixed(2);
+  $('sv_k').textContent=(+$('sl_k').value).toFixed(1); $('sv_l').textContent=(+$('sl_l').value).toFixed(2);
+
+  const r = solowSim(s,d,n,g,a,A,k,l,50);
+  const {d:data, kStar, yStar, y90} = r;
+  const yrs = data.map(x=>x.t);
+
+  $('ss_k2').textContent=kStar.toFixed(1); $('ss_y2').textContent=yStar.toFixed(2);
+  $('ss_gr').textContent=(g*100).toFixed(1)+'%'; $('ss_yr').textContent=y90>=50?'50+':y90;
+
+  // GDP
+  const ssPath = data.map(x => A*Math.pow(1+g,x.t)*yStar*l);
+  sCharts.gdp.data.labels = yrs;
+  sCharts.gdp.data.datasets[0].data = data.map(x=>x.yAct);
+  sCharts.gdp.data.datasets[1].data = ssPath;
+  sCharts.gdp.update();
+
+  // Capital
+  sCharts.cap.data.labels = yrs;
+  sCharts.cap.data.datasets[0].data = data.map(x=>x.k);
+  sCharts.cap.data.datasets[1].data = yrs.map(()=>kStar);
+  sCharts.cap.update();
+
+  // Solow diagram
+  const maxK = Math.max(kStar*1.5, k*1.3, 5);
+  const kR=[]; for(let i=0;i<=maxK;i+=maxK/50) kR.push(i);
+  sCharts.solow.data.labels = kR.map(x=>x.toFixed(1));
+  sCharts.solow.data.datasets[0].data = kR.map(x=>s*Math.pow(x,a));
+  sCharts.solow.data.datasets[1].data = kR.map(x=>(n+g+d)*x);
+  sCharts.solow.data.datasets[2].data = kR.map(x=>Math.abs(x-k)<maxK/45?s*Math.pow(k,a):null);
+  sCharts.solow.update();
+
+  // Growth
+  sCharts.growth.data.labels = yrs.slice(1);
+  sCharts.growth.data.datasets[0].data = data.slice(1).map(x=>x.gr);
+  sCharts.growth.data.datasets[1].data = yrs.slice(1).map(()=>g*100);
+  sCharts.growth.update();
+}
+
+function initSolow() {
+  sCharts.gdp = makeChart('cGDP','line',[
+    {label:'GDP per Capita',data:[],borderColor:'#b44a2d',borderWidth:2,pointRadius:0,fill:true,backgroundColor:'rgba(180,74,45,0.06)'},
+    {label:'Steady State Path',data:[],borderColor:'#c4930a',borderWidth:1.5,borderDash:[6,4],pointRadius:0}
+  ],[]);
+  sCharts.cap = makeChart('cCap','line',[
+    {label:'k_tilde',data:[],borderColor:'#b44a2d',borderWidth:2,pointRadius:0,fill:true,backgroundColor:'rgba(180,74,45,0.06)'},
+    {label:'k*',data:[],borderColor:'#c4930a',borderWidth:1.5,borderDash:[6,4],pointRadius:0}
+  ],[],{plugins:{...chartDefaults.plugins,legend:{display:false}}});
+  sCharts.solow = makeChart('cSolow','line',[
+    {label:'s*f(k)',data:[],borderColor:'#2d8a4e',borderWidth:2,pointRadius:0},
+    {label:'(n+g+d)*k',data:[],borderColor:'#c43c3c',borderWidth:2,pointRadius:0},
+    {label:'Current k',data:[],borderColor:'#c4930a',borderWidth:0,pointRadius:8,pointBackgroundColor:'#c4930a'}
+  ],[]);
+  sCharts.growth = makeChart('cGrowth','line',[
+    {label:'Growth %',data:[],borderColor:'#b44a2d',borderWidth:2,pointRadius:0,fill:true,backgroundColor:'rgba(180,74,45,0.06)'},
+    {label:'SS Growth (g)',data:[],borderColor:'#c4930a',borderWidth:1.5,borderDash:[6,4],pointRadius:0}
+  ],[]);
+  loadSolowPreset('fr50');
+}
+
+// ============ TAB 2: ACCOUNTING ============
+let aInited = false;
+function initAccounting() {
+  if (aInited) return; aInited = true;
+
+  // Decomposition bar charts
+  const years = ['1950','1980','2000'];
+  const data = [
+    {A:0.99,KN:0.44,NPOP:1.25,YPOP:0.54},
+    {A:1.05,KN:0.88,NPOP:0.93,YPOP:0.86},
+    {A:1.02,KN:1.01,NPOP:0.72,YPOP:0.75}
+  ];
+
+  // Grouped bar
+  makeChart('cDecomp','bar',[
+    {label:'Y/POP',data:data.map(d=>d.YPOP),backgroundColor:'#b44a2d'},
+    {label:'A (TFP)',data:data.map(d=>d.A),backgroundColor:'#3574c4'},
+    {label:'(K/N)^0.3',data:data.map(d=>d.KN),backgroundColor:'#2d8a4e'},
+    {label:'N/POP',data:data.map(d=>d.NPOP),backgroundColor:'#c4930a'}
+  ],years);
+
+  // Horizontal decomp bars
+  data.forEach((d,i) => {
+    const yr = years[i];
+    // log decomposition: ln(Y/POP) = ln(A) + ln((K/N)^0.3) + ln(N/POP)
+    const lnY = Math.log(d.YPOP);
+    const lnA = Math.log(d.A);
+    const lnK = Math.log(d.KN);
+    const lnN = Math.log(d.NPOP);
+    // Contribution shares (handle negative logs)
+    const total = Math.abs(lnA)+Math.abs(lnK)+Math.abs(lnN);
+    const pctA = (lnA/lnY*100);
+    const pctK = (lnK/lnY*100);
+    const pctN = (lnN/lnY*100);
+
+    $(`bar${yr}`).innerHTML = `
       <div style="font-family:var(--mono);font-size:11px;margin-bottom:6px;">
         Log decomposition of ln(${d.YPOP}) = ${lnA.toFixed(3)} + ${lnK.toFixed(3)} + ${lnN.toFixed(3)}
       </div>
       <div style="display:grid;grid-template-columns:70px 1fr;gap:4px;font-family:var(--mono);font-size:11px;">
         <span>TFP</span><div style="background:#e8e4dd;border-radius:2px;overflow:hidden;height:18px;display:flex;">
-          <div style="width:${Math.abs(pctA).toFixed(0)}%;background:${pctA >= 0 ? '#3574c4' : '#c43c3c'};min-width:2px;"></div>
+          <div style="width:${Math.abs(pctA).toFixed(0)}%;background:${pctA>=0?'#3574c4':'#c43c3c'};min-width:2px;"></div>
         </div>
         <span>(K/N)^&alpha;</span><div style="background:#e8e4dd;border-radius:2px;overflow:hidden;height:18px;display:flex;">
-          <div style="width:${Math.abs(pctK).toFixed(0)}%;background:${pctK >= 0 ? '#2d8a4e' : '#c43c3c'};min-width:2px;"></div>
+          <div style="width:${Math.abs(pctK).toFixed(0)}%;background:${pctK>=0?'#2d8a4e':'#c43c3c'};min-width:2px;"></div>
         </div>
         <span>N/POP</span><div style="background:#e8e4dd;border-radius:2px;overflow:hidden;height:18px;display:flex;">
-          <div style="width:${Math.min(Math.abs(pctN), 100).toFixed(0)}%;background:${pctN >= 0 ? '#c4930a' : '#c43c3c'};min-width:2px;"></div>
+          <div style="width:${Math.min(Math.abs(pctN),100).toFixed(0)}%;background:${pctN>=0?'#c4930a':'#c43c3c'};min-width:2px;"></div>
         </div>
       </div>
     `;
-      });
+  });
 
-      // Growth accounting over time
-      const frGrowth = [3.8, 3.8, 3.8, 1.6, 1.6]; // 50-60, 60-70, 70-80, 80-90, 90-00
-      const usGrowth = [2.2, 2.2, 2.2, 2.3, 2.3];
-      // rough decomposition: capital deepening vs TFP
-      const frCapital = [2.5, 2.2, 1.5, 0.4, 0.2];
-      const frTFP = [1.3, 1.6, 2.3, 1.2, 1.4];
-      const decades = ['1950-60', '1960-70', '1970-80', '1980-90', '1990-00'];
-      makeChart('cAccounting', 'bar', [
-        {label: 'France: Capital Deepening', data: frCapital, backgroundColor: 'rgba(180,74,45,0.7)', stack: 'fr'},
-        {label: 'France: TFP', data: frTFP, backgroundColor: 'rgba(180,74,45,0.3)', stack: 'fr'},
-        {label: 'US: Total Growth', data: usGrowth, backgroundColor: 'rgba(53,116,196,0.5)', stack: 'us'}
-      ], decades, {
-        scales: {
-          ...chartDefaults.scales,
-          x: {...chartDefaults.scales.x, stacked: true},
-          y: {...chartDefaults.scales.y, stacked: true, title: {display: true, text: 'Growth Rate (%)', font: {family: 'DM Mono', size: 10}, color: '#8c857a'}}
-        }
-      });
+  // Growth accounting over time
+  const frGrowth = [3.8,3.8,3.8,1.6,1.6]; // 50-60, 60-70, 70-80, 80-90, 90-00
+  const usGrowth = [2.2,2.2,2.2,2.3,2.3];
+  // rough decomposition: capital deepening vs TFP
+  const frCapital = [2.5,2.2,1.5,0.4,0.2];
+  const frTFP = [1.3,1.6,2.3,1.2,1.4];
+  const decades = ['1950-60','1960-70','1970-80','1980-90','1990-00'];
+  makeChart('cAccounting','bar',[
+    {label:'France: Capital Deepening',data:frCapital,backgroundColor:'rgba(180,74,45,0.7)',stack:'fr'},
+    {label:'France: TFP',data:frTFP,backgroundColor:'rgba(180,74,45,0.3)',stack:'fr'},
+    {label:'US: Total Growth',data:usGrowth,backgroundColor:'rgba(53,116,196,0.5)',stack:'us'}
+  ],decades,{
+    scales:{...chartDefaults.scales,
+      x:{...chartDefaults.scales.x,stacked:true},
+      y:{...chartDefaults.scales.y,stacked:true,title:{display:true,text:'Growth Rate (%)',font:{family:'DM Mono',size:10},color:'#8c857a'}}
     }
+  });
+}
 
-    // ============ TAB 3: GAME THEORY ============
-    let gInited = false;
-    let gCharts = {};
+// ============ TAB 3: GAME THEORY ============
+let gInited = false;
+let gCharts = {};
 
-    function initGameTheory() {
-      if (gInited) return; gInited = true;
+function initGameTheory() {
+  if (gInited) return; gInited = true;
 
-      // Sensitivity chart
-      gCharts.sens = makeChart('cSensitivity', 'line', [
-        {label: 'E[Enter]', data: [], borderColor: '#b44a2d', borderWidth: 2, pointRadius: 0, fill: true, backgroundColor: 'rgba(180,74,45,0.06)'},
-        {label: 'E[Stay Out]', data: [], borderColor: '#3574c4', borderWidth: 2, borderDash: [6, 4], pointRadius: 0},
-        {label: 'Break-even', data: [], borderColor: '#c4930a', borderWidth: 1.5, borderDash: [3, 3], pointRadius: 0}
-      ], [], {plugins: {...chartDefaults.plugins, legend: {display: true}}});
+  // Sensitivity chart
+  gCharts.sens = makeChart('cSensitivity','line',[
+    {label:'E[Enter]',data:[],borderColor:'#b44a2d',borderWidth:2,pointRadius:0,fill:true,backgroundColor:'rgba(180,74,45,0.06)'},
+    {label:'E[Stay Out]',data:[],borderColor:'#3574c4',borderWidth:2,borderDash:[6,4],pointRadius:0},
+    {label:'Break-even',data:[],borderColor:'#c4930a',borderWidth:1.5,borderDash:[3,3],pointRadius:0}
+  ],[],{plugins:{...chartDefaults.plugins,legend:{display:true}}});
 
-      gCharts.mixed = makeChart('cMixed', 'line', [
-        {label: 'E[Durabuild] given q', data: [], borderColor: '#b44a2d', borderWidth: 2, pointRadius: 0},
-        {label: 'E[Competitor] given p', data: [], borderColor: '#3574c4', borderWidth: 2, pointRadius: 0}
-      ], [], {
-        plugins: {...chartDefaults.plugins, legend: {display: true}},
-        scales: {...chartDefaults.scales, x: {...chartDefaults.scales.x, title: {display: true, text: 'Probability of Entry', font: {family: 'DM Mono', size: 10}, color: '#8c857a'}}}
-      });
+  gCharts.mixed = makeChart('cMixed','line',[
+    {label:'E[Durabuild] given q',data:[],borderColor:'#b44a2d',borderWidth:2,pointRadius:0},
+    {label:'E[Competitor] given p',data:[],borderColor:'#3574c4',borderWidth:2,pointRadius:0}
+  ],[],{plugins:{...chartDefaults.plugins,legend:{display:true}},
+    scales:{...chartDefaults.scales,x:{...chartDefaults.scales.x,title:{display:true,text:'Probability of Entry',font:{family:'DM Mono',size:10},color:'#8c857a'}}}
+  });
 
-      gameUpdate();
-    }
+  gameUpdate();
+}
 
-    function gameUpdate() {
-      // Read values
-      const p = +$('gl_p').value / 100;
-      const eh = +$('gl_eh').value, el = +$('gl_el').value, so = +$('gl_so').value;
-      const be = +$('gl_be').value, ye = +$('gl_ye').value, re = +$('gl_re').value, ne = +$('gl_ne').value;
+function gameUpdate() {
+  // Read values
+  const p = +$('gl_p').value/100;
+  const eh = +$('gl_eh').value, el = +$('gl_el').value, so = +$('gl_so').value;
+  const be = +$('gl_be').value, ye = +$('gl_ye').value, re = +$('gl_re').value, ne = +$('gl_ne').value;
 
-      // Labels
-      $('gv_p').textContent = $('gl_p').value + '%'; $('gv_eh').textContent = eh; $('gv_el').textContent = el;
-      $('gv_so').textContent = so; $('gv_be').textContent = be; $('gv_ye').textContent = ye;
-      $('gv_re').textContent = re; $('gv_ne').textContent = ne;
+  // Labels
+  $('gv_p').textContent=$('gl_p').value+'%'; $('gv_eh').textContent=eh; $('gv_el').textContent=el;
+  $('gv_so').textContent=so; $('gv_be').textContent=be; $('gv_ye').textContent=ye;
+  $('gv_re').textContent=re; $('gv_ne').textContent=ne;
 
-      // Game 1: Expected values
-      const evEnter = p * eh + (1 - p) * el;
-      const evOut = so;
-      $('ev_enter').textContent = evEnter.toFixed(1);
-      $('ev_out').textContent = evOut.toFixed(1);
-      $('ev_optimal').textContent = evEnter > evOut ? 'ENTER' : evEnter < evOut ? 'STAY OUT' : 'INDIFFERENT';
-      $('ev_optimal').style.color = evEnter >= evOut ? '#2d8a4e' : '#c43c3c';
+  // Game 1: Expected values
+  const evEnter = p*eh + (1-p)*el;
+  const evOut = so;
+  $('ev_enter').textContent = evEnter.toFixed(1);
+  $('ev_out').textContent = evOut.toFixed(1);
+  $('ev_optimal').textContent = evEnter > evOut ? 'ENTER' : evEnter < evOut ? 'STAY OUT' : 'INDIFFERENT';
+  $('ev_optimal').style.color = evEnter >= evOut ? '#2d8a4e' : '#c43c3c';
 
-      // Break-even probability: p*eh + (1-p)*el = so => p = (so - el)/(eh - el)
-      const bep = (so - el) / (eh - el);
-      $('breakeven_p').textContent = (bep >= 0 && bep <= 1) ? (bep * 100).toFixed(1) + '%' : 'N/A';
+  // Break-even probability: p*eh + (1-p)*el = so => p = (so - el)/(eh - el)
+  const bep = (so - el) / (eh - el);
+  $('breakeven_p').textContent = (bep >= 0 && bep <= 1) ? (bep*100).toFixed(1)+'%' : 'N/A';
 
-      // Game 2: Payoff matrix and Nash
-      $('cell_ee').innerHTML = `<span class="payoff-a">${be}</span>, <span class="payoff-b">${be}</span>`;
-      $('cell_eo').innerHTML = `<span class="payoff-a">${ye}</span>, <span class="payoff-b">${re}</span>`;
-      $('cell_se').innerHTML = `<span class="payoff-a">${re}</span>, <span class="payoff-b">${ye}</span>`;
-      $('cell_so').innerHTML = `<span class="payoff-a">${ne}</span>, <span class="payoff-b">${ne}</span>`;
+  // Game 2: Payoff matrix and Nash
+  $('cell_ee').innerHTML = `<span class="payoff-a">${be}</span>, <span class="payoff-b">${be}</span>`;
+  $('cell_eo').innerHTML = `<span class="payoff-a">${ye}</span>, <span class="payoff-b">${re}</span>`;
+  $('cell_se').innerHTML = `<span class="payoff-a">${re}</span>, <span class="payoff-b">${ye}</span>`;
+  $('cell_so').innerHTML = `<span class="payoff-a">${ne}</span>, <span class="payoff-b">${ne}</span>`;
 
-      // Find Nash equilibria (symmetric game)
-      // Check best responses
-      document.querySelectorAll('.payoff-matrix td').forEach(td => td.classList.remove('nash-highlight'));
-      const nashCells = [];
+  // Find Nash equilibria (symmetric game)
+  // Check best responses
+  document.querySelectorAll('.payoff-matrix td').forEach(td=>td.classList.remove('nash-highlight'));
+  const nashCells = [];
 
-      // If competitor enters: Durabuild prefers be vs re
-      const brDurVsEnter = be >= re ? 'enter' : 'out';
-      // If competitor stays out: Durabuild prefers ye vs ne
-      const brDurVsOut = ye >= ne ? 'enter' : 'out';
-      // If Durabuild enters: Competitor prefers be vs re
-      const brCompVsEnter = be >= re ? 'enter' : 'out';
-      // If Durabuild stays: Competitor prefers ye vs ne
-      const brCompVsOut = ye >= ne ? 'enter' : 'out';
+  // If competitor enters: Durabuild prefers be vs re
+  const brDurVsEnter = be >= re ? 'enter' : 'out';
+  // If competitor stays out: Durabuild prefers ye vs ne
+  const brDurVsOut = ye >= ne ? 'enter' : 'out';
+  // If Durabuild enters: Competitor prefers be vs re
+  const brCompVsEnter = be >= re ? 'enter' : 'out';
+  // If Durabuild stays: Competitor prefers ye vs ne
+  const brCompVsOut = ye >= ne ? 'enter' : 'out';
 
-      let nashText = '<strong>Best Response Analysis:</strong><br>';
-      nashText += `If competitor enters: Durabuild should ${brDurVsEnter} (${be} vs ${re})<br>`;
-      nashText += `If competitor stays out: Durabuild should ${brDurVsOut} (${ye} vs ${ne})<br>`;
+  let nashText = '<strong>Best Response Analysis:</strong><br>';
+  nashText += `If competitor enters: Durabuild should ${brDurVsEnter} (${be} vs ${re})<br>`;
+  nashText += `If competitor stays out: Durabuild should ${brDurVsOut} (${ye} vs ${ne})<br>`;
 
-      // Check NE
-      let pureNE = [];
-      if (brDurVsEnter === 'enter' && brCompVsEnter === 'enter') {
-        $('cell_ee').classList.add('nash-highlight'); pureNE.push('(Enter, Enter)');
-      }
-      if (brDurVsOut === 'enter' && brCompVsOut === 'out') {
-        $('cell_eo').classList.add('nash-highlight'); pureNE.push('(Enter, Stay Out)');
-      }
-      if (brDurVsEnter === 'out' && brCompVsEnter === 'out') {
-        // wrong -- need to re-check for asymmetric
-      }
-      // Symmetric, so also check
-      if (brDurVsOut === 'out' && brCompVsOut === 'enter') {
-        $('cell_se').classList.add('nash-highlight'); pureNE.push('(Stay Out, Enter)');
-      }
-      if (brDurVsEnter === 'out' && brCompVsEnter === 'out' && brDurVsOut === 'out' && brCompVsOut === 'out') {
-        $('cell_so').classList.add('nash-highlight'); pureNE.push('(Stay Out, Stay Out)');
-      }
-      // Re-check properly
-      // (E,E) is NE if be >= re AND be >= re
-      if (be >= re) {if (!pureNE.includes('(Enter, Enter)')) {$('cell_ee').classList.add('nash-highlight'); pureNE.push('(Enter, Enter)');} }
-      // (E,O) is NE if ye >= ne AND re >= be -- Durabuild enters given comp out, Comp stays given Dur enters
-      // Wait, let me redo this properly
-      document.querySelectorAll('.payoff-matrix td').forEach(td => td.classList.remove('nash-highlight'));
-      pureNE = [];
+  // Check NE
+  let pureNE = [];
+  if (brDurVsEnter==='enter' && brCompVsEnter==='enter') {
+    $('cell_ee').classList.add('nash-highlight'); pureNE.push('(Enter, Enter)');
+  }
+  if (brDurVsOut==='enter' && brCompVsOut==='out') {
+    $('cell_eo').classList.add('nash-highlight'); pureNE.push('(Enter, Stay Out)');
+  }
+  if (brDurVsEnter==='out' && brCompVsEnter==='out') {
+    // wrong -- need to re-check for asymmetric
+  }
+  // Symmetric, so also check
+  if (brDurVsOut==='out' && brCompVsOut==='enter') {
+    $('cell_se').classList.add('nash-highlight'); pureNE.push('(Stay Out, Enter)');
+  }
+  if (brDurVsEnter==='out' && brCompVsEnter==='out' && brDurVsOut==='out' && brCompVsOut==='out') {
+    $('cell_so').classList.add('nash-highlight'); pureNE.push('(Stay Out, Stay Out)');
+  }
+  // Re-check properly
+  // (E,E) is NE if be >= re AND be >= re
+  if (be >= re) { if (!pureNE.includes('(Enter, Enter)')) { $('cell_ee').classList.add('nash-highlight'); pureNE.push('(Enter, Enter)'); } }
+  // (E,O) is NE if ye >= ne AND re >= be -- Durabuild enters given comp out, Comp stays given Dur enters
+  // Wait, let me redo this properly
+  document.querySelectorAll('.payoff-matrix td').forEach(td=>td.classList.remove('nash-highlight'));
+  pureNE = [];
 
-      // (Enter, Enter): D gets be, C gets be. Is D's best? be vs re (if switch to out). Is C's best? be vs re.
-      if (be >= re && be >= re) {$('cell_ee').classList.add('nash-highlight'); pureNE.push('(Enter, Enter)');}
-      // (Enter, Out): D gets ye, C gets re. D: ye vs ne? C: re vs be?
-      if (ye >= ne && re >= be) {$('cell_eo').classList.add('nash-highlight'); pureNE.push('(Enter, Stay Out)');}
-      // (Out, Enter): D gets re, C gets ye. D: re vs be? C: ye vs ne?
-      if (re >= be && ye >= ne) {$('cell_se').classList.add('nash-highlight'); pureNE.push('(Stay Out, Enter)');}
-      // (Out, Out): D gets ne, C gets ne. D: ne vs ye? C: ne vs ye?
-      if (ne >= ye && ne >= ye) {$('cell_so').classList.add('nash-highlight'); pureNE.push('(Stay Out, Stay Out)');}
+  // (Enter, Enter): D gets be, C gets be. Is D's best? be vs re (if switch to out). Is C's best? be vs re.
+  if (be >= re && be >= re) { $('cell_ee').classList.add('nash-highlight'); pureNE.push('(Enter, Enter)'); }
+  // (Enter, Out): D gets ye, C gets re. D: ye vs ne? C: re vs be?
+  if (ye >= ne && re >= be) { $('cell_eo').classList.add('nash-highlight'); pureNE.push('(Enter, Stay Out)'); }
+  // (Out, Enter): D gets re, C gets ye. D: re vs be? C: ye vs ne?
+  if (re >= be && ye >= ne) { $('cell_se').classList.add('nash-highlight'); pureNE.push('(Stay Out, Enter)'); }
+  // (Out, Out): D gets ne, C gets ne. D: ne vs ye? C: ne vs ye?
+  if (ne >= ye && ne >= ye) { $('cell_so').classList.add('nash-highlight'); pureNE.push('(Stay Out, Stay Out)'); }
 
-      nashText += `<br><strong>Nash Equilibria:</strong> ${pureNE.length > 0 ? pureNE.join(', ') : 'No pure-strategy NE (mixed strategy needed)'}`;
+  nashText += `<br><strong>Nash Equilibria:</strong> ${pureNE.length > 0 ? pureNE.join(', ') : 'No pure-strategy NE (mixed strategy needed)'}`;
 
-      // Dominant strategy check
-      if (brDurVsEnter === brDurVsOut) {
-        nashText += `<br><strong>Dominant Strategy:</strong> Durabuild should always ${brDurVsEnter}`;
-      } else {
-        nashText += `<br>No dominant strategy for Durabuild -- best action depends on competitor's choice.`;
-      }
+  // Dominant strategy check
+  if (brDurVsEnter === brDurVsOut) {
+    nashText += `<br><strong>Dominant Strategy:</strong> Durabuild should always ${brDurVsEnter}`;
+  } else {
+    nashText += `<br>No dominant strategy for Durabuild -- best action depends on competitor's choice.`;
+  }
 
-      $('nashAnalysis').innerHTML = nashText;
+  $('nashAnalysis').innerHTML = nashText;
 
-      // Game 3: Decision tree
-      $('decisionTree').innerHTML = `
+  // Game 3: Decision tree
+  $('decisionTree').innerHTML = `
     <div class="tree-node">Durabuild Decision Node</div>
     <div class="tree-branch">
       <div class="tree-node">ENTER CHINA</div>
       <div class="tree-branch">
-        <div>Nature: High Growth <span class="tree-prob">[p = ${(p * 100).toFixed(0)}%]</span></div>
+        <div>Nature: High Growth <span class="tree-prob">[p = ${(p*100).toFixed(0)}%]</span></div>
         <div>&rarr; Payoff: <span class="tree-outcome">${eh}</span></div>
       </div>
       <div class="tree-branch">
-        <div>Nature: Slowdown <span class="tree-prob">[p = ${((1 - p) * 100).toFixed(0)}%]</span></div>
+        <div>Nature: Slowdown <span class="tree-prob">[p = ${((1-p)*100).toFixed(0)}%]</span></div>
         <div>&rarr; Payoff: <span class="tree-outcome">${el}</span></div>
       </div>
-      <div style="margin-top:4px;">E[Enter] = ${p.toFixed(2)}&times;${eh} + ${(1 - p).toFixed(2)}&times;(${el}) = <span class="tree-outcome">${evEnter.toFixed(1)}</span></div>
+      <div style="margin-top:4px;">E[Enter] = ${p.toFixed(2)}&times;${eh} + ${(1-p).toFixed(2)}&times;(${el}) = <span class="tree-outcome">${evEnter.toFixed(1)}</span></div>
     </div>
     <div class="tree-branch">
       <div class="tree-node">STAY OUT</div>
       <div>&rarr; Payoff: <span class="tree-outcome">${so}</span></div>
     </div>
     <div style="margin-top:10px;font-weight:500;">
-      Optimal by backward induction: <span style="color:${evEnter >= evOut ? '#2d8a4e' : '#c43c3c'}">${evEnter >= evOut ? 'ENTER' : 'STAY OUT'}</span>
+      Optimal by backward induction: <span style="color:${evEnter>=evOut?'#2d8a4e':'#c43c3c'}">${evEnter>=evOut?'ENTER':'STAY OUT'}</span>
     </div>
   `;
 
-      // Game 4: Mixed strategy
-      // For symmetric 2x2: Durabuild mixes with prob p* such that competitor is indifferent
-      // Comp indifferent: p*be + (1-p)*re = p*ye + (1-p)*ne
-      // p*(be-re) + re = p*(ye-ne) + ne => p = (ne-re)/(be-re-ye+ne)
-      const mixedP = (ne - re) / ((be - re) - (ye - ne));
-      let mixedHTML = '';
-      if (mixedP > 0 && mixedP < 1 && isFinite(mixedP)) {
-        mixedHTML = `
+  // Game 4: Mixed strategy
+  // For symmetric 2x2: Durabuild mixes with prob p* such that competitor is indifferent
+  // Comp indifferent: p*be + (1-p)*re = p*ye + (1-p)*ne
+  // p*(be-re) + re = p*(ye-ne) + ne => p = (ne-re)/(be-re-ye+ne)
+  const mixedP = (ne-re)/((be-re)-(ye-ne));
+  let mixedHTML = '';
+  if (mixedP > 0 && mixedP < 1 && isFinite(mixedP)) {
+    mixedHTML = `
       <div style="font-family:var(--mono);font-size:13px;">
-        Mixed Strategy NE: each enters with probability <strong style="color:var(--accent)">${(mixedP * 100).toFixed(1)}%</strong>
+        Mixed Strategy NE: each enters with probability <strong style="color:var(--accent)">${(mixedP*100).toFixed(1)}%</strong>
       </div>
       <div style="font-size:12px;color:var(--text2);margin-top:6px;line-height:1.5;">
         Each player randomizes to make the opponent indifferent between entering and staying out.
-        Expected payoff at mixed NE: ${(mixedP * be + (1 - mixedP) * re).toFixed(1)} for each player.
+        Expected payoff at mixed NE: ${(mixedP*be+(1-mixedP)*re).toFixed(1)} for each player.
       </div>
     `;
-      } else {
-        mixedHTML = `<div style="font-size:12px;color:var(--text2);">Pure strategy NE exists, so mixed strategy is not needed with current payoffs.</div>`;
-      }
-      $('mixedStrategy').innerHTML = mixedHTML;
+  } else {
+    mixedHTML = `<div style="font-size:12px;color:var(--text2);">Pure strategy NE exists, so mixed strategy is not needed with current payoffs.</div>`;
+  }
+  $('mixedStrategy').innerHTML = mixedHTML;
 
-      if (!gCharts.sens) return;
+  if (!gCharts.sens) return;
 
-      // Sensitivity chart
-      const probs = [];
-      for (let pp = 0; pp <= 100; pp += 2) probs.push(pp);
-      const evLine = probs.map(pp => (pp / 100) * eh + (1 - pp / 100) * el);
-      const soLine = probs.map(() => so);
-      const bepLine = probs.map(pp => (bep >= 0 && bep <= 1 && Math.abs(pp / 100 - bep) < 0.015) ? Math.max(...evLine) * 1.1 : null);
+  // Sensitivity chart
+  const probs = [];
+  for (let pp=0; pp<=100; pp+=2) probs.push(pp);
+  const evLine = probs.map(pp => (pp/100)*eh + (1-pp/100)*el);
+  const soLine = probs.map(() => so);
+  const bepLine = probs.map(pp => (bep>=0&&bep<=1&&Math.abs(pp/100-bep)<0.015) ? Math.max(...evLine)*1.1 : null);
 
-      gCharts.sens.data.labels = probs.map(p => p + '%');
-      gCharts.sens.data.datasets[0].data = evLine;
-      gCharts.sens.data.datasets[1].data = soLine;
-      gCharts.sens.data.datasets[2].data = bepLine;
-      gCharts.sens.update();
+  gCharts.sens.data.labels = probs.map(p=>p+'%');
+  gCharts.sens.data.datasets[0].data = evLine;
+  gCharts.sens.data.datasets[1].data = soLine;
+  gCharts.sens.data.datasets[2].data = bepLine;
+  gCharts.sens.update();
 
-      // Mixed strategy viz
-      const probs2 = [];
-      for (let pp = 0; pp <= 100; pp += 2) probs2.push(pp);
-      const durExpected = probs2.map(q => {
-        const qq = q / 100;
-        return qq * be + (1 - qq) * ye; // if durabuild enters, expected given competitor mixes
-      });
-      const compExpected = probs2.map(pp => {
-        const p = pp / 100;
-        return p * be + (1 - p) * re;
-      });
-      gCharts.mixed.data.labels = probs2.map(p => p + '%');
-      gCharts.mixed.data.datasets[0].data = durExpected;
-      gCharts.mixed.data.datasets[1].data = compExpected;
-      gCharts.mixed.update();
-    }
+  // Mixed strategy viz
+  const probs2 = [];
+  for (let pp=0; pp<=100; pp+=2) probs2.push(pp);
+  const durExpected = probs2.map(q => {
+    const qq = q/100;
+    return qq*be + (1-qq)*ye; // if durabuild enters, expected given competitor mixes
+  });
+  const compExpected = probs2.map(pp => {
+    const p = pp/100;
+    return p*be + (1-p)*re;
+  });
+  gCharts.mixed.data.labels = probs2.map(p=>p+'%');
+  gCharts.mixed.data.datasets[0].data = durExpected;
+  gCharts.mixed.data.datasets[1].data = compExpected;
+  gCharts.mixed.update();
+}
 
-    // ============ TAB 4: CONVERGENCE ============
-    let convInited = false;
-    function initConvergence() {
-      if (convInited) return; convInited = true;
+// ============ TAB 4: CONVERGENCE ============
+let convInited = false;
+function initConvergence() {
+  if (convInited) return; convInited = true;
 
-      const us = solowSim(0.20, 0.044, 0.014, 0.018, 0.30, 1.0, 40, 1.0, 50);
-      const fr = solowSim(0.22, 0.044, 0.010, 0.025, 0.30, 0.99, 4, 1.25, 50);
-      const cn = solowSim(0.45, 0.050, 0.008, 0.035, 0.30, 0.40, 3, 1.10, 50);
-      const ph = solowSim(0.24, 0.050, 0.015, 0.012, 0.30, 0.35, 5, 0.64, 50);
+  const us = solowSim(0.20,0.044,0.014,0.018,0.30,1.0,3.2,1.0,50);
+  const fr = solowSim(0.22,0.044,0.010,0.025,0.30,0.99,2.3,1.25,50);
+  const cn = solowSim(0.45,0.050,0.008,0.035,0.30,0.40,2.4,1.10,50);
+  const ph = solowSim(0.23,0.050,0.008,0.010,0.30,0.35,1.0,0.64,50);
 
-      const yrs = us.d.map(x => x.t);
-      const usBase = us.d[0].yAct, frBase = fr.d[0].yAct, cnBase = cn.d[0].yAct, phBase = ph.d[0].yAct;
+  const yrs = us.d.map(x=>x.t);
+  const usBase = us.d[0].yAct, frBase = fr.d[0].yAct, cnBase = cn.d[0].yAct, phBase = ph.d[0].yAct;
 
-      makeChart('cConverge', 'line', [
-        {label: 'US', data: us.d.map(x => (x.yAct / usBase) * 100), borderColor: '#3574c4', borderWidth: 2, pointRadius: 0},
-        {label: 'France', data: fr.d.map(x => (x.yAct / frBase) * 100), borderColor: '#b44a2d', borderWidth: 2, pointRadius: 0},
-        {label: 'China', data: cn.d.map(x => (x.yAct / cnBase) * 100), borderColor: '#2d8a4e', borderWidth: 2, pointRadius: 0},
-        {label: 'Philippines', data: ph.d.map(x => (x.yAct / phBase) * 100), borderColor: '#c4930a', borderWidth: 2, pointRadius: 0}
-      ], yrs);
+  makeChart('cConverge','line',[
+    {label:'US',data:us.d.map(x=>(x.yAct/usBase)*100),borderColor:'#3574c4',borderWidth:2,pointRadius:0},
+    {label:'France',data:fr.d.map(x=>(x.yAct/frBase)*100),borderColor:'#b44a2d',borderWidth:2,pointRadius:0},
+    {label:'China',data:cn.d.map(x=>(x.yAct/cnBase)*100),borderColor:'#2d8a4e',borderWidth:2,pointRadius:0},
+    {label:'Philippines',data:ph.d.map(x=>(x.yAct/phBase)*100),borderColor:'#c4930a',borderWidth:2,pointRadius:0}
+  ],yrs);
 
-      makeChart('cConvGrowth', 'line', [
-        {label: 'US Growth', data: us.d.slice(1).map(x => x.gr), borderColor: '#3574c4', borderWidth: 2, pointRadius: 0},
-        {label: 'France Growth', data: fr.d.slice(1).map(x => x.gr), borderColor: '#b44a2d', borderWidth: 2, pointRadius: 0},
-        {label: 'China Growth', data: cn.d.slice(1).map(x => x.gr), borderColor: '#2d8a4e', borderWidth: 2, pointRadius: 0},
-        {label: 'PH Growth', data: ph.d.slice(1).map(x => x.gr), borderColor: '#c4930a', borderWidth: 2, pointRadius: 0}
-      ], yrs.slice(1));
+  makeChart('cConvGrowth','line',[
+    {label:'US Growth',data:us.d.slice(1).map(x=>x.gr),borderColor:'#3574c4',borderWidth:2,pointRadius:0},
+    {label:'France Growth',data:fr.d.slice(1).map(x=>x.gr),borderColor:'#b44a2d',borderWidth:2,pointRadius:0},
+    {label:'China Growth',data:cn.d.slice(1).map(x=>x.gr),borderColor:'#2d8a4e',borderWidth:2,pointRadius:0},
+    {label:'PH Growth',data:ph.d.slice(1).map(x=>x.gr),borderColor:'#c4930a',borderWidth:2,pointRadius:0}
+  ],yrs.slice(1));
 
-      makeChart('cCapConv', 'line', [
-        {label: 'US k', data: us.d.map(x => x.k), borderColor: '#3574c4', borderWidth: 2, pointRadius: 0},
-        {label: 'France k', data: fr.d.map(x => x.k), borderColor: '#b44a2d', borderWidth: 2, pointRadius: 0},
-        {label: 'China k', data: cn.d.map(x => x.k), borderColor: '#2d8a4e', borderWidth: 2, pointRadius: 0},
-        {label: 'PH k', data: ph.d.map(x => x.k), borderColor: '#c4930a', borderWidth: 2, pointRadius: 0}
-      ], yrs);
-    }
+  makeChart('cCapConv','line',[
+    {label:'US k',data:us.d.map(x=>x.k),borderColor:'#3574c4',borderWidth:2,pointRadius:0},
+    {label:'France k',data:fr.d.map(x=>x.k),borderColor:'#b44a2d',borderWidth:2,pointRadius:0},
+    {label:'China k',data:cn.d.map(x=>x.k),borderColor:'#2d8a4e',borderWidth:2,pointRadius:0},
+    {label:'PH k',data:ph.d.map(x=>x.k),borderColor:'#c4930a',borderWidth:2,pointRadius:0}
+  ],yrs);
+}
 
-    // ============ TAB 5: POLICY ============
-    let polInited = false;
-    let polCharts = {};
-    function initPolicy() {
-      if (polInited) return; polInited = true;
+// ============ TAB 5: POLICY ============
+let polInited = false;
+let polCharts = {};
+function initPolicy() {
+  if (polInited) return; polInited = true;
 
-      // Savings rate impact
-      const sRates = [];
-      for (let s = 5; s <= 60; s += 1) sRates.push(s);
-      const yStar = sRates.map(s => {
-        const kStar = Math.pow((s / 100) / (0.044 + 0.018 + 0.014), 1 / 0.7);
-        return Math.pow(kStar, 0.3);
-      });
-      makeChart('cPolSavings', 'line', [
-        {label: 'Steady State y*', data: yStar, borderColor: '#b44a2d', borderWidth: 2, pointRadius: 0, fill: true, backgroundColor: 'rgba(180,74,45,0.06)'},
-        {label: 'US (s=20%)', data: sRates.map(s => Math.abs(s - 20) < 0.6 ? yStar[s - 5] : null), borderColor: '#3574c4', pointRadius: 8, pointBackgroundColor: '#3574c4', borderWidth: 0, showLine: false},
-        {label: 'China (s=45%)', data: sRates.map(s => Math.abs(s - 45) < 0.6 ? yStar[s - 5] : null), borderColor: '#2d8a4e', pointRadius: 8, pointBackgroundColor: '#2d8a4e', borderWidth: 0, showLine: false}
-      ], sRates.map(s => s + '%'), {plugins: {...chartDefaults.plugins, legend: {display: true}}});
+  // Savings rate impact
+  const sRates = [];
+  for (let s=5; s<=60; s+=1) sRates.push(s);
+  const yStar = sRates.map(s => {
+    const kStar = Math.pow((s/100)/(0.044+0.018+0.014), 1/0.7);
+    return Math.pow(kStar, 0.3);
+  });
+  makeChart('cPolSavings','line',[
+    {label:'Steady State y*',data:yStar,borderColor:'#b44a2d',borderWidth:2,pointRadius:0,fill:true,backgroundColor:'rgba(180,74,45,0.06)'},
+    {label:'US (s=20%)',data:sRates.map(s=>Math.abs(s-20)<0.6?yStar[s-5]:null),borderColor:'#3574c4',pointRadius:8,pointBackgroundColor:'#3574c4',borderWidth:0,showLine:false},
+    {label:'China (s=45%)',data:sRates.map(s=>Math.abs(s-45)<0.6?yStar[s-5]:null),borderColor:'#2d8a4e',pointRadius:8,pointBackgroundColor:'#2d8a4e',borderWidth:0,showLine:false}
+  ],sRates.map(s=>s+'%'),{plugins:{...chartDefaults.plugins,legend:{display:true}}});
 
-      // Labor participation impact
-      const lRates = [];
-      for (let l = 0.3; l <= 1.4; l += 0.02) lRates.push(+l.toFixed(2));
-      const yLabor = lRates.map(l => 1.0 * 2.5 * l); // A * y_tilde * labor
-      makeChart('cPolLabor', 'line', [
-        {label: 'GDP per Capita (rel)', data: yLabor, borderColor: '#c4930a', borderWidth: 2, pointRadius: 0, fill: true, backgroundColor: 'rgba(196,147,10,0.06)'},
-        {label: 'France 2000 (0.72)', data: lRates.map(l => Math.abs(l - 0.72) < 0.015 ? 1.0 * 2.5 * l : null), borderColor: '#b44a2d', pointRadius: 8, pointBackgroundColor: '#b44a2d', borderWidth: 0, showLine: false},
-        {label: 'US (1.0)', data: lRates.map(l => Math.abs(l - 1.0) < 0.015 ? 1.0 * 2.5 * l : null), borderColor: '#3574c4', pointRadius: 8, pointBackgroundColor: '#3574c4', borderWidth: 0, showLine: false}
-      ], lRates.map(l => l.toFixed(2)), {plugins: {...chartDefaults.plugins, legend: {display: true}}});
+  // Labor participation impact
+  const lRates = [];
+  for (let l=0.3; l<=1.4; l+=0.02) lRates.push(+l.toFixed(2));
+  const yLabor = lRates.map(l => 1.0 * 2.5 * l); // A * y_tilde * labor
+  makeChart('cPolLabor','line',[
+    {label:'GDP per Capita (rel)',data:yLabor,borderColor:'#c4930a',borderWidth:2,pointRadius:0,fill:true,backgroundColor:'rgba(196,147,10,0.06)'},
+    {label:'France 2000 (0.72)',data:lRates.map(l=>Math.abs(l-0.72)<0.015?1.0*2.5*l:null),borderColor:'#b44a2d',pointRadius:8,pointBackgroundColor:'#b44a2d',borderWidth:0,showLine:false},
+    {label:'US (1.0)',data:lRates.map(l=>Math.abs(l-1.0)<0.015?1.0*2.5*l:null),borderColor:'#3574c4',pointRadius:8,pointBackgroundColor:'#3574c4',borderWidth:0,showLine:false}
+  ],lRates.map(l=>l.toFixed(2)),{plugins:{...chartDefaults.plugins,legend:{display:true}}});
 
-      // China projection
-      polCharts.china = makeChart('cChina', 'line', [
-        {label: 'China GDP/capita', data: [], borderColor: '#2d8a4e', borderWidth: 2, pointRadius: 0, fill: true, backgroundColor: 'rgba(45,138,78,0.06)'},
-        {label: 'China SS Path', data: [], borderColor: '#c4930a', borderWidth: 1.5, borderDash: [6, 4], pointRadius: 0},
-        {label: 'US Baseline', data: [], borderColor: '#3574c4', borderWidth: 1.5, borderDash: [4, 4], pointRadius: 0}
-      ], []);
+  // China projection
+  polCharts.china = makeChart('cChina','line',[
+    {label:'China GDP/capita',data:[],borderColor:'#2d8a4e',borderWidth:2,pointRadius:0,fill:true,backgroundColor:'rgba(45,138,78,0.06)'},
+    {label:'China SS Path',data:[],borderColor:'#c4930a',borderWidth:1.5,borderDash:[6,4],pointRadius:0},
+    {label:'US Baseline',data:[],borderColor:'#3574c4',borderWidth:1.5,borderDash:[4,4],pointRadius:0}
+  ],[]);
 
-      policyUpdate();
-    }
+  policyUpdate();
+}
 
-    function policyUpdate() {
-      const cs = +$('pl_cs').value / 100, cg = +$('pl_cg').value / 100;
-      const cn = +$('pl_cn').value / 100, cr = +$('pl_cr').value, ct = +$('pl_ct').value;
-      const co = +$('pl_co').value;
+function policyUpdate() {
+  const cs = +$('pl_cs').value/100, cg = +$('pl_cg').value/100;
+  const cn = +$('pl_cn').value/100, cr = +$('pl_cr').value, ct = +$('pl_ct').value;
+  const co = +$('pl_co').value;
 
-      $('pv_cs').textContent = $('pl_cs').value + '%'; $('pv_cg').textContent = $('pl_cg').value + '%';
-      $('pv_cn').textContent = $('pl_cn').value + '%'; $('pv_cr').textContent = (+$('pl_cr').value).toFixed(2);
-      $('pv_ct').textContent = (+$('pl_ct').value).toFixed(2); $('pv_co').textContent = $('pl_co').value;
+  $('pv_cs').textContent=$('pl_cs').value+'%'; $('pv_cg').textContent=$('pl_cg').value+'%';
+  $('pv_cn').textContent=$('pl_cn').value+'%'; $('pv_cr').textContent=(+$('pl_cr').value).toFixed(2);
+  $('pv_ct').textContent=(+$('pl_ct').value).toFixed(2); $('pv_co').textContent=$('pl_co').value;
 
-      // Effective TFP growth adjusted for tech adoption and regulatory friction
-      const effG = cg * ct * cr;
-      // Population growth drops after one-child effect kicks in
-      const years = 50;
+  // Effective TFP growth adjusted for tech adoption and regulatory friction
+  const effG = cg * ct * cr;
+  // Population growth drops after one-child effect kicks in
+  const years = 50;
 
-      // China sim with time-varying pop growth
-      const delta = 0.05, alpha = 0.30, A0 = 0.40;
-      let k = 3, data = [];
-      for (let t = 0; t <= years; t++) {
-        const popG = t < co ? cn : Math.max(cn - 0.005 * (t - co), -0.005);
-        const brk = popG + effG + delta;
-        const At = A0 * Math.pow(1 + effG, t);
-        const yt = Math.pow(k, alpha);
-        const yAct = At * yt * 1.10;
-        const inv = cs * yt;
-        const brkI = brk * k;
-        const dk = inv - brkI;
-        let gr = 0;
-        if (t > 0) gr = (yAct / data[t - 1].yAct - 1) * 100;
-        data.push({t, k, yAct, gr});
-        k = Math.max(k + dk, 0.01);
-      }
+  // China sim with time-varying pop growth
+  const delta = 0.05, alpha = 0.30, A0 = 0.40;
+  let k = 3, data = [];
+  for (let t=0; t<=years; t++) {
+    const popG = t < co ? cn : Math.max(cn - 0.005*(t-co), -0.005);
+    const brk = popG + effG + delta;
+    const At = A0 * Math.pow(1+effG, t);
+    const yt = Math.pow(k, alpha);
+    const yAct = At * yt * 1.10;
+    const inv = cs * yt;
+    const brkI = brk * k;
+    const dk = inv - brkI;
+    let gr = 0;
+    if (t>0) gr = (yAct/data[t-1].yAct-1)*100;
+    data.push({t,k,yAct,gr});
+    k = Math.max(k+dk, 0.01);
+  }
 
-      // US baseline
-      const usR = solowSim(0.20, 0.044, 0.014, 0.018, 0.30, 1.0, 40, 1.0, years);
+  // US baseline
+  const usR = solowSim(0.20,0.044,0.014,0.018,0.30,1.0,3.2,1.0,years);
 
-      // China steady state (using final parameters)
-      const finalBrk = Math.max(cn - 0.005 * (years - co), -0.005) + effG + delta;
-      const cnKStar = Math.pow(cs / finalBrk, 1 / (1 - alpha));
-      const cnYStar = Math.pow(cnKStar, alpha);
-      const ssPath = data.map(d => {
-        const At = A0 * Math.pow(1 + effG, d.t);
-        return At * cnYStar * 1.10;
-      });
+  // China steady state (using final parameters)
+  const finalBrk = Math.max(cn-0.005*(years-co),-0.005) + effG + delta;
+  const cnKStar = Math.pow(cs/finalBrk, 1/(1-alpha));
+  const cnYStar = Math.pow(cnKStar, alpha);
+  const ssPath = data.map(d => {
+    const At = A0*Math.pow(1+effG,d.t);
+    return At*cnYStar*1.10;
+  });
 
-      $('cn_ss_k').textContent = cnKStar.toFixed(1);
-      $('cn_ss_y').textContent = cnYStar.toFixed(2);
-      $('cn_peak_gr').textContent = Math.max(...data.map(d => d.gr)).toFixed(1) + '%';
+  $('cn_ss_k').textContent = cnKStar.toFixed(1);
+  $('cn_ss_y').textContent = cnYStar.toFixed(2);
+  $('cn_peak_gr').textContent = Math.max(...data.map(d=>d.gr)).toFixed(1)+'%';
 
-      if (!polCharts.china) return;
-      const yrs = data.map(d => d.t);
-      polCharts.china.data.labels = yrs;
-      polCharts.china.data.datasets[0].data = data.map(d => d.yAct);
-      polCharts.china.data.datasets[1].data = ssPath;
-      polCharts.china.data.datasets[2].data = usR.d.map(d => d.yAct);
-      polCharts.china.update();
-    }
+  if (!polCharts.china) return;
+  const yrs = data.map(d=>d.t);
+  polCharts.china.data.labels = yrs;
+  polCharts.china.data.datasets[0].data = data.map(d=>d.yAct);
+  polCharts.china.data.datasets[1].data = ssPath;
+  polCharts.china.data.datasets[2].data = usR.d.map(d=>d.yAct);
+  polCharts.china.update();
+}
 
-    // ============ INIT ============
-    initSolow();
-  </script>
+// ============ FORMULA HIGHLIGHT ON PARAM HOVER ============
+(function() {
+  const paramRows = document.querySelectorAll('.param-row[data-param]');
+  const fvSpans = document.querySelectorAll('.eq-hero .fv[data-param]');
+
+  function highlight(paramId) {
+    fvSpans.forEach(sp => {
+      if (sp.dataset.param === paramId) sp.classList.add('hl');
+    });
+    paramRows.forEach(row => {
+      if (row.dataset.param === paramId) row.classList.add('hl');
+    });
+  }
+
+  function unhighlight() {
+    fvSpans.forEach(sp => sp.classList.remove('hl'));
+    paramRows.forEach(row => row.classList.remove('hl'));
+  }
+
+  paramRows.forEach(row => {
+    row.addEventListener('mouseenter', () => highlight(row.dataset.param));
+    row.addEventListener('mouseleave', unhighlight);
+  });
+
+  fvSpans.forEach(sp => {
+    sp.addEventListener('mouseenter', () => highlight(sp.dataset.param));
+    sp.addEventListener('mouseleave', unhighlight);
+  });
+})();
+
+// ============ INIT ============
+initSolow();
+</script>
 </body>
-
 </html>

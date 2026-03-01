@@ -1163,12 +1163,43 @@ let gCharts = {};
 function initGameTheory() {
   if (gInited) return; gInited = true;
 
-  // Sensitivity chart
-  gCharts.sens = makeChart('cSensitivity','line',[
-    {label:'E[Enter]',data:[],borderColor:'#b44a2d',borderWidth:2,pointRadius:0,fill:true,backgroundColor:'rgba(180,74,45,0.06)'},
-    {label:'E[Stay Out]',data:[],borderColor:'#3574c4',borderWidth:2,borderDash:[6,4],pointRadius:0},
-    {label:'Break-even',data:[],borderColor:'#c4930a',borderWidth:1.5,borderDash:[3,3],pointRadius:0}
-  ],[],{plugins:{...chartDefaults.plugins,legend:{display:true}}});
+  // Sensitivity chart with vertical break-even line plugin
+  const bepPlugin = {
+    id: 'breakEvenLine',
+    afterDraw(chart) {
+      const bepPct = chart._bepPct;
+      if (bepPct == null || bepPct < 0 || bepPct > 100) return;
+      const xScale = chart.scales.x;
+      const yScale = chart.scales.y;
+      const x = xScale.getPixelForValue(bepPct);
+      const ctx = chart.ctx;
+      ctx.save();
+      ctx.beginPath();
+      ctx.moveTo(x, yScale.top);
+      ctx.lineTo(x, yScale.bottom);
+      ctx.strokeStyle = '#c4930a';
+      ctx.lineWidth = 2;
+      ctx.setLineDash([5, 3]);
+      ctx.stroke();
+      ctx.restore();
+      // Label
+      ctx.save();
+      ctx.font = '10px DM Mono';
+      ctx.fillStyle = '#c4930a';
+      ctx.textAlign = 'center';
+      ctx.fillText('Break-even', x, yScale.top - 6);
+      ctx.restore();
+    }
+  };
+  gCharts.sens = new Chart($('cSensitivity'), {
+    type: 'line',
+    data: { labels: [], datasets: [
+      {label:'E[Enter]',data:[],borderColor:'#b44a2d',borderWidth:2,pointRadius:0,fill:true,backgroundColor:'rgba(180,74,45,0.06)'},
+      {label:'E[Stay Out]',data:[],borderColor:'#3574c4',borderWidth:2,borderDash:[6,4],pointRadius:0}
+    ]},
+    options: { ...chartDefaults, plugins:{...chartDefaults.plugins,legend:{display:true}} },
+    plugins: [bepPlugin]
+  });
 
   gCharts.mixed = makeChart('cMixed','line',[
     {label:'E[Durabuild] given q',data:[],borderColor:'#b44a2d',borderWidth:2,pointRadius:0},
@@ -1322,15 +1353,13 @@ function gameUpdate() {
 
   // Sensitivity chart
   const probs = [];
-  for (let pp=0; pp<=100; pp+=2) probs.push(pp);
+  for (let pp=0; pp<=100; pp+=1) probs.push(pp);
   const evLine = probs.map(pp => (pp/100)*eh + (1-pp/100)*el);
   const soLine = probs.map(() => so);
-  const bepLine = probs.map(pp => (bep>=0&&bep<=1&&Math.abs(pp/100-bep)<0.015) ? Math.max(...evLine)*1.1 : null);
-
   gCharts.sens.data.labels = probs.map(p=>p+'%');
   gCharts.sens.data.datasets[0].data = evLine;
   gCharts.sens.data.datasets[1].data = soLine;
-  gCharts.sens.data.datasets[2].data = bepLine;
+  gCharts.sens._bepPct = (bep >= 0 && bep <= 1) ? Math.round(bep * 100) : null;
   gCharts.sens.update();
 
   // Mixed strategy viz

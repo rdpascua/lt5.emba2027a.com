@@ -352,24 +352,34 @@ input[type="range"]::-webkit-slider-thumb {
 <!-- ========== CASE EXHIBITS ========== -->
 <div class="tab-content" id="tab-exhibits">
   <h2>Case Exhibits</h2>
-  <div class="subtitle">Key data from the Durabuild case — Exhibit 2 decomposes France/US GDP per capita using <span style="font-family:'STIX Two Text',Georgia,serif;"><em>Y</em>/<em>POP</em> = <em>A</em> &middot; (<em>K</em>/<em>N</em>)<sup>&alpha;</sup> &middot; (<em>N</em>/<em>POP</em>)</span></div>
+  <div class="subtitle">Key data from the Durabuild case — reproduced with PWT 11.0 data extended through 2023</div>
 
-  <div class="callout">
-    Exhibit 2 is the heart of the case: it breaks down <em>why</em> France's GDP per capita differs from the US.
-    Is the gap driven by technology (A), capital (K/N), or how much people work (N/POP)?
-    The answer changes dramatically from 1950 to 2000.
+  <!-- EXHIBIT 1 -->
+  <div class="card">
+    <h3>Exhibit 1: Real GDP per Capita — France vs United States (1950–2023)</h3>
+    <p style="font-size:12px;color:var(--text2);margin-bottom:12px;">
+      Log of real GDP per capita (rgdpna/pop) in constant national prices.
+      France converged rapidly toward the US from 1950 to the mid-1970s, then the gap stabilized.
+      Updated from the original case (PWT 7.1, 1950–2000) using PWT 11.0 data extended to 2023.
+    </p>
+    <div class="chart-box tall"><canvas id="cExh1Gdp"></canvas></div>
+    <div style="margin-top:10px;font-size:11px;color:var(--text3);">
+      Source: Penn World Table 11.0 — rgdpna (real GDP at constant national prices, mil. 2021 US$) / pop (population, millions). Natural log scale.
+    </div>
   </div>
 
+  <!-- EXHIBIT 2 -->
   <div class="card">
     <h3>Exhibit 2: GDP per Capita Decomposition (France/US Ratios)</h3>
     <p style="font-size:12px;color:var(--text2);margin-bottom:16px;">
-      All values are France &divide; US ratios. A value of 1.00 means France equals the US. Below 1.00 means France is behind.
-      The identity must hold: <span class="term" data-tip="Total Factor Productivity — technology, efficiency, management, and institutions. Everything affecting output beyond capital and labor." style="font-family:var(--mono)">A</span> &times; <span class="term" data-tip="Capital intensity — capital per hour worked, raised to α. Measures how much machinery/equipment each worker has." style="font-family:var(--mono)">(K/N)<sup>&alpha;</sup></span> &times; <span class="term" data-tip="Labor utilization — total hours worked per person in the population. Affected by work week length, vacation, unemployment." style="font-family:var(--mono)">N/POP</span> = <span class="term" data-tip="GDP per capita — total output divided by population" style="font-family:var(--mono)">Y/POP</span>
+      Breaks down <em>why</em> France's GDP per capita differs from the US:
+      <span class="term" data-tip="Total Factor Productivity — technology, efficiency, management, and institutions. Everything affecting output beyond capital and labor." style="font-family:var(--mono)">A</span> &times; <span class="term" data-tip="Capital intensity — capital per hour worked, raised to α. Measures how much machinery/equipment each worker has." style="font-family:var(--mono)">(K/N)<sup>&alpha;</sup></span> &times; <span class="term" data-tip="Labor utilization — total hours worked per person in the population. Affected by work week length, vacation, unemployment." style="font-family:var(--mono)">N/POP</span> = <span class="term" data-tip="GDP per capita — total output divided by population" style="font-family:var(--mono)">Y/POP</span>.
+      All values are France &divide; US ratios. A value of 1.00 means France equals the US.
     </p>
 
     <div class="grid-2">
       <div>
-        <div style="font-family:var(--mono);font-size:11px;color:var(--text3);margin-bottom:8px;">ORIGINAL CASE — EXHIBIT 2 (PWT 7.1)</div>
+        <div style="font-family:var(--mono);font-size:11px;color:var(--text3);margin-bottom:8px;">ORIGINAL CASE (PWT 7.1)</div>
         <table class="data-table">
           <tr><th>Year</th><th><span class="term" data-tip="GDP per capita — total output divided by population" style="font-family:var(--mono)">Y/POP</span></th><th><span class="term" data-tip="Total Factor Productivity — technology, efficiency, management, and institutions. Everything affecting output beyond capital and labor." style="font-family:var(--mono)">A</span></th><th><span class="term" data-tip="Capital intensity — capital per hour worked, raised to α. Measures how much machinery/equipment each worker has." style="font-family:var(--mono)">(K/N)<sup>0.3</sup></span></th><th><span class="term" data-tip="Labor utilization — total hours worked per person in the population. Affected by work week length, vacation, unemployment." style="font-family:var(--mono)">N/POP</span></th></tr>
           <tr><td>1950</td><td>0.54</td><td>0.99</td><td>0.44</td><td>1.25</td></tr>
@@ -393,13 +403,10 @@ input[type="range"]::-webkit-slider-thumb {
         </div>
       </div>
     </div>
-  </div>
 
-  <div class="card">
-    <h3>What Changed Between PWT 7.1 and 11.0?</h3>
-    <div style="font-size:13px;color:var(--text2);line-height:1.7;">
-      <p style="margin-bottom:10px;">The numbers shift significantly because PWT 11.0 incorporates revised 2017 and 2021 ICP PPP benchmarks, updated capital stock estimates, and extends data to 2023. The key story changes:</p>
-      <div class="grid-3" style="margin-top:12px;">
+    <div style="margin-top:20px;padding-top:16px;border-top:1px solid var(--border);">
+      <div style="font-family:var(--mono);font-size:11px;color:var(--text3);margin-bottom:10px;">WHAT CHANGED BETWEEN PWT 7.1 AND 11.0?</div>
+      <div class="grid-3">
         <div style="text-align:center;padding:16px;background:var(--surface2);border-radius:4px;">
           <div style="font-family:var(--mono);font-size:11px;color:var(--text3);margin-bottom:6px;">1950: WHAT DROVE THE GAP?</div>
           <div style="font-size:13px;line-height:1.5;">
@@ -424,31 +431,24 @@ input[type="range"]::-webkit-slider-thumb {
     </div>
   </div>
 
-  <div class="callout blue">
-    <strong>Discussion point:</strong> PWT 7.1 told a "capital deepening" story — France started with equal technology but no capital, and caught up by investing.
-    PWT 11.0 tells a "<span class="term" data-tip="Total Factor Productivity — technology, efficiency, management, and institutions. Everything affecting output beyond capital and labor.">TFP</span> catch-up" story — France started behind in technology and caught up by adopting US methods.
-    Both agree on the punchline: France's reversal after 1980 was driven by declining labor utilization (N/POP), not a loss of technology or capital.
+  <!-- EXHIBIT 3 -->
+  <div class="card">
+    <h3>Exhibit 3: Labor Force Participation — France vs United States (1950–2023)</h3>
+    <p style="font-size:12px;color:var(--text2);margin-bottom:12px;">
+      Employment-to-population ratio (emp/pop) — the share of total population that is employed.
+      This is the key driver of the <span class="term" data-tip="Labor utilization — total hours worked per person in the population. Affected by work week length, vacation, unemployment." style="font-family:var(--mono)">N/POP</span> component in Exhibit 2.
+      France started <em>above</em> the US in the 1950s but fell below by the mid-1970s and has stayed lower ever since.
+    </p>
+    <div class="chart-box tall"><canvas id="cLfpr"></canvas></div>
+    <div style="margin-top:10px;font-size:11px;color:var(--text3);">
+      Source: Penn World Table 11.0 — emp (persons engaged) / pop (population).
+    </div>
   </div>
 
-  <div class="card">
-    <h3>Case Spreadsheet: Solow Model Parameters (CU83-XLS-ENG)</h3>
-    <p style="font-size:12px;color:var(--text2);margin-bottom:12px;">
-      The case spreadsheet calibrates a Solow model using these starting parameters to project growth paths.
-      Note: the spreadsheet's model-calibrated ratios differ from Exhibit 2's historical decomposition because the model
-      backs out <span class="term" data-tip="Total Factor Productivity — technology, efficiency, management, and institutions. Everything affecting output beyond capital and labor." style="font-family:var(--mono)">A</span> from the production function using different capital stock assumptions.
-    </p>
-    <table class="data-table">
-      <tr><th>Parameter</th><th>US</th><th>France</th><th>France/US</th></tr>
-      <tr><td>Population (millions)</td><td>154.3</td><td>42.6</td><td>0.28</td></tr>
-      <tr><td>Investment Rate (<span class="term" data-tip="Savings/investment rate — fraction of output invested in new capital" style="font-family:var(--mono)">s</span>)</td><td>23.0%</td><td>23.3%</td><td>1.01</td></tr>
-      <tr><td>Pop Growth (<span class="term" data-tip="Population growth rate — more workers means capital is spread thinner, lowering k* per worker" style="font-family:var(--mono)">n</span>)</td><td>1.10%</td><td>0.66%</td><td>0.60</td></tr>
-      <tr><td><span class="term" data-tip="Total Factor Productivity — technology, efficiency, management, and institutions. Everything affecting output beyond capital and labor.">TFP</span> Growth (<span class="term" data-tip="Technology growth rate — the only source of permanent growth in the Solow model" style="font-family:var(--mono)">g</span>)</td><td>1.27%</td><td>1.63%</td><td>1.28</td></tr>
-      <tr><td>Depreciation (<span class="term" data-tip="Depreciation rate — fraction of capital that wears out each year" style="font-family:var(--mono)">&delta;</span>)</td><td>3.10%</td><td>2.55%</td><td>0.82</td></tr>
-      <tr><td>N/POP</td><td>0.405</td><td>0.460</td><td>1.14</td></tr>
-    </table>
-    <div style="margin-top:8px;font-size:11px;color:var(--text3);">
-      Source: Columbia CaseWorks spreadsheet (CU83-XLS-ENG). Starting year: 1950. All parameters held constant in projections.
-    </div>
+  <div class="callout blue">
+    <strong>Discussion:</strong> PWT 7.1 told a "capital deepening" story — France caught up by investing.
+    PWT 11.0 tells a "<span class="term" data-tip="Total Factor Productivity — technology, efficiency, management, and institutions. Everything affecting output beyond capital and labor.">TFP</span> catch-up" story — France caught up by adopting US methods.
+    Both agree on the punchline: France's reversal after 1980 was driven by declining labor utilization (N/POP) — Exhibit 3 shows this directly.
   </div>
 </div>
 
@@ -1018,6 +1018,7 @@ function switchTab(name) {
   document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));
   document.querySelector(`.tab-content#tab-${name}`).classList.add('active');
   event.target.classList.add('active');
+  if (name==='exhibits') initExhibits();
   if (name==='accounting') initAccounting();
   if (name==='gametheory') initGameTheory();
   if (name==='convergence') initConvergence();
@@ -1112,6 +1113,51 @@ function initSolow() {
     {label:'SS Growth (g)',data:[],borderColor:'#c4930a',borderWidth:1.5,borderDash:[6,4],pointRadius:0}
   ],[]);
   loadSolowPreset('fr50');
+}
+
+// ============ EXHIBITS TAB ============
+let exInited = false;
+function initExhibits() {
+  if (exInited) return; exInited = true;
+  const pw = PWT_RAW;
+  const fraGdp = pw.data.FRA.rgdpna, fraPop = pw.data.FRA.pop;
+  const usaGdp = pw.data.USA.rgdpna, usaPop = pw.data.USA.pop;
+  const fraEmp = pw.data.FRA.emp, usaEmp = pw.data.USA.emp;
+  const years = []; const fraLogGdppc = []; const usaLogGdppc = [];
+  const fraLfpr = []; const usaLfpr = [];
+  for (let i=0; i<=pw.y1-pw.y0; i++) {
+    years.push(pw.y0+i);
+    fraLogGdppc.push(+(Math.log(fraGdp[i]/fraPop[i])).toFixed(3));
+    usaLogGdppc.push(+(Math.log(usaGdp[i]/usaPop[i])).toFixed(3));
+    fraLfpr.push(+(fraEmp[i]/fraPop[i]*100).toFixed(1));
+    usaLfpr.push(+(usaEmp[i]/usaPop[i]*100).toFixed(1));
+  }
+  // Exhibit 1: Log GDP per capita
+  const lineOpts = {plugins:{...chartDefaults.plugins,
+    legend:{display:true,labels:{font:{family:'DM Mono',size:11},color:'#5c564c',boxWidth:12,padding:14}}
+  }};
+  makeChart('cExh1Gdp','line',[
+    {label:'United States',data:usaLogGdppc,borderColor:'#3574c4',borderWidth:2.5,pointRadius:0,tension:0.2},
+    {label:'France',data:fraLogGdppc,borderColor:'#b44a2d',borderWidth:2.5,pointRadius:0,tension:0.2}
+  ],years,{
+    ...lineOpts,
+    scales:{
+      x:{...chartDefaults.scales.x,ticks:{...chartDefaults.scales.x.ticks,maxTicksLimit:15}},
+      y:{...chartDefaults.scales.y,title:{display:true,text:'ln(GDP per capita)',font:{family:'DM Mono',size:10},color:'#8c857a'}}
+    }
+  });
+  // Exhibit 3: Employment-to-population ratio
+  makeChart('cLfpr','line',[
+    {label:'France',data:fraLfpr,borderColor:'#b44a2d',backgroundColor:'rgba(180,74,45,0.08)',borderWidth:2.5,pointRadius:0,fill:true},
+    {label:'United States',data:usaLfpr,borderColor:'#3574c4',backgroundColor:'rgba(53,116,196,0.08)',borderWidth:2.5,pointRadius:0,fill:true}
+  ],years,{
+    ...lineOpts,
+    scales:{
+      x:{...chartDefaults.scales.x,ticks:{...chartDefaults.scales.x.ticks,maxTicksLimit:15}},
+      y:{...chartDefaults.scales.y,title:{display:true,text:'Employment / Population (%)',font:{family:'DM Mono',size:10},color:'#8c857a'},
+        min:35,max:55}
+    }
+  });
 }
 
 // ============ TAB 2: ACCOUNTING ============

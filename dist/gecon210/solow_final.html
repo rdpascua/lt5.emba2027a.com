@@ -236,6 +236,7 @@ input[type="range"]::-webkit-slider-thumb {
 
 <div class="tabs">
   <button class="tab active" onclick="switchTab('solow')">Solow Model</button>
+  <button class="tab" onclick="switchTab('exhibits')">Case Exhibits</button>
   <button class="tab" onclick="switchTab('accounting')">Growth Accounting</button>
   <button class="tab" onclick="switchTab('gametheory')">Game Theory</button>
   <button class="tab" onclick="switchTab('convergence')">Convergence</button>
@@ -345,6 +346,88 @@ input[type="range"]::-webkit-slider-thumb {
         <div class="chart-box"><canvas id="cGrowth"></canvas></div>
       </div>
     </div>
+  </div>
+</div>
+
+<!-- ========== CASE EXHIBITS ========== -->
+<div class="tab-content" id="tab-exhibits">
+  <h2>Case Exhibits</h2>
+  <div class="subtitle">Key data from the Durabuild case — Exhibit 2 decomposes France/US GDP per capita using <span style="font-family:'STIX Two Text',Georgia,serif;"><em>Y</em>/<em>POP</em> = <em>A</em> &middot; (<em>K</em>/<em>N</em>)<sup>&alpha;</sup> &middot; (<em>N</em>/<em>POP</em>)</span></div>
+
+  <div class="callout">
+    Exhibit 2 is the heart of the case: it breaks down <em>why</em> France's GDP per capita differs from the US.
+    Is the gap driven by technology (A), capital (K/N), or how much people work (N/POP)?
+    The answer changes dramatically from 1950 to 2000.
+  </div>
+
+  <div class="card">
+    <h3>Exhibit 2: GDP per Capita Decomposition (France/US Ratios)</h3>
+    <p style="font-size:12px;color:var(--text2);margin-bottom:16px;">
+      All values are France &divide; US ratios. A value of 1.00 means France equals the US. Below 1.00 means France is behind.
+      The identity must hold: <span class="term" data-tip="Total Factor Productivity — technology, efficiency, management, and institutions. Everything affecting output beyond capital and labor." style="font-family:var(--mono)">A</span> &times; <span class="term" data-tip="Capital intensity — capital per hour worked, raised to α. Measures how much machinery/equipment each worker has." style="font-family:var(--mono)">(K/N)<sup>&alpha;</sup></span> &times; <span class="term" data-tip="Labor utilization — total hours worked per person in the population. Affected by work week length, vacation, unemployment." style="font-family:var(--mono)">N/POP</span> = <span class="term" data-tip="GDP per capita — total output divided by population" style="font-family:var(--mono)">Y/POP</span>
+    </p>
+
+    <div class="grid-2">
+      <div>
+        <div style="font-family:var(--mono);font-size:11px;color:var(--text3);margin-bottom:8px;">ORIGINAL CASE (PWT 7.1)</div>
+        <table class="data-table">
+          <tr><th>Year</th><th><span class="term" data-tip="GDP per capita — total output divided by population" style="font-family:var(--mono)">Y/POP</span></th><th><span class="term" data-tip="Total Factor Productivity — technology, efficiency, management, and institutions. Everything affecting output beyond capital and labor." style="font-family:var(--mono)">A</span></th><th><span class="term" data-tip="Capital intensity — capital per hour worked, raised to α. Measures how much machinery/equipment each worker has." style="font-family:var(--mono)">(K/N)<sup>0.3</sup></span></th><th><span class="term" data-tip="Labor utilization — total hours worked per person in the population. Affected by work week length, vacation, unemployment." style="font-family:var(--mono)">N/POP</span></th></tr>
+          <tr><td>1950</td><td>0.54</td><td>0.62</td><td>0.68</td><td>1.29</td></tr>
+          <tr><td>1973</td><td>0.80</td><td>0.78</td><td>1.09</td><td>0.94</td></tr>
+          <tr><td>2000</td><td>0.74</td><td>0.85</td><td>1.13</td><td>0.77</td></tr>
+        </table>
+        <div style="margin-top:8px;font-size:11px;color:var(--text3);">
+          Source: Penn World Table 7.1 (Heston, Summers &amp; Aten 2012)
+        </div>
+      </div>
+      <div>
+        <div style="font-family:var(--mono);font-size:11px;color:var(--accent);margin-bottom:8px;">UPDATED (PWT 11.0)</div>
+        <table class="data-table">
+          <tr><th>Year</th><th><span class="term" data-tip="GDP per capita — total output divided by population" style="font-family:var(--mono)">Y/POP</span></th><th><span class="term" data-tip="Total Factor Productivity — technology, efficiency, management, and institutions. Everything affecting output beyond capital and labor." style="font-family:var(--mono)">A</span></th><th><span class="term" data-tip="Capital intensity — capital per hour worked, raised to α. Measures how much machinery/equipment each worker has." style="font-family:var(--mono)">(K/N)<sup>0.3</sup></span></th><th><span class="term" data-tip="Labor utilization — total hours worked per person in the population. Affected by work week length, vacation, unemployment." style="font-family:var(--mono)">N/POP</span></th></tr>
+          <tr><td>1950</td><td>0.57</td><td>0.48</td><td>0.89</td><td>1.32</td></tr>
+          <tr><td>1980</td><td>0.88</td><td>0.88</td><td>1.13</td><td>0.88</td></tr>
+          <tr><td>2000</td><td>0.79</td><td>0.94</td><td>1.20</td><td>0.70</td></tr>
+        </table>
+        <div style="margin-top:8px;font-size:11px;color:var(--text3);">
+          Source: Penn World Table 11.0 (Feenstra, Inklaar &amp; Timmer 2015, updated 2024)
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>What Changed Between PWT 7.1 and 11.0?</h3>
+    <div style="font-size:13px;color:var(--text2);line-height:1.7;">
+      <p style="margin-bottom:10px;">The numbers shift significantly because PWT 11.0 incorporates revised 2017 and 2021 ICP PPP benchmarks, updated capital stock estimates, and extends data to 2023. The key story changes:</p>
+      <div class="grid-3" style="margin-top:12px;">
+        <div style="text-align:center;padding:16px;background:var(--surface2);border-radius:4px;">
+          <div style="font-family:var(--mono);font-size:11px;color:var(--text3);margin-bottom:6px;">1950: WHAT DROVE THE GAP?</div>
+          <div style="font-size:13px;line-height:1.5;">
+            <strong>PWT 7.1:</strong> Capital (0.68) was the main drag<br>
+            <strong>PWT 11.0:</strong> <span class="term" data-tip="Total Factor Productivity — technology, efficiency, management, and institutions. Everything affecting output beyond capital and labor.">TFP</span> (0.48) was the main drag
+          </div>
+        </div>
+        <div style="text-align:center;padding:16px;background:var(--surface2);border-radius:4px;">
+          <div style="font-family:var(--mono);font-size:11px;color:var(--text3);margin-bottom:6px;">CONVERGENCE DRIVER</div>
+          <div style="font-size:13px;line-height:1.5;">
+            <strong>PWT 7.1:</strong> Capital deepening drove catch-up<br>
+            <strong>PWT 11.0:</strong> <span class="term" data-tip="Total Factor Productivity — technology, efficiency, management, and institutions. Everything affecting output beyond capital and labor.">TFP</span> catch-up was the dominant driver
+          </div>
+        </div>
+        <div style="text-align:center;padding:16px;background:var(--surface2);border-radius:4px;">
+          <div style="font-family:var(--mono);font-size:11px;color:var(--text3);margin-bottom:6px;">2000: WHY THE REVERSAL?</div>
+          <div style="font-size:13px;line-height:1.5;">
+            <strong>Both versions agree:</strong> Labor (N/POP) collapse caused the reversal
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout blue">
+    <strong>Discussion point:</strong> The case was written using PWT 7.1, which told a "capital deepening" story.
+    Updated PWT 11.0 data tells a "<span class="term" data-tip="Total Factor Productivity — technology, efficiency, management, and institutions. Everything affecting output beyond capital and labor.">TFP</span> catch-up" story instead.
+    Both versions agree on the punchline: France's reversal after 1980 was driven by declining labor utilization, not a loss of technology or capital.
   </div>
 </div>
 
@@ -837,72 +920,6 @@ input[type="range"]::-webkit-slider-thumb {
       </div>
     </div>
 
-    <div class="card">
-      <h3>Key PWT Variables for This Case</h3>
-      <table class="data-table">
-        <tr><th style="text-align:left;">Variable</th><th style="text-align:left;">Description</th><th style="text-align:left;">Use in Solow</th></tr>
-        <tr><td style="font-family:var(--mono);color:var(--accent);">rgdpna</td><td style="text-align:left;">Real GDP at constant national prices (mil. 2017 US$)</td><td style="text-align:left;">Y -- compute y = rgdpna/emp</td></tr>
-        <tr><td style="font-family:var(--mono);color:var(--accent);">rnna</td><td style="text-align:left;">Capital stock at constant national prices (mil. 2017 US$)</td><td style="text-align:left;">K -- compute k = rnna/emp</td></tr>
-        <tr><td style="font-family:var(--mono);color:var(--accent);">emp</td><td style="text-align:left;">Number of persons engaged (millions)</td><td style="text-align:left;">L -- labor input</td></tr>
-        <tr><td style="font-family:var(--mono);color:var(--accent);">avh</td><td style="text-align:left;">Average annual hours worked per worker</td><td style="text-align:left;">N -- total hours = emp * avh</td></tr>
-        <tr><td style="font-family:var(--mono);color:var(--accent);">pop</td><td style="text-align:left;">Population (millions)</td><td style="text-align:left;">POP -- for Y/POP, N/POP</td></tr>
-        <tr><td style="font-family:var(--mono);color:var(--accent);">labsh</td><td style="text-align:left;">Share of labour compensation in GDP</td><td style="text-align:left;">1 - &alpha; (so &alpha; = 1 - labsh)</td></tr>
-        <tr><td style="font-family:var(--mono);color:var(--accent);">rtfpna</td><td style="text-align:left;">TFP at constant national prices (2017=1)</td><td style="text-align:left;">A -- total factor productivity index</td></tr>
-        <tr><td style="font-family:var(--mono);color:var(--accent);">ctfp</td><td style="text-align:left;">TFP level at current PPPs (USA=1)</td><td style="text-align:left;">A -- cross-country TFP comparison</td></tr>
-        <tr><td style="font-family:var(--mono);color:var(--accent);">delta</td><td style="text-align:left;">Average depreciation rate of capital stock</td><td style="text-align:left;">&delta; -- directly usable</td></tr>
-        <tr><td style="font-family:var(--mono);color:var(--accent);">csh_i</td><td style="text-align:left;">Share of gross capital formation in GDP (expenditure)</td><td style="text-align:left;">s -- investment/savings rate</td></tr>
-      </table>
-    </div>
-  </div>
-
-  <div class="card">
-    <h3>How to Replicate Exhibit 2 Using PWT 11.0</h3>
-    <div style="font-size:13px;color:var(--text2);line-height:1.8;">
-      <p style="margin-bottom:12px;">The case decomposes France/US GDP per capita as: <span style="font-family:'STIX Two Text',Georgia,serif;font-size:16px;"><em>Y</em>/<em>POP</em> = <em>A</em> &middot; (<em>K</em>/<em>N</em>)<sup>&alpha;</sup> &middot; (<em>N</em>/<em>POP</em>)</span></p>
-
-      <p style="margin-bottom:6px;"><strong>Step 1: Extract data for France (FRA) and the United States (USA)</strong></p>
-      <p style="margin-bottom:12px;">Download PWT 11.0. Filter for country codes FRA and USA. Select years of interest (1950, 1980, 2000, and extend to 2019 or 2023).</p>
-
-      <p style="margin-bottom:6px;"><strong>Step 2: Compute total hours per capita (N/POP)</strong></p>
-      <div class="equation"><em>N</em> / <em>POP</em> = (<em>emp</em> &times; <em>avh</em>) / <em>pop</em></div>
-      <p style="margin-bottom:12px;">Then compute the France/US ratio: (N/POP)<sub>FRA</sub> / (N/POP)<sub>USA</sub></p>
-
-      <p style="margin-bottom:6px;"><strong>Step 3: Compute capital-to-labor ratio</strong></p>
-      <div class="equation"><em>K</em> / <em>N</em> = <em>rnna</em> / (<em>emp</em> &times; <em>avh</em>)</div>
-      <p style="margin-bottom:12px;">Then compute (K/N)<sub>FRA</sub>/(K/N)<sub>USA</sub> and raise to the power &alpha;. The standard value is &alpha; = 0.3; alternatively use &alpha; = 1 - labsh from PWT directly.</p>
-
-      <p style="margin-bottom:6px;"><strong>Step 4: Back out TFP (A) as a residual</strong></p>
-      <div class="equation"><em>A</em> = (<em>Y</em> / <em>POP</em>) / [(<em>K</em> / <em>N</em>)<sup>&alpha;</sup> &middot; (<em>N</em> / <em>POP</em>)]</div>
-      <p style="margin-bottom:12px;">Or use the <span style="font-family:var(--mono);color:var(--accent);">ctfp</span> variable directly for the cross-country TFP level comparison (USA=1).</p>
-
-      <p style="margin-bottom:6px;"><strong>Step 5: Verify the decomposition</strong></p>
-      <div class="equation">(<em>Y</em> / <em>POP</em>)<sub>ratio</sub> = <em>A</em><sub>ratio</sub> &middot; (<em>K</em> / <em>N</em>)<sup>&alpha;</sup><sub>ratio</sub> &middot; (<em>N</em> / <em>POP</em>)<sub>ratio</sub></div>
-      <p style="margin-bottom:12px;">The product of the three right-hand terms should equal the left-hand term. This is an accounting identity -- it must hold.</p>
-
-      <p style="margin-bottom:6px;"><strong>Step 6: Extend to the Philippines (PHL) and China (CHN)</strong></p>
-      <p>Repeat the same decomposition for PHL/USA and CHN/USA ratios. This lets you apply the case's analytical framework beyond France and answer Lisa's question about China -- and apply it to the Philippine context for class discussion.</p>
-    </div>
-  </div>
-
-  <div class="card">
-    <h3>Growth Accounting with PWT (<span class="term" data-tip="Solow Residual — the portion of growth not explained by capital or labor. Attributed to technology, efficiency, and institutions.">Solow Residual</span> Method)</h3>
-    <div style="font-size:13px;color:var(--text2);line-height:1.8;">
-      <p style="margin-bottom:10px;">To decompose growth rates over time (not just level differences), use the growth accounting equation:</p>
-      <div class="equation"><em>g</em><sub><em>Y</em>/<em>L</em></sub> = <em>&alpha;</em> &middot; <em>g</em><sub><em>K</em>/<em>L</em></sub> + <em>g</em><sub><em>A</em></sub> &nbsp;&nbsp;&nbsp; (Solow residual: <em>g</em><sub><em>A</em></sub> = <em>g</em><sub><em>Y</em>/<em>L</em></sub> &minus; <em>&alpha;</em> &middot; <em>g</em><sub><em>K</em>/<em>L</em></sub>)</div>
-
-      <p style="margin-bottom:10px;">Using PWT variables:</p>
-      <div style="font-family:var(--mono);font-size:12px;background:var(--surface2);padding:14px;border-radius:4px;line-height:2;">
-        y = log(rgdpna / emp) &nbsp;&nbsp;&nbsp;# log GDP per worker<br>
-        k = log(rnna / emp) &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# log capital per worker<br>
-        &alpha; = 1 - labsh &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# capital share<br>
-        g_y = &Delta;y &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# growth of output per worker<br>
-        g_k = &Delta;k &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# growth of capital per worker<br>
-        g_A = g_y - &alpha; * g_k &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# TFP growth (Solow residual)
-      </div>
-
-      <p style="margin-top:12px;">This is the method used in Solow (1957). The R code walkthrough using PWT is available at
-        <a href="https://www.r-econometrics.com/2018/12/30/an-exercise-in-growth-accounting/" target="_blank" style="color:var(--accent);">r-econometrics.com</a>.
-      </p>
     </div>
   </div>
 

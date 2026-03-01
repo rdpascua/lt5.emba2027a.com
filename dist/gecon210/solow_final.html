@@ -1756,26 +1756,28 @@ function pwtRender() {
   pwtChart.data.labels = years;
   pwtChart.update();
 
-  // Update table — show selected country
-  const vals = pwtDB.data[country] && pwtDB.data[country][varCode];
-  if (!vals) { $('pwtTable').innerHTML = '<tr><td>No data</td></tr>'; return; }
-
-  // Show every 5 years + 2023
+  // Update table — show all countries, highlight selected
   const showYears = [];
   for (let y=y0; y<=y1; y+=5) showYears.push(y);
   if (showYears[showYears.length-1] !== y1) showYears.push(y1);
 
-  let html = '<tr><th>Year</th>';
+  let html = '<tr><th style="position:sticky;left:0;background:var(--surface);z-index:1;min-width:140px;">Year</th>';
   showYears.forEach(y => html += '<th>'+y+'</th>');
-  html += '</tr><tr><td style="text-align:left;font-weight:500;">'+country+'</td>';
-  showYears.forEach(y => {
-    const idx = y - y0;
-    const v = vals[idx];
-    if (v === null || v === undefined) { html += '<td>—</td>'; }
-    else if (Math.abs(v) > 1000) { html += '<td>'+v.toLocaleString()+'</td>'; }
-    else { html += '<td>'+v+'</td>'; }
-  });
   html += '</tr>';
+  const names = {FRA:'France',USA:'United States',CHN:'China',PHL:'Philippines'};
+  countries.forEach(iso => {
+    const vals = pwtDB.data[iso] && pwtDB.data[iso][varCode];
+    const hl = iso === country;
+    html += '<tr style="'+(hl?'background:var(--surface2);font-weight:600;':'')+'"><td style="text-align:left;font-weight:500;min-width:140px;white-space:nowrap;position:sticky;left:0;background:'+(hl?'var(--surface2)':'var(--surface)')+';z-index:1;">'+names[iso]+' <span style="color:var(--text3);font-weight:400;">('+iso+')</span></td>';
+    showYears.forEach(y => {
+      const idx = y - y0;
+      const v = vals ? vals[idx] : null;
+      if (v === null || v === undefined) { html += '<td>—</td>'; }
+      else if (Math.abs(v) > 1000) { html += '<td>'+v.toLocaleString()+'</td>'; }
+      else { html += '<td>'+v+'</td>'; }
+    });
+    html += '</tr>';
+  });
   $('pwtTable').innerHTML = html;
 }
 

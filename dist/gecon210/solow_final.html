@@ -953,22 +953,24 @@ function switchTab(name) {
 // ============ TAB 1: SOLOW ============
 let sCharts = {};
 
+let currentStartYear = 1950;
 const SPRESETS = {
-  us50: {s:20,d:4.4,n:1.7,g:1.8,a:0.30,A:1.0,k:3.0,l:1.0},
-  fr50: {s:22,d:4.4,n:1.0,g:2.5,a:0.30,A:0.99,k:2.3,l:1.25},
-  fr80: {s:24,d:4.4,n:0.5,g:1.2,a:0.30,A:1.05,k:5.3,l:0.93},
-  cn00: {s:35,d:5.0,n:0.8,g:3.5,a:0.30,A:0.40,k:1.7,l:1.10},
-  cn1c: {s:35,d:5.0,n:0.3,g:3.5,a:0.30,A:0.40,k:1.7,l:1.10},
-  ph24: {s:23,d:5.0,n:0.8,g:1.0,a:0.30,A:0.35,k:1.0,l:0.64},
-  phbd: {s:23,d:5.0,n:0.8,g:0.3,a:0.30,A:0.35,k:1.8,l:0.60},
-  phdd: {s:23,d:5.0,n:0.8,g:2.0,a:0.30,A:0.35,k:1.0,l:0.75},
-  phhi: {s:38,d:5.0,n:0.8,g:2.5,a:0.30,A:0.35,k:1.8,l:0.75},
+  us50: {s:20,d:4.4,n:1.7,g:1.8,a:0.30,A:1.0,k:3.0,l:1.0,yr:1950},
+  fr50: {s:22,d:4.4,n:1.0,g:2.5,a:0.30,A:0.99,k:2.3,l:1.25,yr:1950},
+  fr80: {s:24,d:4.4,n:0.5,g:1.2,a:0.30,A:1.05,k:5.3,l:0.93,yr:1980},
+  cn00: {s:35,d:5.0,n:0.8,g:3.5,a:0.30,A:0.40,k:1.7,l:1.10,yr:2000},
+  cn1c: {s:35,d:5.0,n:0.3,g:3.5,a:0.30,A:0.40,k:1.7,l:1.10,yr:2000},
+  ph24: {s:23,d:5.0,n:0.8,g:1.0,a:0.30,A:0.35,k:1.0,l:0.64,yr:2024},
+  phbd: {s:23,d:5.0,n:0.8,g:0.3,a:0.30,A:0.35,k:1.8,l:0.60,yr:2024},
+  phdd: {s:23,d:5.0,n:0.8,g:2.0,a:0.30,A:0.35,k:1.0,l:0.75,yr:2024},
+  phhi: {s:38,d:5.0,n:0.8,g:2.5,a:0.30,A:0.35,k:1.8,l:0.75,yr:2024},
 };
 
 function loadSolowPreset(p) {
   const v = SPRESETS[p];
   $('sl_s').value=v.s; $('sl_d').value=v.d; $('sl_n').value=v.n; $('sl_g').value=v.g;
   $('sl_a').value=v.a; $('sl_A').value=v.A; $('sl_k').value=v.k; $('sl_l').value=v.l;
+  currentStartYear = v.yr || 1950;
   solowUpdate();
 }
 
@@ -982,7 +984,7 @@ function solowUpdate() {
 
   const r = solowSim(s,d,n,g,a,A,k,l,50);
   const {d:data, kStar, yStar, y90} = r;
-  const yrs = data.map(x=>x.t);
+  const yrs = data.map(x=>currentStartYear+x.t);
 
   $('ss_k2').textContent=kStar.toFixed(1); $('ss_y2').textContent=yStar.toFixed(2);
   $('ss_gr').textContent=(g*100).toFixed(1)+'%'; $('ss_yr').textContent=y90>=50?'50+':y90;
@@ -1313,7 +1315,8 @@ function initConvergence() {
   const cn = solowSim(0.35,0.050,0.008,0.035,0.30,0.40,1.7,1.10,50);
   const ph = solowSim(0.23,0.050,0.008,0.010,0.30,0.35,1.0,0.64,50);
 
-  const yrs = us.d.map(x=>x.t);
+  // Convergence uses common timeline starting at 1950 for comparability
+  const yrs = us.d.map(x=>1950+x.t);
   const usBase = us.d[0].yAct, frBase = fr.d[0].yAct, cnBase = cn.d[0].yAct, phBase = ph.d[0].yAct;
 
   makeChart('cConverge','line',[
@@ -1426,7 +1429,7 @@ function policyUpdate() {
   $('cn_peak_gr').textContent = Math.max(...data.map(d=>d.gr)).toFixed(1)+'%';
 
   if (!polCharts.china) return;
-  const yrs = data.map(d=>d.t);
+  const yrs = data.map(d=>2000+d.t);
   polCharts.china.data.labels = yrs;
   polCharts.china.data.datasets[0].data = data.map(d=>d.yAct);
   polCharts.china.data.datasets[1].data = ssPath;

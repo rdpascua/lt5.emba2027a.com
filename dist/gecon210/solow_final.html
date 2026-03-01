@@ -179,12 +179,12 @@ input[type="range"]::-webkit-slider-thumb {
 }
 .term:hover::after {
   content: attr(data-tip);
-  position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%);
+  position: absolute; top: 100%; left: 50%; transform: translateX(-50%);
   background: #1a1714; color: #f5f0e8; font-style: normal; font-size: 11px;
   padding: 8px 12px; border-radius: 4px; min-width: 200px; max-width: 320px;
-  white-space: normal; z-index: 100; pointer-events: none;
+  white-space: normal; z-index: 999; pointer-events: none;
   box-shadow: 0 2px 8px rgba(0,0,0,0.3); line-height: 1.5;
-  text-align: center;
+  text-align: center; margin-top: 4px;
 }
 
 

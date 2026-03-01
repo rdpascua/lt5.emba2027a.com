@@ -221,9 +221,31 @@ input[type="range"]::-webkit-slider-thumb {
 }
 .toggle-btn.on { background: var(--text); color: var(--surface); border-color: var(--text); }
 
+.hamburger {
+  display: none; border: none; background: none; cursor: pointer;
+  padding: 8px 16px; font-family: var(--mono); font-size: 12px; font-weight: 500;
+  color: var(--text2); align-items: center; gap: 8px;
+}
+.hamburger .bar {
+  display: flex; flex-direction: column; gap: 3px;
+}
+.hamburger .bar span {
+  display: block; width: 16px; height: 2px; background: var(--text2); border-radius: 1px;
+  transition: transform 0.2s, opacity 0.2s;
+}
+.hamburger.open .bar span:nth-child(1) { transform: translateY(5px) rotate(45deg); }
+.hamburger.open .bar span:nth-child(2) { opacity: 0; }
+.hamburger.open .bar span:nth-child(3) { transform: translateY(-5px) rotate(-45deg); }
+
 @media (max-width: 960px) {
   .grid-2, .grid-3, .grid-sidebar { grid-template-columns: 1fr; }
-  .tabs { overflow-x: auto; }
+  .tabs { display: none; flex-direction: column; padding: 0; border-bottom: none; position: absolute; left: 0; right: 0; z-index: 100; background: var(--surface); border-bottom: 1px solid var(--border); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+  .tabs.open { display: flex; }
+  .tab { padding: 12px 24px; border-bottom: 1px solid var(--border); margin: 0; text-align: left; }
+  .tab:last-child { border-bottom: none; }
+  .tab.active { border-bottom-color: var(--border); color: var(--accent); background: var(--surface2); }
+  .hamburger { display: flex; }
+  .nav-wrap { position: relative; border-bottom: 1px solid var(--border); background: var(--surface); padding: 0 16px; }
 }
 </style>
 </head>
@@ -234,15 +256,22 @@ input[type="range"]::-webkit-slider-thumb {
   <div class="case-ref">LT5 | EMBA2027 | Brizuela, Magbitang, Pascua, Valencia</div>
 </div>
 
-<div class="tabs">
-  <button class="tab active" onclick="switchTab('solow')">Solow Model</button>
-  <button class="tab" onclick="switchTab('exhibits')">Case Exhibits</button>
-  <button class="tab" onclick="switchTab('accounting')">Growth Accounting</button>
-  <button class="tab" onclick="switchTab('gametheory')">Game Theory</button>
-  <button class="tab" onclick="switchTab('convergence')">Convergence</button>
-  <button class="tab" onclick="switchTab('policy')">Policy Analysis</button>
-  <button class="tab" onclick="switchTab('data')">PWT Data</button>
-  <button class="tab" onclick="switchTab('refs')">References & PWT Guide</button>
+<div class="nav-wrap">
+  <button class="hamburger" id="menuBtn" onclick="toggleMenu()">
+    <div class="bar"><span></span><span></span><span></span></div>
+    <span id="menuLabel">Solow Model</span>
+  </button>
+  <div class="tabs" id="tabBar">
+    <button class="tab active" onclick="switchTab('solow')">Solow Model</button>
+    <button class="tab" onclick="switchTab('exhibits')">Case Exhibits</button>
+    <button class="tab" onclick="switchTab('projections')">Case Projections</button>
+    <button class="tab" onclick="switchTab('accounting')">Growth Accounting</button>
+    <button class="tab" onclick="switchTab('gametheory')">Game Theory</button>
+    <button class="tab" onclick="switchTab('convergence')">Convergence</button>
+    <button class="tab" onclick="switchTab('policy')">Policy Analysis</button>
+    <button class="tab" onclick="switchTab('data')">PWT Data</button>
+    <button class="tab" onclick="switchTab('refs')">References & PWT Guide</button>
+  </div>
 </div>
 
 <!-- ========== TAB 1: SOLOW MODEL ========== -->
@@ -449,6 +478,88 @@ input[type="range"]::-webkit-slider-thumb {
     <strong>Discussion:</strong> PWT 7.1 told a "capital deepening" story — France caught up by investing.
     PWT 11.0 tells a "<span class="term" data-tip="Total Factor Productivity — technology, efficiency, management, and institutions. Everything affecting output beyond capital and labor.">TFP</span> catch-up" story — France caught up by adopting US methods.
     Both agree on the punchline: France's reversal after 1980 was driven by declining labor utilization (N/POP) — Exhibit 3 shows this directly.
+  </div>
+</div>
+
+<!-- ========== TAB: CASE PROJECTIONS ========== -->
+<div class="tab-content" id="tab-projections">
+  <h2>Case Projections</h2>
+  <div class="subtitle">Solow model projections from the case spreadsheet (CU83-XLS-ENG) using PWT 11.0 starting parameters &middot; N = emp &times; avh (total hours)</div>
+
+  <div class="callout">
+    These are <strong>model projections</strong>, not historical data. The spreadsheet takes 1950 starting values and simulates forward using fixed parameters
+    (<span class="term" data-tip="Savings/investment rate — fraction of output invested in new capital" style="font-family:var(--mono)">s</span>,
+    <span class="term" data-tip="Population growth rate — more workers means capital is spread thinner, lowering k* per worker" style="font-family:var(--mono)">n</span>,
+    <span class="term" data-tip="Technology growth rate — the only source of permanent growth in the Solow model" style="font-family:var(--mono)">g</span>,
+    <span class="term" data-tip="Depreciation rate — fraction of capital that wears out each year" style="font-family:var(--mono)">&delta;</span>,
+    N/POP all held constant). The real economy changed these parameters over time — that gap between projection and reality is the analytical point.
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <h3>United States — Projected Growth</h3>
+      <table class="data-table" style="font-size:12px;">
+        <tr><th>Year</th><th><span class="term" data-tip="GDP per capita — total output divided by population" style="font-family:var(--mono)">Y/Pop</span></th><th>Growth</th><th><span class="term" data-tip="Capital per hour worked — how much machinery/equipment backs each hour of labor" style="font-family:var(--mono)">K/N</span></th><th><span class="term" data-tip="Total Factor Productivity — technology, efficiency, management, and institutions. Everything affecting output beyond capital and labor." style="font-family:var(--mono)">A</span></th></tr>
+        <tr><td>1950</td><td>17,556</td><td>&mdash;</td><td>84.5</td><td>5.668</td></tr>
+        <tr><td>1960</td><td>20,926</td><td>1.78%</td><td>99.5</td><td>6.432</td></tr>
+        <tr><td>1970</td><td>24,985</td><td>1.79%</td><td>117.9</td><td>7.299</td></tr>
+        <tr><td>1980</td><td>29,866</td><td>1.80%</td><td>140.2</td><td>8.283</td></tr>
+        <tr><td>1990</td><td>35,728</td><td>1.81%</td><td>167.1</td><td>9.400</td></tr>
+        <tr><td>2000</td><td>42,761</td><td>1.81%</td><td>199.5</td><td>10.667</td></tr>
+        <tr><td>2010</td><td>51,196</td><td>1.82%</td><td>238.5</td><td>12.105</td></tr>
+        <tr><td>2020</td><td>61,308</td><td>1.82%</td><td>285.4</td><td>13.737</td></tr>
+        <tr><td>2030</td><td>73,428</td><td>1.82%</td><td>341.6</td><td>15.589</td></tr>
+        <tr><td>2040</td><td>87,952</td><td>1.82%</td><td>408.9</td><td>17.690</td></tr>
+      </table>
+      <div style="margin-top:8px;font-size:11px;color:var(--text3);">
+        s=23.0%, n=1.10%, g=1.27%, &delta;=3.10%, N/POP=818.5 hrs/capita
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>France — Projected Growth</h3>
+      <table class="data-table" style="font-size:12px;">
+        <tr><th>Year</th><th><span class="term" data-tip="GDP per capita — total output divided by population" style="font-family:var(--mono)">Y/Pop</span></th><th>Growth</th><th><span class="term" data-tip="Capital per hour worked — how much machinery/equipment backs each hour of labor" style="font-family:var(--mono)">K/N</span></th><th><span class="term" data-tip="Total Factor Productivity — technology, efficiency, management, and institutions. Everything affecting output beyond capital and labor." style="font-family:var(--mono)">A</span></th></tr>
+        <tr><td>1950</td><td>9,928</td><td>&mdash;</td><td>56.3</td><td>2.743</td></tr>
+        <tr><td>1960</td><td>11,952</td><td>1.93%</td><td>60.9</td><td>3.225</td></tr>
+        <tr><td>1970</td><td>14,558</td><td>2.04%</td><td>68.4</td><td>3.793</td></tr>
+        <tr><td>1980</td><td>17,898</td><td>2.12%</td><td>79.4</td><td>4.460</td></tr>
+        <tr><td>1990</td><td>22,163</td><td>2.19%</td><td>94.2</td><td>5.245</td></tr>
+        <tr><td>2000</td><td>27,589</td><td>2.23%</td><td>113.9</td><td>6.168</td></tr>
+        <tr><td>2010</td><td>34,474</td><td>2.27%</td><td>139.5</td><td>7.254</td></tr>
+        <tr><td>2020</td><td>43,194</td><td>2.29%</td><td>172.3</td><td>8.530</td></tr>
+        <tr><td>2030</td><td>54,223</td><td>2.31%</td><td>214.2</td><td>10.032</td></tr>
+        <tr><td>2040</td><td>68,157</td><td>2.32%</td><td>267.4</td><td>11.797</td></tr>
+      </table>
+      <div style="margin-top:8px;font-size:11px;color:var(--text3);">
+        s=23.3%, n=0.66%, g=1.63%, &delta;=2.55%, N/POP=1080.4 hrs/capita
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>France/US Ratios — Model Projections</h3>
+    <p style="font-size:12px;color:var(--text2);margin-bottom:12px;">
+      What the Solow model <em>predicts</em> given fixed 1950 parameters. Compare with actual PWT 11.0 data in the Growth Accounting tab to see where the model succeeds and fails.
+    </p>
+    <table class="data-table">
+      <tr><th>Year</th><th><span class="term" data-tip="GDP per capita — total output divided by population" style="font-family:var(--mono)">Y/POP</span></th><th><span class="term" data-tip="Total Factor Productivity — technology, efficiency, management, and institutions. Everything affecting output beyond capital and labor." style="font-family:var(--mono)">A</span></th><th><span class="term" data-tip="Capital intensity — capital per hour worked, raised to α. Measures how much machinery/equipment each worker has." style="font-family:var(--mono)">(K/N)<sup>0.3</sup></span></th><th><span class="term" data-tip="Labor utilization — total hours worked per person in the population. Affected by work week length, vacation, unemployment." style="font-family:var(--mono)">N/POP</span></th></tr>
+      <tr><td>1950</td><td>0.57</td><td>0.48</td><td>0.89</td><td>1.32</td></tr>
+      <tr><td>1960</td><td>0.57</td><td>0.50</td><td>0.86</td><td>1.32</td></tr>
+      <tr><td>1970</td><td>0.58</td><td>0.52</td><td>0.85</td><td>1.32</td></tr>
+      <tr><td>1980</td><td>0.60</td><td>0.54</td><td>0.84</td><td>1.32</td></tr>
+      <tr><td>1990</td><td>0.62</td><td>0.56</td><td>0.84</td><td>1.32</td></tr>
+      <tr><td>2000</td><td>0.65</td><td>0.58</td><td>0.85</td><td>1.32</td></tr>
+    </table>
+    <div style="margin-top:8px;font-size:11px;color:var(--text3);">
+      N/POP is constant because the model holds labor participation fixed. In reality it dropped from 1.32 to 0.70.
+    </div>
+  </div>
+
+  <div class="callout blue">
+    <strong>Key insight:</strong> The model projects France's Y/POP ratio rising from 0.57 to 0.65 by 2000 — <em>slow, steady convergence</em>.
+    In reality, France surged to 0.88 by 1980 then fell back to 0.79 by 2000. The model misses both the boom (faster <span class="term" data-tip="Total Factor Productivity — technology, efficiency, management, and institutions. Everything affecting output beyond capital and labor.">TFP</span> catch-up than assumed)
+    and the reversal (labor collapse not in the model). This is exactly the analytical gap the case asks students to explain.
   </div>
 </div>
 
@@ -1013,11 +1124,22 @@ function solowSim(s, delta, n, g, alpha, A0, k0, labor, years=50) {
 }
 
 // ============ TAB SWITCHING ============
+function toggleMenu() {
+  const bar = $('tabBar');
+  const btn = $('menuBtn');
+  bar.classList.toggle('open');
+  btn.classList.toggle('open');
+}
+
 function switchTab(name) {
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
   document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));
   document.querySelector(`.tab-content#tab-${name}`).classList.add('active');
   event.target.classList.add('active');
+  // Close mobile menu and update label
+  $('tabBar').classList.remove('open');
+  $('menuBtn').classList.remove('open');
+  $('menuLabel').textContent = event.target.textContent;
   if (name==='exhibits') initExhibits();
   if (name==='accounting') initAccounting();
   if (name==='gametheory') initGameTheory();

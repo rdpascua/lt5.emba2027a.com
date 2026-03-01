@@ -311,20 +311,24 @@ input[type="range"]::-webkit-slider-thumb {
     <div>
       <div class="card">
         <h3>GDP per Capita Path</h3>
+        <div style="font-size:11px;color:var(--text3);margin-bottom:6px;">Red = actual path from initial conditions. Gold dashed = steady-state path. The gap shows how far the economy is from long-run equilibrium.</div>
         <div class="chart-box tall"><canvas id="cGDP"></canvas></div>
       </div>
       <div class="grid-2">
         <div class="card">
-          <h3>Capital per Effective Worker</h3>
+          <h3>Capital per Effective Worker (k&#x0303;)</h3>
+          <div style="font-size:11px;color:var(--text3);margin-bottom:6px;">Red = k&#x0303; over time. Gold dashed = k&#x0303;* (steady state). Capital rises when investment exceeds break-even, then levels off.</div>
           <div class="chart-box"><canvas id="cCap"></canvas></div>
         </div>
         <div class="card">
           <h3>Solow Diagram</h3>
+          <div style="font-size:11px;color:var(--text3);margin-bottom:6px;">Green curve = s&middot;f(k&#x0303;), concave due to diminishing returns. Red line = (n+g+&delta;)&middot;k&#x0303;, break-even investment. Where they cross = k&#x0303;*. Gold dot = current position.</div>
           <div class="chart-box"><canvas id="cSolow"></canvas></div>
         </div>
       </div>
       <div class="card">
         <h3>GDP per Capita Growth Rate (%)</h3>
+        <div style="font-size:11px;color:var(--text3);margin-bottom:6px;">Red = growth rate over time. Gold dashed = steady-state growth (= g). Growth starts high when far from steady state, then decays toward g. Only technology drives permanent growth.</div>
         <div class="chart-box"><canvas id="cGrowth"></canvas></div>
       </div>
     </div>
@@ -1030,7 +1034,7 @@ function initSolow() {
   sCharts.solow = makeChart('cSolow','line',[
     {label:'s*f(k)',data:[],borderColor:'#2d8a4e',borderWidth:2,pointRadius:0},
     {label:'(n+g+d)*k',data:[],borderColor:'#c43c3c',borderWidth:2,pointRadius:0},
-    {label:'Current k',data:[],borderColor:'#c4930a',borderWidth:0,pointRadius:8,pointBackgroundColor:'#c4930a'}
+    {label:'Current k',data:[],borderColor:'#c4930a',borderWidth:2,pointRadius:8,pointBackgroundColor:'#c4930a',pointStyle:'circle',showLine:false}
   ],[]);
   sCharts.growth = makeChart('cGrowth','line',[
     {label:'Growth %',data:[],borderColor:'#b44a2d',borderWidth:2,pointRadius:0,fill:true,backgroundColor:'rgba(180,74,45,0.06)'},
@@ -1356,8 +1360,8 @@ function initPolicy() {
   });
   makeChart('cPolSavings','line',[
     {label:'Steady State y*',data:yStar,borderColor:'#b44a2d',borderWidth:2,pointRadius:0,fill:true,backgroundColor:'rgba(180,74,45,0.06)'},
-    {label:'US (s=20%)',data:sRates.map(s=>Math.abs(s-20)<0.6?yStar[s-5]:null),borderColor:'#3574c4',pointRadius:8,pointBackgroundColor:'#3574c4',borderWidth:0,showLine:false},
-    {label:'China (s=45%)',data:sRates.map(s=>Math.abs(s-45)<0.6?yStar[s-5]:null),borderColor:'#2d8a4e',pointRadius:8,pointBackgroundColor:'#2d8a4e',borderWidth:0,showLine:false}
+    {label:'US (s=20%)',data:sRates.map(s=>Math.abs(s-20)<0.6?yStar[s-5]:null),borderColor:'#3574c4',pointRadius:8,pointBackgroundColor:'#3574c4',borderWidth:2,pointStyle:'circle',showLine:false},
+    {label:'China (s=45%)',data:sRates.map(s=>Math.abs(s-45)<0.6?yStar[s-5]:null),borderColor:'#2d8a4e',pointRadius:8,pointBackgroundColor:'#2d8a4e',borderWidth:2,pointStyle:'circle',showLine:false}
   ],sRates.map(s=>s+'%'),{plugins:{...chartDefaults.plugins,legend:{display:true}}});
 
   // Labor participation impact
@@ -1366,8 +1370,8 @@ function initPolicy() {
   const yLabor = lRates.map(l => 1.0 * 2.5 * l); // A * y_tilde * labor
   makeChart('cPolLabor','line',[
     {label:'GDP per Capita (rel)',data:yLabor,borderColor:'#c4930a',borderWidth:2,pointRadius:0,fill:true,backgroundColor:'rgba(196,147,10,0.06)'},
-    {label:'France 2000 (0.70)',data:lRates.map(l=>Math.abs(l-0.70)<0.015?1.0*2.5*l:null),borderColor:'#b44a2d',pointRadius:8,pointBackgroundColor:'#b44a2d',borderWidth:0,showLine:false},
-    {label:'US (1.0)',data:lRates.map(l=>Math.abs(l-1.0)<0.015?1.0*2.5*l:null),borderColor:'#3574c4',pointRadius:8,pointBackgroundColor:'#3574c4',borderWidth:0,showLine:false}
+    {label:'France 2000 (0.70)',data:lRates.map(l=>Math.abs(l-0.70)<0.015?1.0*2.5*l:null),borderColor:'#b44a2d',pointRadius:8,pointBackgroundColor:'#b44a2d',borderWidth:2,pointStyle:'circle',showLine:false},
+    {label:'US (1.0)',data:lRates.map(l=>Math.abs(l-1.0)<0.015?1.0*2.5*l:null),borderColor:'#3574c4',pointRadius:8,pointBackgroundColor:'#3574c4',borderWidth:2,pointStyle:'circle',showLine:false}
   ],lRates.map(l=>l.toFixed(2)),{plugins:{...chartDefaults.plugins,legend:{display:true}}});
 
   // China projection

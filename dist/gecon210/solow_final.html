@@ -173,14 +173,20 @@ input[type="range"]::-webkit-slider-thumb {
   color: var(--accent); text-align: center; padding: 8px;
 }
 
-.decision-tree {
-  font-family: var(--mono); font-size: 12px; line-height: 2.2;
-  padding: 16px; background: var(--surface2); border-radius: 4px;
+.term {
+  color: var(--accent); font-style: italic; cursor: help;
+  position: relative; border-bottom: 1px dotted var(--accent);
 }
-.tree-branch { padding-left: 24px; border-left: 2px solid var(--border); margin-left: 8px; }
-.tree-node { font-weight: 500; color: var(--text); }
-.tree-outcome { color: var(--accent); font-weight: 500; }
-.tree-prob { color: var(--text3); }
+.term:hover::after {
+  content: attr(data-tip);
+  position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%);
+  background: #1a1714; color: #f5f0e8; font-style: normal; font-size: 11px;
+  padding: 8px 12px; border-radius: 4px; min-width: 200px; max-width: 320px;
+  white-space: normal; z-index: 100; pointer-events: none;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3); line-height: 1.5;
+  text-align: center;
+}
+
 
 /* Decomp table */
 .data-table {
@@ -241,17 +247,17 @@ input[type="range"]::-webkit-slider-thumb {
 <!-- ========== TAB 1: SOLOW MODEL ========== -->
 <div class="tab-content active" id="tab-solow">
   <h2>Solow Growth Model Simulation</h2>
-  <div class="subtitle">Transition dynamics, steady state, and why France's growth slowed after the 1970s</div>
+  <div class="subtitle">Transition dynamics, <span class="term" data-tip="The long-run level where capital per worker stops changing — the economy's destination">steady state</span>, and why France's growth slowed after the 1970s</div>
 
   <div class="eq-hero">
     <div>
       <em>Y</em> = <span class="fv" data-param="sl_A">A</span> &middot; <span class="fv" data-param="sl_k">K</span><sup><span class="fv" data-param="sl_a">&alpha;</span></sup> &middot; <span class="fv" data-param="sl_l">L</span><sup>1&minus;<span class="fv" data-param="sl_a">&alpha;</span></sup>
-      <div style="font-size:11px;color:var(--text3);font-style:normal;margin-top:4px;">Production Function &mdash; output from technology, capital &amp; labor</div>
+      <div style="font-size:11px;color:var(--text3);font-style:normal;margin-top:4px;"><span class="term" data-tip="Production Function — the equation showing how technology (A), capital (K), and labor (L) combine to produce total output (Y)">Production Function</span> &mdash; output from technology, capital &amp; labor</div>
     </div>
     <span class="sep">|</span>
     <div>
       &Delta;<span class="fv" data-param="sl_k">k&#x0303;</span> = <span class="fv" data-param="sl_s">s</span> &middot; <em>f</em>(<span class="fv" data-param="sl_k">k&#x0303;</span>) &minus; (<span class="fv" data-param="sl_n">n</span> + <span class="fv" data-param="sl_g">g</span> + <span class="fv" data-param="sl_d">&delta;</span>)<span class="fv" data-param="sl_k">k&#x0303;</span>
-      <div style="font-size:11px;color:var(--text3);font-style:normal;margin-top:4px;">Capital Accumulation &mdash; investment minus break-even</div>
+      <div style="font-size:11px;color:var(--text3);font-style:normal;margin-top:4px;"><span class="term" data-tip="How capital per effective worker changes each period">Capital Accumulation</span> &mdash; investment minus <span class="term" data-tip="The investment needed just to keep capital per worker constant, replacing depreciation and equipping new workers">break-even</span></div>
     </div>
   </div>
 
@@ -280,7 +286,7 @@ input[type="range"]::-webkit-slider-thumb {
           <input type="range" id="sl_a" min="0.10" max="0.60" step="0.01" value="0.30" oninput="solowUpdate()">
         </div>
         <div class="param-row" data-param="sl_A">
-          <div class="param-header"><span>Initial TFP (A<sub>0</sub>)</span><span class="pval" id="sv_A">0.99</span></div>
+          <div class="param-header"><span>Initial <span class="term" data-tip="Total Factor Productivity — a catch-all for technology, efficiency, management, and institutions. Everything affecting output beyond just capital and labor.">TFP</span> (A<sub>0</sub>)</span><span class="pval" id="sv_A">0.99</span></div>
           <input type="range" id="sl_A" min="0.10" max="3.0" step="0.01" value="0.99" oninput="solowUpdate()">
         </div>
         <div class="param-row" data-param="sl_k">
@@ -295,10 +301,10 @@ input[type="range"]::-webkit-slider-thumb {
 
       <div class="section-label">Steady State</div>
       <div class="ss-grid">
-        <div class="ss-box"><div class="val" id="ss_k2">--</div><div class="lbl">k&#x0303;*</div></div>
-        <div class="ss-box"><div class="val" id="ss_y2">--</div><div class="lbl">y&#x0303;*</div></div>
-        <div class="ss-box"><div class="val" id="ss_gr">--</div><div class="lbl">SS Growth</div></div>
-        <div class="ss-box"><div class="val" id="ss_yr">--</div><div class="lbl">Yrs to 90%</div></div>
+        <div class="ss-box"><div class="val" id="ss_k2">--</div><div class="lbl"><span class="term" data-tip="Steady-state capital per effective worker — the level of capital the economy is heading toward">k&#x0303;*</span></div></div>
+        <div class="ss-box"><div class="val" id="ss_y2">--</div><div class="lbl"><span class="term" data-tip="Steady-state output per effective worker — the long-run output level">&#x0079;&#x0303;*</span></div></div>
+        <div class="ss-box"><div class="val" id="ss_gr">--</div><div class="lbl"><span class="term" data-tip="Steady-state growth rate — always equals g (technology growth). The only source of permanent growth.">SS Growth</span></div></div>
+        <div class="ss-box"><div class="val" id="ss_yr">--</div><div class="lbl"><span class="term" data-tip="How many years until the economy reaches 90% of its steady state — measures transition speed">Yrs to 90%</span></div></div>
       </div>
 
       <div class="section-label">Case Presets</div>
@@ -318,24 +324,24 @@ input[type="range"]::-webkit-slider-thumb {
     <div>
       <div class="card">
         <h3>GDP per Capita Path</h3>
-        <div style="font-size:11px;color:var(--text3);margin-bottom:6px;">Red = actual path from initial conditions. Gold dashed = steady-state path. The gap shows how far the economy is from long-run equilibrium.</div>
+        <div style="font-size:11px;color:var(--text3);margin-bottom:6px;">Red = actual path from initial conditions. Gold dashed = <span class="term" data-tip="The long-run level where capital per worker stops changing — the economy's destination">steady-state</span> path. The gap shows how far the economy is from long-run equilibrium.</div>
         <div class="chart-box tall"><canvas id="cGDP"></canvas></div>
       </div>
       <div class="grid-2">
         <div class="card">
           <h3>Capital per Effective Worker (k&#x0303;)</h3>
-          <div style="font-size:11px;color:var(--text3);margin-bottom:6px;">Red = k&#x0303; over time. Gold dashed = k&#x0303;* (steady state). Capital rises when investment exceeds break-even, then levels off.</div>
+          <div style="font-size:11px;color:var(--text3);margin-bottom:6px;">Red = <span class="term" data-tip="Capital per effective worker — how much capital each worker has, adjusted for technology" style="font-family:var(--mono)">k&#x0303;</span> over time. Gold dashed = <span class="term" data-tip="Steady-state capital per effective worker — the level k̃ is heading toward" style="font-family:var(--mono)">k&#x0303;*</span> (<span class="term" data-tip="The long-run level where capital per worker stops changing">steady state</span>). Capital rises when investment exceeds <span class="term" data-tip="The investment needed just to keep capital per worker constant">break-even</span>, then levels off.</div>
           <div class="chart-box"><canvas id="cCap"></canvas></div>
         </div>
         <div class="card">
           <h3>Solow Diagram</h3>
-          <div style="font-size:11px;color:var(--text3);margin-bottom:6px;">Green curve = s&middot;f(k&#x0303;), concave due to diminishing returns. Red line = (n+g+&delta;)&middot;k&#x0303;, break-even investment. Where they cross = k&#x0303;*. Gold dot = current position.</div>
+          <div style="font-size:11px;color:var(--text3);margin-bottom:6px;">Green curve = s&middot;f(k&#x0303;), concave due to <span class="term" data-tip="Each additional unit of capital produces less additional output — this is why the green curve flattens">diminishing returns</span>. Red line = (n+g+&delta;)&middot;k&#x0303;, <span class="term" data-tip="The investment needed just to keep capital per worker constant — replacing worn-out capital (δ), equipping new workers (n), and keeping up with technology (g)">break-even investment</span>. Where they cross = <span class="term" data-tip="Steady-state capital per effective worker" style="font-family:var(--mono)">k&#x0303;*</span>. Gold dot = current position.</div>
           <div class="chart-box"><canvas id="cSolow"></canvas></div>
         </div>
       </div>
       <div class="card">
         <h3>GDP per Capita Growth Rate (%)</h3>
-        <div style="font-size:11px;color:var(--text3);margin-bottom:6px;">Red = growth rate over time. Gold dashed = steady-state growth (= g). Growth starts high when far from steady state, then decays toward g. Only technology drives permanent growth.</div>
+        <div style="font-size:11px;color:var(--text3);margin-bottom:6px;">Red = growth rate over time. Gold dashed = <span class="term" data-tip="The long-run growth rate, always equal to g (technology growth). This is the Solow model's key insight.">steady-state growth</span> (= <span class="term" data-tip="Technology growth rate — the ONLY source of permanent growth in the Solow model" style="font-family:var(--mono)">g</span>). Growth starts high when far from <span class="term" data-tip="The long-run level where capital per worker stops changing">steady state</span>, then decays toward g.</div>
         <div class="chart-box"><canvas id="cGrowth"></canvas></div>
       </div>
     </div>
@@ -349,7 +355,7 @@ input[type="range"]::-webkit-slider-thumb {
 
   <div class="callout">
     France's GDP per capita went from 57% of the US (1950) to 88% (1980) then back to 79% (2000).
-    The decomposition reveals TFP catch-up was the dominant driver of convergence, while declining labor utilization caused the reversal.
+    The decomposition reveals <span class="term" data-tip="Total Factor Productivity — technology, efficiency, management, institutions. Everything affecting output beyond capital and labor.">TFP</span> catch-up was the dominant driver of convergence, while declining labor utilization caused the reversal.
     Capital intensity actually exceeded the US by 1980 and stayed above it.
   </div>
 
@@ -357,7 +363,7 @@ input[type="range"]::-webkit-slider-thumb {
     <div class="card">
       <h3>France/US Ratios (PWT 11.0)</h3>
       <table class="data-table">
-        <tr><th>Year</th><th>Y/POP</th><th>A (TFP)</th><th>(K/N)^0.3</th><th>N/POP</th></tr>
+        <tr><th>Year</th><th><span class="term" data-tip="GDP per capita — total output divided by population" style="font-family:var(--mono)">Y/POP</span></th><th><span class="term" data-tip="Total Factor Productivity — technology, efficiency, institutions. The 'Solow residual' not explained by capital or labor." style="font-family:var(--mono)">A (TFP)</span></th><th><span class="term" data-tip="Capital intensity — capital per hour worked, raised to α. Measures how much machinery/equipment each worker has." style="font-family:var(--mono)">(K/N)^0.3</span></th><th><span class="term" data-tip="Labor utilization — total hours worked per person in the population. Affected by work week length, vacation, unemployment." style="font-family:var(--mono)">N/POP</span></th></tr>
         <tr><td>1950</td><td>0.57</td><td>0.48</td><td>0.89</td><td>1.32</td></tr>
         <tr><td>1980</td><td>0.88</td><td>0.88</td><td>1.13</td><td>0.88</td></tr>
         <tr><td>2000</td><td>0.79</td><td>0.94</td><td>1.20</td><td>0.70</td></tr>
@@ -379,7 +385,7 @@ input[type="range"]::-webkit-slider-thumb {
       <h3>1950: Why France was at 57%</h3>
       <div id="bar1950"></div>
       <div style="font-size:12px;color:var(--text2);margin-top:8px;line-height:1.5;">
-        Post-war France had very low TFP (0.48) -- the dominant source of the gap.
+        Post-war France had very low <span class="term" data-tip="Total Factor Productivity — technology, efficiency, management, institutions">TFP</span> (0.48) -- the dominant source of the gap.
         Capital was moderately below the US ((K/N)^0.3 = 0.89).
         But France had <em>higher</em> labor utilization (1.32) -- everyone was working to rebuild.
       </div>
@@ -388,7 +394,7 @@ input[type="range"]::-webkit-slider-thumb {
       <h3>1980: Peak Convergence at 88%</h3>
       <div id="bar1980"></div>
       <div style="font-size:12px;color:var(--text2);margin-top:8px;line-height:1.5;">
-        TFP nearly closed the gap (0.48 &rarr; 0.88). Capital exceeded the US (1.13).
+        <span class="term" data-tip="Total Factor Productivity — technology, efficiency, management, institutions">TFP</span> nearly closed the gap (0.48 &rarr; 0.88). Capital exceeded the US (1.13).
         But labor utilization already started declining (1.32 &rarr; 0.88).
         This is when Grandpa Frank should have recognized the slowdown.
       </div>
@@ -397,7 +403,7 @@ input[type="range"]::-webkit-slider-thumb {
       <h3>2000: Reversal to 79%</h3>
       <div id="bar2000"></div>
       <div style="font-size:12px;color:var(--text2);margin-top:8px;line-height:1.5;">
-        Capital well above the US ((K/N)^0.3 = 1.20). TFP nearly equal (0.94).
+        Capital well above the US (<span class="term" data-tip="Capital intensity ratio — France had 20% MORE capital per hour worked than the US" style="font-family:var(--mono)">(K/N)^0.3 = 1.20</span>). <span class="term" data-tip="Total Factor Productivity — technology and efficiency nearly matched the US">TFP</span> nearly equal (0.94).
         The entire gap is labor utilization: N/POP = 0.70.
         35-hour work week, 5-week vacation, high unemployment (11%).
       </div>
@@ -449,7 +455,7 @@ input[type="range"]::-webkit-slider-thumb {
       </div>
 
       <div style="margin-top:12px;background:var(--surface2);border-radius:4px;padding:14px;">
-        <div style="font-family:var(--mono);font-size:11px;color:var(--text3);margin-bottom:6px;">EXPECTED VALUES</div>
+        <div style="font-family:var(--mono);font-size:11px;color:var(--text3);margin-bottom:6px;"><span class="term" data-tip="Expected Value — the average payoff you'd get if you played this decision many times, weighted by the probability of each outcome">EXPECTED VALUES</span></div>
         <div class="ev-display">E[Enter] = <span id="ev_enter">58.0</span></div>
         <div class="ev-display" style="color:var(--blue)">E[Stay Out] = <span id="ev_out">0.0</span></div>
         <div style="text-align:center;font-family:var(--mono);font-size:13px;font-weight:500;margin-top:8px;padding-top:8px;border-top:1px solid var(--border);">
@@ -458,9 +464,9 @@ input[type="range"]::-webkit-slider-thumb {
       </div>
 
       <div style="margin-top:14px;">
-        <div style="font-family:var(--mono);font-size:11px;color:var(--text3);margin-bottom:6px;">BREAK-EVEN PROBABILITY</div>
+        <div style="font-family:var(--mono);font-size:11px;color:var(--text3);margin-bottom:6px;"><span class="term" data-tip="Break-even Probability — the exact P where entering and staying out have the same expected payoff. Below this, stay out.">BREAK-EVEN PROBABILITY</span></div>
         <div style="font-family:var(--mono);font-size:14px;font-weight:500;color:var(--accent);" id="breakeven_p">--</div>
-        <div style="font-size:11px;color:var(--text3);margin-top:2px;">Minimum P(High Growth) needed for entry to be rational</div>
+        <div style="font-size:11px;color:var(--text3);margin-top:2px;">Minimum P(High Growth) needed for entering to make sense</div>
       </div>
     </div>
 
@@ -468,8 +474,8 @@ input[type="range"]::-webkit-slider-thumb {
     <div class="card">
       <h3>2. Strategic Entry Game (2-Player)</h3>
       <p style="font-size:12px;color:var(--text2);margin-bottom:12px;">
-        Durabuild and a Competitor simultaneously decide whether to enter China. Payoffs depend on market crowding.
-        Green highlight = Nash Equilibrium.
+        Durabuild and a competitor both decide whether to enter China at the same time. Payoffs depend on whether the market gets crowded.
+        Green highlight = <span class="term" data-tip="Nash Equilibrium — an outcome where neither player benefits from switching their choice, given what the other player is doing">Nash Equilibrium</span>.
       </p>
 
       <div class="param-row">
@@ -508,44 +514,35 @@ input[type="range"]::-webkit-slider-thumb {
   </div>
 
   <div class="grid-2">
-    <!-- Decision Tree -->
-    <div class="card">
-      <h3>3. Sequential Decision Tree</h3>
-      <p style="font-size:12px;color:var(--text2);margin-bottom:12px;">
-        If Durabuild moves first (invest in China assessment), then decides to enter or not based on findings.
-      </p>
-      <div id="decisionTree" class="decision-tree"></div>
-    </div>
-
     <!-- Mixed Strategy -->
     <div class="card">
-      <h3>4. Mixed Strategy Equilibrium</h3>
+      <h3>3. <span class="term" data-tip="Mixed Strategy — when there's no single best action, players randomize between choices with calculated probabilities">Mixed Strategy</span> Equilibrium</h3>
       <p style="font-size:12px;color:var(--text2);margin-bottom:12px;">
-        If the entry game has no pure-strategy NE, what probability should each player enter with?
+        If neither "always enter" nor "always stay out" is clearly best, what probability should each player enter with?
       </p>
       <div id="mixedStrategy"></div>
       <div class="chart-box" style="height:220px;margin-top:12px;"><canvas id="cMixed"></canvas></div>
     </div>
-  </div>
 
-  <div class="card">
-    <h3>5. Sensitivity: Entry EV vs Probability of High Growth</h3>
-    <div style="font-size:12px;color:var(--text2);margin-bottom:8px;">
-      How the expected value of entering China changes as you vary P(growth continues).
-      The vertical line marks the break-even probability.
+    <!-- Sensitivity -->
+    <div class="card">
+      <h3>4. Sensitivity: Entry EV vs P(High Growth)</h3>
+      <div style="font-size:12px;color:var(--text2);margin-bottom:8px;">
+        How the <span class="term" data-tip="Expected Value — the average payoff weighted by the probability of each outcome">expected value</span> of entering China changes as you vary P(growth continues). The vertical line marks the <span class="term" data-tip="Break-even Probability — the exact probability where entering and staying out have equal expected payoff">break-even probability</span>.
+      </div>
+      <div class="chart-box" style="height:220px;"><canvas id="cSensitivity"></canvas></div>
     </div>
-    <div class="chart-box tall"><canvas id="cSensitivity"></canvas></div>
   </div>
 </div>
 
 <!-- ========== TAB 4: CONVERGENCE ========== -->
 <div class="tab-content" id="tab-convergence">
   <h2>Convergence Analysis</h2>
-  <div class="subtitle">The Solow model predicts conditional convergence: countries with similar fundamentals converge to the same steady state. Absolute convergence is not guaranteed.</div>
+  <div class="subtitle">The Solow model predicts <span class="term" data-tip="Conditional Convergence — countries converge to the same income level ONLY if they share similar savings rates, policies, and institutions">conditional convergence</span>: countries with similar fundamentals converge to the same <span class="term" data-tip="The long-run level where capital per worker stops changing">steady state</span>. <span class="term" data-tip="Absolute Convergence — the idea that ALL countries will converge regardless of their characteristics. The Solow model says this is NOT guaranteed.">Absolute convergence</span> is not guaranteed.</div>
 
   <div class="callout green">
-    The case demonstrates conditional convergence perfectly: France converged to the US in capital intensity (K/N ratio matched by 2000)
-    but NOT in GDP per capita -- because they had different labor market institutions (the "conditions" diverged).
+    The case demonstrates <span class="term" data-tip="Conditional Convergence — convergence happens only when countries share similar structural characteristics">conditional convergence</span> perfectly: France converged to the US in capital intensity (K/N ratio matched by 2000)
+    but NOT in GDP per capita — because they had different labor market institutions (the "conditions" diverged).
   </div>
 
   <div class="grid-2">
@@ -556,7 +553,7 @@ input[type="range"]::-webkit-slider-thumb {
     <div class="card">
       <h3>Growth Rate Convergence</h3>
       <div style="font-size:12px;color:var(--text2);margin-bottom:8px;">
-        Poorer countries grow faster initially (higher marginal product of capital) then slow toward steady-state growth rate g.
+        Poorer countries grow faster initially (higher <span class="term" data-tip="Marginal Product of Capital — the extra output gained from one more unit of capital. High when capital is scarce, low when capital is abundant.">marginal product of capital</span>) then slow toward <span class="term" data-tip="The long-run growth rate, always equal to g (technology growth)">steady-state</span> growth rate <span class="term" data-tip="Technology growth rate — the ONLY source of permanent growth" style="font-family:var(--mono)">g</span>.
       </div>
       <div class="chart-box tall"><canvas id="cConvGrowth"></canvas></div>
     </div>
@@ -572,7 +569,7 @@ input[type="range"]::-webkit-slider-thumb {
   </div>
 
   <div class="card">
-    <h3>Why France Never Fully Caught Up: Conditional vs Absolute Convergence</h3>
+    <h3>Why France Never Fully Caught Up: <span class="term" data-tip="Conditional Convergence — countries only converge if they share similar structural characteristics">Conditional</span> vs <span class="term" data-tip="Absolute Convergence — the (incorrect) idea that ALL countries will converge regardless">Absolute</span> Convergence</h3>
     <div class="grid-3" style="margin-top:12px;">
       <div style="text-align:center;">
         <div style="font-family:var(--mono);font-size:28px;font-weight:500;color:var(--green);">1.20</div>
@@ -581,7 +578,7 @@ input[type="range"]::-webkit-slider-thumb {
       </div>
       <div style="text-align:center;">
         <div style="font-family:var(--mono);font-size:28px;font-weight:500;color:var(--green);">0.94</div>
-        <div style="font-size:12px;color:var(--text2);margin-top:4px;">TFP ratio in 2000</div>
+        <div style="font-size:12px;color:var(--text2);margin-top:4px;"><span class="term" data-tip="Total Factor Productivity — technology, efficiency, institutions. France nearly matched the US.">TFP</span> ratio in 2000</div>
         <div style="font-size:11px;color:var(--text3);">Technology: NEARLY CONVERGED</div>
       </div>
       <div style="text-align:center;">
@@ -592,7 +589,7 @@ input[type="range"]::-webkit-slider-thumb {
     </div>
     <div style="margin-top:16px;font-size:13px;color:var(--text2);line-height:1.6;">
       The Solow model predicts convergence in capital and technology -- and it happened.
-      But the model also tells us that steady-state output depends on labor inputs, which are shaped by
+      But the model also tells us that <span class="term" data-tip="The long-run level where capital per worker stops changing">steady-state</span> output depends on labor inputs, which are shaped by
       institutional factors: the 35-hour work week, mandatory 5-week vacation, 60% wage replacement unemployment insurance,
       high marginal tax rates, strict firing regulations, and high minimum wage.
       These are the "conditions" that make France's steady state lower than the US's.
@@ -609,7 +606,7 @@ input[type="range"]::-webkit-slider-thumb {
       </div>
       <div style="text-align:center;">
         <div style="font-family:var(--mono);font-size:28px;font-weight:500;color:var(--red);">~0.35</div>
-        <div style="font-size:12px;color:var(--text2);margin-top:4px;">Relative TFP (est.)</div>
+        <div style="font-size:12px;color:var(--text2);margin-top:4px;">Relative <span class="term" data-tip="Total Factor Productivity — technology, efficiency, institutions">TFP</span> (est.)</div>
         <div style="font-size:11px;color:var(--text3);">BSP DP 2024-10: post-pandemic recovery</div>
       </div>
       <div style="text-align:center;">
@@ -620,8 +617,8 @@ input[type="range"]::-webkit-slider-thumb {
     </div>
     <div style="margin-top:16px;font-size:13px;color:var(--text2);line-height:1.6;">
       The Philippines presents a different convergence puzzle than France. Where France converged in capital but diverged in labor,
-      the PH is far from convergence on <em>all</em> fronts: low capital stock, low TFP, and moderate labor participation.
-      The Solow model predicts this should mean high growth potential -- the marginal product of capital is high when k is low.
+      the PH is far from convergence on <em>all</em> fronts: low capital stock, low <span class="term" data-tip="Total Factor Productivity — technology, efficiency, management, institutions">TFP</span>, and moderate labor participation.
+      The Solow model predicts this should mean high growth potential — the <span class="term" data-tip="Marginal Product of Capital — the extra output from one more unit of capital. High when capital is scarce.">marginal product of capital</span> is high when <span class="term" data-tip="Capital per effective worker" style="font-family:var(--mono)">k</span> is low.
       But three structural issues suppress the transition: (1) gross capital formation is only ~23% of GDP (World Bank 2023),
       well below China's 43% or Vietnam's 33%; (2) TFP growth was historically negative for most of 1967-2000 (Cororaton 2005,
       <em>Asian Development Review</em>), only turning mildly positive after 1990s reforms, and recovering post-pandemic but still
@@ -629,8 +626,8 @@ input[type="range"]::-webkit-slider-thumb {
       reached $38.3B in 2024 (8.3% of GDP, BSP) but flow primarily to household consumption rather than investment.
     </div>
     <div style="margin-top:10px;font-size:13px;color:var(--text2);line-height:1.6;">
-      The key insight: the Philippines has the <em>initial conditions</em> for catch-up growth (low k, high MPK),
-      but not yet the <em>structural conditions</em> (savings, TFP growth, human capital retention) to realize it.
+      The key insight: the Philippines has the <em>initial conditions</em> for catch-up growth (low <span class="term" data-tip="Capital per effective worker" style="font-family:var(--mono)">k</span>, high <span class="term" data-tip="Marginal Product of Capital — extra output from one more unit of capital">MPK</span>),
+      but not yet the <em>structural conditions</em> (savings, <span class="term" data-tip="Total Factor Productivity growth — technology and efficiency improvements">TFP growth</span>, human capital retention) to realize it.
       Note also that population growth has slowed sharply to 0.8% annually (PSA 2024 Census, down from 1.63% in 2015-2020),
       which mechanically raises k* -- fewer workers to share capital across -- potentially aiding convergence if sustained.
     </div>
@@ -644,15 +641,15 @@ input[type="range"]::-webkit-slider-thumb {
 
   <div class="callout">
     Lisa's key question: will China's high growth persist? The Solow model gives a clear framework.
-    Growth from capital accumulation is temporary (transitional). Only TFP growth is permanent.
-    China's 45% savings rate drives fast transition, but the steady state depends on g, n, and institutional quality.
+    Growth from <span class="term" data-tip="Capital Accumulation — building up more machines, factories, and infrastructure per worker">capital accumulation</span> is temporary (transitional). Only <span class="term" data-tip="Total Factor Productivity growth — the ONLY source of permanent growth">TFP growth</span> is permanent.
+    China's 45% savings rate drives fast transition, but the <span class="term" data-tip="The long-run level the economy is heading toward">steady state</span> depends on <span class="term" data-tip="Technology growth rate" style="font-family:var(--mono)">g</span>, <span class="term" data-tip="Population growth rate" style="font-family:var(--mono)">n</span>, and institutional quality.
   </div>
 
   <div class="grid-2">
     <div class="card">
       <h3>Policy Lever: Savings Rate</h3>
       <div style="font-size:12px;color:var(--text2);margin-bottom:8px;">
-        Higher s raises the steady-state k* and y*, but has diminishing returns due to &alpha; &lt; 1.
+        Higher <span class="term" data-tip="Savings rate — fraction of output invested in new capital" style="font-family:var(--mono)">s</span> raises the <span class="term" data-tip="Steady-state capital per effective worker" style="font-family:var(--mono)">k*</span> and <span class="term" data-tip="Steady-state output per effective worker" style="font-family:var(--mono)">y*</span>, but has <span class="term" data-tip="Diminishing Returns — each additional unit of savings produces less additional output">diminishing returns</span> due to <span class="term" data-tip="Capital share of output — typically 0.30, meaning 30% of income goes to capital" style="font-family:var(--mono)">&alpha;</span> &lt; 1.
         China's s=45% is historically unprecedented.
       </div>
       <div class="chart-box"><canvas id="cPolSavings"></canvas></div>
@@ -686,7 +683,7 @@ input[type="range"]::-webkit-slider-thumb {
           <div style="font-size:10px;color:var(--text3);margin-top:2px;">Investment share of GDP. Higher s &rarr; higher k* and y*</div>
         </div>
         <div class="param-row">
-          <div class="param-header"><span>TFP Growth (g)</span><span class="pval" id="pv_cg">3.5%</span></div>
+          <div class="param-header"><span><span class="term" data-tip="Total Factor Productivity growth — technology and efficiency improvement rate. The only source of permanent growth.">TFP Growth</span> (<span class="term" data-tip="Technology growth rate" style="font-family:var(--mono)">g</span>)</span><span class="pval" id="pv_cg">3.5%</span></div>
           <input type="range" id="pl_cg" min="0" max="8" step="0.1" value="3.5" oninput="policyUpdate()">
           <div style="font-size:10px;color:var(--text3);margin-top:2px;">Technology growth rate. Only source of permanent growth in Solow model</div>
         </div>
@@ -889,7 +886,7 @@ input[type="range"]::-webkit-slider-thumb {
   </div>
 
   <div class="card">
-    <h3>Growth Accounting with PWT (Solow Residual Method)</h3>
+    <h3>Growth Accounting with PWT (<span class="term" data-tip="Solow Residual — the portion of growth not explained by capital or labor. Attributed to technology, efficiency, and institutions.">Solow Residual</span> Method)</h3>
     <div style="font-size:13px;color:var(--text2);line-height:1.8;">
       <p style="margin-bottom:10px;">To decompose growth rates over time (not just level differences), use the growth accounting equation:</p>
       <div class="equation"><em>g</em><sub><em>Y</em>/<em>L</em></sub> = <em>&alpha;</em> &middot; <em>g</em><sub><em>K</em>/<em>L</em></sub> + <em>g</em><sub><em>A</em></sub> &nbsp;&nbsp;&nbsp; (Solow residual: <em>g</em><sub><em>A</em></sub> = <em>g</em><sub><em>Y</em>/<em>L</em></sub> &minus; <em>&alpha;</em> &middot; <em>g</em><sub><em>K</em>/<em>L</em></sub>)</div>
@@ -1254,9 +1251,9 @@ function gameUpdate() {
   // If Durabuild stays: Competitor prefers ye vs ne
   const brCompVsOut = ye >= ne ? 'enter' : 'out';
 
-  let nashText = '<strong>Best Response Analysis:</strong><br>';
-  nashText += `If competitor enters: Durabuild should ${brDurVsEnter} (${be} vs ${re})<br>`;
-  nashText += `If competitor stays out: Durabuild should ${brDurVsOut} (${ye} vs ${ne})<br>`;
+  let nashText = '<strong><span class="term" data-tip="Best Response — the optimal action for each player given what the other player does">Best Response</span> Analysis:</strong><br>';
+  nashText += `If competitor enters → Durabuild should ${brDurVsEnter} (payoff ${be} vs ${re})<br>`;
+  nashText += `If competitor stays out → Durabuild should ${brDurVsOut} (payoff ${ye} vs ${ne})<br>`;
 
   // Check NE
   let pureNE = [];
@@ -1293,42 +1290,17 @@ function gameUpdate() {
   // (Out, Out): D gets ne, C gets ne. D: ne vs ye? C: ne vs ye?
   if (ne >= ye && ne >= ye) { $('cell_so').classList.add('nash-highlight'); pureNE.push('(Stay Out, Stay Out)'); }
 
-  nashText += `<br><strong>Nash Equilibria:</strong> ${pureNE.length > 0 ? pureNE.join(', ') : 'No pure-strategy NE (mixed strategy needed)'}`;
+  nashText += `<br><strong><span class="term" data-tip="Nash Equilibrium — an outcome where neither player benefits from switching their choice alone">Nash Equilibrium</span>:</strong> ${pureNE.length > 0 ? pureNE.join(', ') : 'None — no stable outcome exists, so players may need to randomize (see panel 3)'}`;
 
-  // Dominant strategy check
   if (brDurVsEnter === brDurVsOut) {
-    nashText += `<br><strong>Dominant Strategy:</strong> Durabuild should always ${brDurVsEnter}`;
+    nashText += `<br><strong><span class="term" data-tip="Dominant Strategy — a strategy that is best regardless of what the other player does">Dominant Strategy</span>:</strong> Durabuild should always ${brDurVsEnter}, no matter what the competitor does.`;
   } else {
-    nashText += `<br>No dominant strategy for Durabuild -- best action depends on competitor's choice.`;
+    nashText += `<br>No <span class="term" data-tip="A strategy that is best regardless of what the other player does">dominant strategy</span> — Durabuild's best move depends on what the competitor does.`;
   }
 
   $('nashAnalysis').innerHTML = nashText;
 
-  // Game 3: Decision tree
-  $('decisionTree').innerHTML = `
-    <div class="tree-node">Durabuild Decision Node</div>
-    <div class="tree-branch">
-      <div class="tree-node">ENTER CHINA</div>
-      <div class="tree-branch">
-        <div>Nature: High Growth <span class="tree-prob">[p = ${(p*100).toFixed(0)}%]</span></div>
-        <div>&rarr; Payoff: <span class="tree-outcome">${eh}</span></div>
-      </div>
-      <div class="tree-branch">
-        <div>Nature: Slowdown <span class="tree-prob">[p = ${((1-p)*100).toFixed(0)}%]</span></div>
-        <div>&rarr; Payoff: <span class="tree-outcome">${el}</span></div>
-      </div>
-      <div style="margin-top:4px;">E[Enter] = ${p.toFixed(2)}&times;${eh} + ${(1-p).toFixed(2)}&times;(${el}) = <span class="tree-outcome">${evEnter.toFixed(1)}</span></div>
-    </div>
-    <div class="tree-branch">
-      <div class="tree-node">STAY OUT</div>
-      <div>&rarr; Payoff: <span class="tree-outcome">${so}</span></div>
-    </div>
-    <div style="margin-top:10px;font-weight:500;">
-      Optimal by backward induction: <span style="color:${evEnter>=evOut?'#2d8a4e':'#c43c3c'}">${evEnter>=evOut?'ENTER':'STAY OUT'}</span>
-    </div>
-  `;
-
-  // Game 4: Mixed strategy
+  // Game 3: Mixed strategy
   // For symmetric 2x2: Durabuild mixes with prob p* such that competitor is indifferent
   // Comp indifferent: p*be + (1-p)*re = p*ye + (1-p)*ne
   // p*(be-re) + re = p*(ye-ne) + ne => p = (ne-re)/(be-re-ye+ne)
@@ -1337,15 +1309,15 @@ function gameUpdate() {
   if (mixedP > 0 && mixedP < 1 && isFinite(mixedP)) {
     mixedHTML = `
       <div style="font-family:var(--mono);font-size:13px;">
-        Mixed Strategy NE: each enters with probability <strong style="color:var(--accent)">${(mixedP*100).toFixed(1)}%</strong>
+        <span class="term" data-tip="Mixed Strategy — when no single action is always best, players randomize with calculated probabilities">Mixed Strategy</span> equilibrium: each enters with <strong style="color:var(--accent)">${(mixedP*100).toFixed(1)}%</strong> probability
       </div>
       <div style="font-size:12px;color:var(--text2);margin-top:6px;line-height:1.5;">
-        Each player randomizes to make the opponent indifferent between entering and staying out.
-        Expected payoff at mixed NE: ${(mixedP*be+(1-mixedP)*re).toFixed(1)} for each player.
+        No single best move exists, so each player hedges by entering sometimes and staying out sometimes.
+        Average payoff: ${(mixedP*be+(1-mixedP)*re).toFixed(1)} for each player.
       </div>
     `;
   } else {
-    mixedHTML = `<div style="font-size:12px;color:var(--text2);">Pure strategy NE exists, so mixed strategy is not needed with current payoffs.</div>`;
+    mixedHTML = `<div style="font-size:12px;color:var(--text2);">A <span class="term" data-tip="Nash Equilibrium — an outcome where neither player benefits from switching">Nash Equilibrium</span> exists with current payoffs, so <span class="term" data-tip="Mixed Strategy — randomizing between actions">mixed strategy</span> is not needed.</div>`;
   }
   $('mixedStrategy').innerHTML = mixedHTML;
 

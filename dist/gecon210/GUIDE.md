@@ -24,7 +24,7 @@ Each slider controls one variable in the model. Drag any slider and all four cha
 | **α** (Capital Share) | Output elasticity of capital (typically 0.30) | How much of national income goes to capital vs labor. α < 1 is what creates diminishing returns. |
 | **A₀** (Initial TFP) | Starting technology level relative to the US | France 1950 ≈ 0.99 (nearly equal tech); China 2000 ≈ 0.40 (far behind) |
 | **k̃₀** (Initial capital/eff. worker) | Where the economy starts on the transition path | Low k̃₀ = far from steady state = fast growth (this is the catch-up story) |
-| **N/POP** (Labor Participation) | Total hours worked per person in the population | Not in the Solow equation directly, but multiplies output per capita. France's decline from 1.32 to 0.70 is why it fell behind. |
+| **N/POP** (Labor Participation) | Persons engaged per capita (employment-to-population ratio) | Not in the Solow equation directly, but multiplies output per capita. France's decline from 1.14 to 0.86 is why it fell behind. |
 
 ### Left Panel: Case Presets
 
@@ -89,9 +89,9 @@ All values are **France/USA ratios** from Penn World Table 11.0. A value of 1.00
 | Column | What it measures | Example: 1950 value of 0.57 means... |
 |-|-|-|
 | **Y/POP** | GDP per capita ratio | France produced 57% of US GDP per person |
-| **A (TFP)** | Total factor productivity ratio | France's technology/efficiency was 48% of the US |
-| **(K/N)^0.3** | Capital intensity ratio (raised to α) | France's capital per hour worked, adjusted for diminishing returns, was 89% of the US |
-| **N/POP** | Labor utilization ratio | French people worked 32% MORE total hours per capita than Americans |
+| **A (TFP)** | Total factor productivity ratio | France's technology/efficiency was 61% of the US |
+| **(K/N)^0.3** | Capital intensity ratio (raised to α) | France's capital per worker, adjusted for diminishing returns, was 82% of the US |
+| **N/POP** | Labor utilization ratio | France had 14% MORE persons employed per capita than the US |
 
 The verification row confirms: A × (K/N)^α × N/POP = Y/POP (the decomposition is exact).
 
@@ -99,9 +99,9 @@ The verification row confirms: A × (K/N)^α × N/POP = Y/POP (the decomposition
 
 Each card shows a horizontal bar decomposition — which factor contributed most to the gap in that year.
 
-- **1950**: The gap (Y/POP = 0.57) was driven by low TFP (A = 0.48). Post-war France hadn't yet adopted US production methods. Capital was moderate (0.89). Labor was actually ABOVE the US (1.32) — everyone was working to rebuild.
-- **1980**: Convergence peaked (Y/POP = 0.88). TFP nearly closed (0.88). Capital exceeded the US (1.13). But labor started falling (0.88) as welfare state policies reduced hours worked.
-- **2000**: Reversal (Y/POP = 0.79). Capital well above US (1.20), TFP nearly equal (0.94). The ENTIRE remaining gap is labor (0.70) — 35-hour work week, 5-week vacation, high unemployment.
+- **1950**: The gap (Y/POP = 0.57) was driven by lower TFP (A = 0.61) and capital (0.82). Post-war France hadn't yet adopted US production methods. Labor was slightly ABOVE the US (1.14) — more of the population was working.
+- **1980**: Convergence peaked (Y/POP = 0.88). TFP nearly closed (0.95). Capital at near-parity (1.02). But labor started falling (0.91) as welfare state policies reduced participation.
+- **2000**: Reversal (Y/POP = 0.79). TFP at parity (0.99), capital slightly below (0.93). The primary drag is labor (0.86) — lower employment rates, high unemployment (11%).
 
 ### Growth Rate Decomposition Chart
 
@@ -192,9 +192,9 @@ Shows k̃ paths — how capital per effective worker evolves.
 ### Conditional vs Absolute Convergence (Big Numbers Panel)
 
 Three key 2000 ratios that tell the France story:
-- **(K/N)^0.3 = 1.20** (green) — France EXCEEDED US capital intensity. Capital converged and then some.
-- **TFP = 0.94** (green) — Technology nearly converged. France adopted US methods.
-- **N/POP = 0.70** (red) — Labor DIVERGED. This is the gap.
+- **(K/N)^0.3 = 0.93** (yellow) — France slightly below US capital intensity.
+- **TFP = 0.99** (green) — Technology fully converged. France adopted US methods.
+- **N/POP = 0.86** (red) — Labor DIVERGED. This is the gap.
 
 **Punchline**: The Solow model predicted capital and technology convergence correctly. But France's steady state is LOWER than the US because of institutional differences (labor market regulations). This is CONDITIONAL convergence — same model, different steady states.
 
@@ -222,9 +222,9 @@ This tab connects the Solow framework to Lisa's decision about China.
 ### Policy Lever: Labor Participation
 
 - **Chart**: GDP per capita as a function of N/POP
-- **Red dot**: France 2000 (0.70)
+- **Red dot**: France 2000 (0.86)
 - **Blue dot**: US (1.0)
-- **How to read**: This is LINEAR — unlike savings, labor participation has a direct proportional effect. France's 30% labor gap translates directly to 30% lower GDP per capita. No diminishing returns here.
+- **How to read**: This is LINEAR — unlike savings, labor participation has a direct proportional effect. France's 14% labor gap translates directly to 14% lower GDP per capita. No diminishing returns here.
 
 ### China Scenario Builder
 
@@ -263,9 +263,9 @@ Lists where each model parameter comes from (PWT, World Bank, national census, e
 ### Key PWT Variables
 Table mapping PWT variable codes to economic concepts:
 - `rgdpna` → Y (real GDP at constant national prices)
-- `rnna` → K (capital stock)
-- `emp` → L (persons employed)
-- `avh` → hours per worker (to compute N = emp × avh)
+- `cn` → K (capital stock at current PPPs — used for cross-country comparison)
+- `rnna` → K (capital stock at constant national prices — used for time-series within a country)
+- `emp` → N (persons engaged)
 - `pop` → population
 - `hc` → human capital index
 - `labsh` → labor share (alternative to assuming α = 0.3)
@@ -284,9 +284,9 @@ Shows the formula: TFP growth = GDP growth - α × Capital growth - (1-α) × La
 
 2. **Steady state** is the intersection point — WHERE growth stops depending on capital, and the economy grows only at rate g from technology.
 
-3. **France caught up via TFP** (Tab 2) — PWT 11.0 shows TFP was the main convergence driver (0.48 → 0.94), not capital deepening. Capital actually EXCEEDED the US.
+3. **France caught up via TFP** (Tab 2) — PWT 11.0 shows TFP was the main convergence driver (0.61 → 0.99), not capital deepening.
 
-4. **France fell back because of labor** (Tab 4) — N/POP dropped from 1.32 to 0.70. Institutional choices (35-hr week, long vacations, high unemployment) created a LOWER steady state.
+4. **France fell back because of labor** (Tab 4) — N/POP dropped from 1.14 to 0.86. Institutional choices (lower labor force participation, high unemployment) created a LOWER steady state.
 
 5. **China's growth is transitional** (Tab 5) — High savings drive fast capital accumulation, but this is temporary. The question is whether g (TFP growth) can be sustained, or whether China will hit the same plateau France did.
 

@@ -150,6 +150,7 @@ input[type="range"]::-webkit-slider-thumb {
   border-radius: 4px; text-align: left; transition: all 0.12s;
 }
 .preset-btn:hover { border-color: var(--accent); background: rgba(180,74,45,0.03); }
+.preset-btn.active { border-color: var(--accent); background: rgba(180,74,45,0.06); box-shadow: 0 0 0 1px var(--accent); }
 .preset-btn strong { display: block; font-weight: 600; margin-bottom: 1px; }
 .preset-btn span { font-size: 11px; color: var(--text3); }
 
@@ -288,7 +289,8 @@ input[type="range"]::-webkit-slider-thumb {
     <button class="tab" onclick="switchTab('convergence')">Convergence</button>
     <button class="tab" onclick="switchTab('policy')">Policy Analysis</button>
     <button class="tab" onclick="switchTab('data')">PWT Data</button>
-    <button class="tab" onclick="switchTab('refs')">References & PWT Guide</button>
+    <button class="tab" onclick="switchTab('wbdata')">World Bank Data</button>
+    <button class="tab" onclick="switchTab('refs')">References & Data Guide</button>
   </div>
 </div>
 
@@ -372,8 +374,11 @@ input[type="range"]::-webkit-slider-thumb {
     <div>
       <div class="card">
         <h3>GDP per Capita Path</h3>
-        <div style="font-size:11px;color:var(--text3);margin-bottom:6px;">Red = actual path from initial conditions. Gold dashed = <span class="term" data-tip="The long-run equilibrium where capital per effective worker stops changing">steady-state</span> path. The gap shows how far the economy is from long-run equilibrium.</div>
+        <div style="font-size:11px;color:var(--text3);margin-bottom:6px;">Red = simulated path from initial conditions. Gold dashed = <span class="term" data-tip="The long-run equilibrium where capital per effective worker stops changing">steady-state</span> path. Blue dashed = <span class="term" data-tip="World Bank NY.GDP.PCAP.KD — GDP per capita in constant 2015 US$, scaled to match model units at t=0">actual World Bank data</span> (toggle below).</div>
         <div class="chart-box tall"><canvas id="cGDP"></canvas></div>
+        <div style="margin-top:6px;">
+          <span id="wbStatus" style="font-family:var(--mono);font-size:10px;color:var(--text3);"></span>
+        </div>
       </div>
       <div class="grid-2">
         <div class="card">
@@ -389,7 +394,7 @@ input[type="range"]::-webkit-slider-thumb {
       </div>
       <div class="card">
         <h3>GDP per Capita Growth Rate (%)</h3>
-        <div style="font-size:11px;color:var(--text3);margin-bottom:6px;">Red = growth rate over time. Gold dashed = <span class="term" data-tip="The long-run equilibrium growth rate — always equals g (technology growth)">steady-state growth</span> (= <span class="term" data-tip="Technology growth rate — the only source of permanent growth in the Solow model" style="font-family:var(--mono)">g</span>). Growth starts high when far from <span class="term" data-tip="The long-run equilibrium where capital per effective worker stops changing">steady state</span>, then decays toward g.</div>
+        <div style="font-size:11px;color:var(--text3);margin-bottom:6px;">Red = model growth rate. Gold dashed = <span class="term" data-tip="The long-run equilibrium growth rate — always equals g (technology growth)">steady-state growth</span> (= <span class="term" data-tip="Technology growth rate — the only source of permanent growth in the Solow model" style="font-family:var(--mono)">g</span>). Blue dashed = <span class="term" data-tip="Year-over-year % change in World Bank GDP per capita (constant 2015 US$)">actual World Bank growth</span>. The model is smooth; reality is volatile.</div>
         <div class="chart-box"><canvas id="cGrowth"></canvas></div>
       </div>
     </div>
@@ -521,10 +526,6 @@ input[type="range"]::-webkit-slider-thumb {
     </p>
   </div>
 
-  <div class="callout blue" style="text-align:center;font-size:14px;">
-    <strong>Scan the QR Code to view LT5' simulation for the Solow model, game theory and more.</strong><br>
-    https://lt5.emba2027a.com/gecon210/solow_final
-  </div>
 </div>
 
 <!-- ========== CASE EXHIBITS ========== -->
@@ -1116,6 +1117,7 @@ input[type="range"]::-webkit-slider-thumb {
   <div class="grid-2">
     <div class="card">
       <h3>Comparative GDP per Capita (Index = 100 at Year 0)</h3>
+      <div style="font-size:11px;color:var(--text3);margin-bottom:6px;">Solid = Solow model. Dashed = actual World Bank data (NY.GDP.PCAP.KD, indexed to 100 at 1960).</div>
       <div class="chart-box tall"><canvas id="cConverge"></canvas></div>
     </div>
     <div class="card">
@@ -1125,6 +1127,12 @@ input[type="range"]::-webkit-slider-thumb {
       </div>
       <div class="chart-box tall"><canvas id="cConvGrowth"></canvas></div>
     </div>
+  </div>
+
+  <div style="text-align:center;margin-bottom:20px;">
+    <label style="font-family:var(--mono);font-size:12px;color:var(--text2);display:inline-flex;align-items:center;gap:6px;cursor:pointer;padding:8px 16px;border:1px solid var(--border);border-radius:4px;background:var(--surface);">
+      <input type="checkbox" id="cbConvActual" onchange="toggleConvActual()"> Show Actual GDP <span style="color:var(--blue);">(World Bank)</span>
+    </label>
   </div>
 
   <div class="card">
@@ -1323,10 +1331,47 @@ input[type="range"]::-webkit-slider-thumb {
   </div>
 </div>
 
+<!-- ========== TAB: WORLD BANK DATA ========== -->
+<div class="tab-content" id="tab-wbdata">
+  <h2>World Bank &mdash; GDP per Capita</h2>
+  <div class="subtitle">NY.GDP.PCAP.KD &middot; Constant 2015 US$ &middot; 1960&ndash;2023 &middot; Source: <a href="https://data.worldbank.org/indicator/NY.GDP.PCAP.KD" target="_blank" style="color:var(--accent);">World Bank Open Data</a></div>
+
+  <div style="margin-bottom:16px;">
+    <label style="font-size:12px;color:var(--text2);display:block;margin-bottom:4px;">Highlight Country</label>
+    <select id="wb_country" onchange="wbDataRender()" style="font-family:var(--mono);font-size:13px;padding:6px 10px;border:1px solid var(--border);border-radius:4px;background:var(--surface);color:var(--text);width:320px;">
+      <option value="USA">United States (USA)</option>
+      <option value="FRA">France (FRA)</option>
+      <option value="CHN">China (CHN)</option>
+      <option value="PHL">Philippines (PHL)</option>
+    </select>
+  </div>
+
+  <div class="card">
+    <h3>GDP per Capita (constant 2015 US$)</h3>
+    <div class="chart-box tall"><canvas id="cWbChart"></canvas></div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <h3>Year-over-Year Growth Rate (%)</h3>
+      <div class="chart-box tall"><canvas id="cWbGrowth"></canvas></div>
+    </div>
+    <div class="card">
+      <h3>Indexed (1960 = 100)</h3>
+      <div class="chart-box tall"><canvas id="cWbIndex"></canvas></div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:16px;overflow-x:auto;">
+    <table class="data-table" id="wbTable" style="font-size:11px;">
+    </table>
+  </div>
+</div>
+
 <!-- ========== TAB 7: REFERENCES & PWT GUIDE ========== -->
 <div class="tab-content" id="tab-refs">
-  <h2>References & Penn World Table Guide</h2>
-  <div class="subtitle">Data sources, references, and how to use PWT 11.0 to solve the Durabuild case</div>
+  <h2>References & Data Guide</h2>
+  <div class="subtitle">Data sources (PWT 11.0 &amp; World Bank), references, and how to use PWT 11.0 to solve the Durabuild case</div>
 
   <div class="callout" style="border-left-color:var(--accent);">
     The case's Exhibits 1 &amp; 2 use <strong>Penn World Tables 7.1</strong> (per Exhibit 1 source note). Students should replicate and extend the analysis
@@ -1368,6 +1413,37 @@ input[type="range"]::-webkit-slider-thumb {
         <p style="margin-bottom:8px;"><strong>OFW remittances</strong>: $38.3B = 8.3% of GDP (BSP, as reported by PSA for 2024).</p>
         <p><strong>Population</strong>: 112.7M (PSA 2024 POPCEN).</p>
       </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>World Bank Open Data</h3>
+    <div style="font-size:13px;color:var(--text2);line-height:1.7;">
+      <p style="margin-bottom:10px;">Actual GDP overlays on the Solow and Convergence tabs use World Bank World Development Indicators, embedded as of March 2026.</p>
+      <p style="margin-bottom:10px;"><strong>Indicator used:</strong></p>
+      <p style="margin-bottom:6px;font-family:var(--mono);font-size:12px;">
+        NY.GDP.PCAP.KD — GDP per capita (constant 2015 US$)
+      </p>
+      <p style="margin-bottom:10px;"><strong>Countries:</strong> USA, FRA, CHN, PHL &middot; <strong>Coverage:</strong> 1960&ndash;2023</p>
+      <p style="margin-bottom:10px;"><strong>Access the data:</strong></p>
+      <p style="margin-bottom:6px;font-family:var(--mono);font-size:12px;">
+        <a href="https://data.worldbank.org/indicator/NY.GDP.MKTP.CD" target="_blank" style="color:var(--accent);">data.worldbank.org/indicator/NY.GDP.MKTP.CD</a>
+      </p>
+      <p style="margin-bottom:6px;font-family:var(--mono);font-size:12px;">
+        API: <a href="https://api.worldbank.org/v2/country/USA;FRA;CHN;PHL/indicator/NY.GDP.PCAP.KD?format=json&per_page=500&date=1960:2023" target="_blank" style="color:var(--accent);">api.worldbank.org/v2/...</a>
+      </p>
+      <p style="margin-bottom:10px;margin-top:14px;"><strong>How it's used:</strong></p>
+      <p style="font-size:12px;color:var(--text3);">
+        <strong>Solow tab:</strong> WB GDP per capita is scaled to match the model's index units at the first overlapping year (anchor point),
+        so the blue line shows how actual GDP tracks the model's simulated path. Growth rates are computed as year-over-year % change from the WB series.
+      </p>
+      <p style="font-size:12px;color:var(--text3);margin-top:6px;">
+        <strong>Convergence tab:</strong> All four countries are indexed to 100 at 1960 (first year of WB data) for direct comparison of relative growth trajectories.
+      </p>
+      <p style="margin-top:14px;"><strong>Required citation:</strong></p>
+      <p style="font-size:12px;color:var(--text3);font-style:italic;">
+        World Bank. "GDP per capita (constant 2015 US$)." World Development Indicators. Accessed March 2026.
+      </p>
     </div>
   </div>
 
@@ -1502,6 +1578,7 @@ function switchTab(name) {
   if (name==='convergence') initConvergence();
   if (name==='policy') initPolicy();
   if (name==='data') initPwtData();
+  if (name==='wbdata') initWbData();
 }
 
 // ============ TAB 1: SOLOW ============
@@ -1551,11 +1628,15 @@ function computePresetFromPWT(cc, yr, gStart, gEnd) {
 let SPRESETS = {};
 
 function loadSolowPreset(p) {
+  document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
+  if (event && event.currentTarget) event.currentTarget.classList.add('active');
   const v = SPRESETS[p];
   $('sl_s').value=v.s; $('sl_d').value=v.d; $('sl_n').value=v.n; $('sl_g').value=v.g;
   $('sl_a').value=v.a; $('sl_A').value=v.A; $('sl_k').value=v.k; $('sl_l').value=v.l;
   currentStartYear = v.yr || 1950;
+  currentWBPreset = p;
   solowUpdate();
+  applyWBOverlay(p);
 }
 
 function solowUpdate() {
@@ -1578,7 +1659,12 @@ function solowUpdate() {
   sCharts.gdp.data.labels = yrs;
   sCharts.gdp.data.datasets[0].data = data.map(x=>x.yAct);
   sCharts.gdp.data.datasets[1].data = ssPath;
-  sCharts.gdp.update();
+  // Re-anchor WB overlay when sliders change
+  if (currentWBPreset && WB_COUNTRY_MAP[currentWBPreset]) {
+    applyWBOverlay(currentWBPreset);
+  } else {
+    sCharts.gdp.update();
+  }
 
   // Capital
   sCharts.cap.data.labels = yrs;
@@ -1602,10 +1688,94 @@ function solowUpdate() {
   sCharts.growth.update();
 }
 
+// ============ WORLD BANK ACTUAL GDP OVERLAY ============
+// Source: World Bank NY.GDP.PCAP.KD — GDP per capita (constant 2015 US$)
+// Data embedded 2026-03-06. Covers 1960–2023 for USA, FRA, CHN, PHL.
+const WB_GDP = {
+  USA:{1960:18899.16,1961:19015.98,1962:19868.02,1963:20445.84,1964:21333.30,1965:22416.62,1966:23599.57,1967:23927.60,1968:24826.99,1969:25347.71,1970:25108.39,1971:25609.29,1972:26668.17,1973:27906.14,1974:27502.85,1975:27177.02,1976:28370.46,1977:29385.32,1978:30685.00,1979:31309.05,1980:30930.42,1981:31405.61,1982:30546.76,1983:31656.17,1984:33654.31,1985:34748.27,1986:35620.76,1987:36523.40,1988:37705.06,1989:38722.25,1990:39009.37,1991:38449.88,1992:39256.05,1993:39807.88,1994:40907.02,1995:41507.91,1996:42575.69,1997:43936.91,1998:45374.62,1999:47004.47,2000:48379.76,2001:48361.02,2002:48729.16,2003:49662.75,2004:51098.56,2005:52393.45,2006:53335.59,2007:53889.40,2008:53442.71,2009:51611.32,2010:52555.77,2011:52956.66,2012:53738.15,2013:54462.63,2014:55394.45,2015:56572.92,2016:57151.47,2017:58151.70,2018:59526.67,2019:60750.99,2020:59194.67,2021:62680.25,2022:63886.13,2023:65186.60},
+  FRA:{1960:10776.12,1961:11192.77,1962:11840.66,1963:12437.89,1964:13116.06,1965:13619.42,1966:14199.14,1967:14760.33,1968:15313.24,1969:16264.89,1970:17116.86,1971:17853.90,1972:18496.79,1973:19484.46,1974:20210.49,1975:19924.37,1976:20700.62,1977:21336.39,1978:22078.72,1979:22792.24,1980:23050.93,1981:23186.76,1982:23666.51,1983:23836.40,1984:24102.02,1985:24358.14,1986:24813.03,1987:25308.62,1988:26374.12,1989:27372.05,1990:27992.98,1991:28197.24,1992:28482.52,1993:28257.10,1994:28822.50,1995:29379.62,1996:29683.78,1997:30325.52,1998:31256.51,1999:32152.72,2000:33255.14,2001:33640.67,2002:33753.58,2003:33840.62,2004:34557.15,2005:34946.04,2006:35645.42,2007:36322.17,2008:36257.37,2009:35052.85,2010:35578.20,2011:36269.96,2012:36161.29,2013:36256.09,2014:36444.39,2015:36702.43,2016:36920.53,2017:37580.60,2018:38062.44,2019:38705.21,2020:35709.20,2021:38030.86,2022:38868.33,2023:39319.42},
+  CHN:{1960:241.39,1961:177.35,1962:166.09,1963:178.75,1964:206.40,1965:235.70,1966:253.64,1967:232.94,1968:217.63,1969:247.62,1970:287.36,1971:299.31,1972:303.17,1973:319.33,1974:320.02,1975:341.84,1976:331.30,1977:351.56,1978:386.17,1979:409.98,1980:436.59,1981:453.07,1982:486.89,1983:531.39,1984:604.35,1985:676.28,1986:725.83,1987:797.34,1988:872.66,1989:895.53,1990:917.27,1991:989.55,1992:1117.27,1993:1258.35,1994:1406.86,1995:1545.19,1996:1681.63,1997:1819.10,1998:1944.44,1999:2076.82,2000:2237.44,2001:2405.89,2002:2610.73,2003:2857.04,2004:3127.86,2005:3465.82,2006:3883.35,2007:4409.76,2008:4811.47,2009:5237.77,2010:5764.87,2011:6275.91,2012:6723.19,2013:7198.07,2014:7686.58,2015:8175.33,2016:8679.38,2017:9221.51,2018:9798.65,2019:10356.48,2020:10573.64,2021:11469.57,2022:11830.60,2023:12484.16},
+  PHL:{1960:1123.78,1961:1150.63,1962:1168.61,1963:1211.82,1964:1214.71,1965:1241.11,1966:1257.98,1967:1285.29,1968:1311.52,1969:1334.73,1970:1348.65,1971:1388.25,1972:1430.59,1973:1522.02,1974:1540.04,1975:1587.50,1976:1683.66,1977:1730.59,1978:1772.23,1979:1822.15,1980:1867.57,1981:1881.82,1982:1898.14,1983:1878.60,1984:1696.58,1985:1537.67,1986:1551.41,1987:1576.97,1988:1638.04,1989:1696.00,1990:1704.08,1991:1656.38,1992:1624.35,1993:1620.36,1994:1654.75,1995:1693.81,1996:1752.24,1997:1800.26,1998:1746.53,1999:1759.42,2000:1793.35,2001:1807.71,2002:1837.25,2003:1892.82,2004:1978.34,2005:2037.88,2006:2110.42,2007:2209.35,2008:2264.95,2009:2256.73,2010:2373.14,2011:2416.75,2012:2533.74,2013:2654.42,2014:2776.92,2015:2909.86,2016:3076.34,2017:3247.45,2018:3410.94,2019:3575.88,2020:3198.67,2021:3350.98,2022:3577.70,2023:3744.70}
+};
+const WB_COUNTRY_MAP = {
+  us50:'USA', fr50:'FRA', fr80:'FRA', cn00:'CHN', cn1c:'CHN',
+  ph24:'PHL', phbd:'PHL', phdd:'PHL', phhi:'PHL'
+};
+let currentWBPreset = null;
+
+function toggleConvActual() {
+  const src = $('cbConvActual').checked ? convData.actual : convData.model;
+  if (convCharts.converge) {
+    convCharts.converge.data.labels = src.idxLabels;
+    convCharts.converge.data.datasets = src.idx;
+    convCharts.converge.update();
+  }
+  if (convCharts.growth) {
+    convCharts.growth.data.labels = src.grLabels;
+    convCharts.growth.data.datasets = src.gr;
+    convCharts.growth.update();
+  }
+}
+
+function applyWBOverlay(presetKey) {
+  const cc = WB_COUNTRY_MAP[presetKey];
+  if (!cc || !WB_GDP[cc]) { clearWBOverlay(); return; }
+  const raw = WB_GDP[cc];
+  const yrs = sCharts.gdp.data.labels;
+  const modelData = sCharts.gdp.data.datasets[0].data;
+
+  // Find the earliest overlapping year to anchor the scale
+  let anchorIdx = -1;
+  for (let i = 0; i < yrs.length; i++) {
+    if (raw[yrs[i]] != null) { anchorIdx = i; break; }
+  }
+  if (anchorIdx < 0) {
+    $('wbStatus').textContent = 'No overlapping years';
+    clearWBOverlay();
+    return;
+  }
+
+  // Scale factor: match World Bank value to model value at anchor year
+  const scale = modelData[anchorIdx] / raw[yrs[anchorIdx]];
+
+  // Build aligned data array
+  const wbAligned = yrs.map(yr => raw[yr] != null ? +(raw[yr] * scale).toFixed(4) : null);
+
+  sCharts.gdp.data.datasets[2].data = wbAligned;
+  sCharts.gdp.data.datasets[2].hidden = false;
+  sCharts.gdp.update();
+
+  // Growth rate overlay — compute YoY % change from WB data
+  const growthYrs = sCharts.growth.data.labels;
+  const wbGrowth = growthYrs.map(yr => {
+    const prev = raw[yr-1], curr = raw[yr];
+    return (prev != null && curr != null) ? +((curr/prev - 1)*100).toFixed(2) : null;
+  });
+  sCharts.growth.data.datasets[2].data = wbGrowth;
+  sCharts.growth.data.datasets[2].hidden = false;
+  sCharts.growth.update();
+
+  const count = wbAligned.filter(v => v != null).length;
+  $('wbStatus').textContent = `${count}yr · World Bank NY.GDP.PCAP.KD (constant 2015 US$)`;
+}
+
+function clearWBOverlay() {
+  if (sCharts.gdp) {
+    sCharts.gdp.data.datasets[2].data = [];
+    sCharts.gdp.update();
+  }
+  if (sCharts.growth) {
+    sCharts.growth.data.datasets[2].data = [];
+    sCharts.growth.update();
+  }
+  $('wbStatus').textContent = '';
+}
+
 function initSolow() {
   sCharts.gdp = makeChart('cGDP','line',[
-    {label:'GDP per Capita',data:[],borderColor:'#b44a2d',borderWidth:2,pointRadius:0,fill:true,backgroundColor:'rgba(180,74,45,0.06)'},
-    {label:'Steady State Path',data:[],borderColor:'#c4930a',borderWidth:1.5,borderDash:[6,4],pointRadius:0}
+    {label:'GDP per Capita (Model)',data:[],borderColor:'#b44a2d',borderWidth:2,pointRadius:0,fill:true,backgroundColor:'rgba(180,74,45,0.06)'},
+    {label:'Steady State Path',data:[],borderColor:'#c4930a',borderWidth:1.5,borderDash:[6,4],pointRadius:0},
+    {label:'Actual GDP (World Bank)',data:[],borderColor:'#3574c4',borderWidth:2,pointRadius:0,fill:true,backgroundColor:'rgba(53,116,196,0.06)',hidden:false}
   ],[]);
   sCharts.cap = makeChart('cCap','line',[
     {label:'k_tilde',data:[],borderColor:'#b44a2d',borderWidth:2,pointRadius:0,fill:true,backgroundColor:'rgba(180,74,45,0.06)'},
@@ -1617,11 +1787,16 @@ function initSolow() {
     {label:'Current k',data:[],borderColor:'#c4930a',borderWidth:2,pointRadius:8,pointBackgroundColor:'#c4930a',pointStyle:'circle',showLine:false}
   ],[]);
   sCharts.growth = makeChart('cGrowth','line',[
-    {label:'Growth %',data:[],borderColor:'#b44a2d',borderWidth:2,pointRadius:0,fill:true,backgroundColor:'rgba(180,74,45,0.06)'},
-    {label:'SS Growth (g)',data:[],borderColor:'#c4930a',borderWidth:1.5,borderDash:[6,4],pointRadius:0}
+    {label:'Growth % (Model)',data:[],borderColor:'#b44a2d',borderWidth:2,pointRadius:0,fill:true,backgroundColor:'rgba(180,74,45,0.06)'},
+    {label:'SS Growth (g)',data:[],borderColor:'#c4930a',borderWidth:1.5,borderDash:[6,4],pointRadius:0},
+    {label:'Actual Growth (World Bank)',data:[],borderColor:'#3574c4',borderWidth:2,pointRadius:0,fill:true,backgroundColor:'rgba(53,116,196,0.06)',hidden:false}
   ],[]);
   loadSolowPreset('fr50');
+  // Highlight default preset button
+  const btns = document.querySelectorAll('.preset-btn');
+  btns.forEach(b => { if (b.textContent.includes('France 1950')) b.classList.add('active'); });
 }
+
 
 // ============ EXHIBITS TAB ============
 let exInited = false;
@@ -1940,6 +2115,8 @@ function gameUpdate() {
 
 // ============ TAB 4: CONVERGENCE ============
 let convInited = false;
+let convCharts = {};
+let convData = {}; // store full data for toggling
 function initConvergence() {
   if (convInited) return; convInited = true;
 
@@ -1948,30 +2125,59 @@ function initConvergence() {
   const cn = solowSim(0.35,0.050,0.008,0.035,0.30,0.40,1.7,1.10,50);
   const ph = solowSim(0.23,0.050,0.008,0.010,0.30,0.35,1.0,0.64,50);
 
-  // Convergence uses common timeline starting at 1950 for comparability
-  const yrs = us.d.map(x=>1950+x.t);
+  // Model: 1950–2000
+  const yrsModel = us.d.map(x=>1950+x.t);
   const usBase = us.d[0].yAct, frBase = fr.d[0].yAct, cnBase = cn.d[0].yAct, phBase = ph.d[0].yAct;
 
-  makeChart('cConverge','line',[
-    {label:'US',data:us.d.map(x=>(x.yAct/usBase)*100),borderColor:'#3574c4',borderWidth:2,pointRadius:0},
-    {label:'France',data:fr.d.map(x=>(x.yAct/frBase)*100),borderColor:'#b44a2d',borderWidth:2,pointRadius:0},
-    {label:'China',data:cn.d.map(x=>(x.yAct/cnBase)*100),borderColor:'#2d8a4e',borderWidth:2,pointRadius:0},
-    {label:'Philippines',data:ph.d.map(x=>(x.yAct/phBase)*100),borderColor:'#c4930a',borderWidth:2,pointRadius:0}
-  ],yrs);
+  // Actual WB: 1960–2023
+  const wbYrs = []; for (let y=1960;y<=2023;y++) wbYrs.push(y);
+  const wbGrYrs = []; for (let y=1961;y<=2023;y++) wbGrYrs.push(y);
+  const wbCodes = ['USA','FRA','CHN','PHL'];
+  const wbColors = ['#3574c4','#b44a2d','#2d8a4e','#c4930a'];
+  const wbNames = ['US','France','China','Philippines'];
+  const wbIdx = {}, wbGr = {};
+  for (const cc of wbCodes) {
+    const raw = WB_GDP[cc], base = raw[1960];
+    wbIdx[cc] = wbYrs.map(yr => raw[yr] != null && base ? +((raw[yr]/base)*100).toFixed(2) : null);
+    wbGr[cc] = wbGrYrs.map(yr => {
+      const prev = raw[yr-1], curr = raw[yr];
+      return (prev != null && curr != null) ? +((curr/prev - 1)*100).toFixed(2) : null;
+    });
+  }
 
-  makeChart('cConvGrowth','line',[
-    {label:'US Growth',data:us.d.slice(1).map(x=>x.gr),borderColor:'#3574c4',borderWidth:2,pointRadius:0},
-    {label:'France Growth',data:fr.d.slice(1).map(x=>x.gr),borderColor:'#b44a2d',borderWidth:2,pointRadius:0},
-    {label:'China Growth',data:cn.d.slice(1).map(x=>x.gr),borderColor:'#2d8a4e',borderWidth:2,pointRadius:0},
-    {label:'PH Growth',data:ph.d.slice(1).map(x=>x.gr),borderColor:'#c4930a',borderWidth:2,pointRadius:0}
-  ],yrs.slice(1));
+  // Store for toggle swapping
+  convData.model = {
+    idxLabels: yrsModel,
+    idx: [
+      {label:'US (Model)',data:us.d.map(x=>(x.yAct/usBase)*100),borderColor:'#3574c4',borderWidth:2,pointRadius:0},
+      {label:'France (Model)',data:fr.d.map(x=>(x.yAct/frBase)*100),borderColor:'#b44a2d',borderWidth:2,pointRadius:0},
+      {label:'China (Model)',data:cn.d.map(x=>(x.yAct/cnBase)*100),borderColor:'#2d8a4e',borderWidth:2,pointRadius:0},
+      {label:'PH (Model)',data:ph.d.map(x=>(x.yAct/phBase)*100),borderColor:'#c4930a',borderWidth:2,pointRadius:0}
+    ],
+    grLabels: yrsModel.slice(1),
+    gr: [
+      {label:'US Growth (Model)',data:us.d.slice(1).map(x=>x.gr),borderColor:'#3574c4',borderWidth:2,pointRadius:0},
+      {label:'France Growth (Model)',data:fr.d.slice(1).map(x=>x.gr),borderColor:'#b44a2d',borderWidth:2,pointRadius:0},
+      {label:'China Growth (Model)',data:cn.d.slice(1).map(x=>x.gr),borderColor:'#2d8a4e',borderWidth:2,pointRadius:0},
+      {label:'PH Growth (Model)',data:ph.d.slice(1).map(x=>x.gr),borderColor:'#c4930a',borderWidth:2,pointRadius:0}
+    ]
+  };
+  convData.actual = {
+    idxLabels: wbYrs,
+    idx: wbCodes.map((cc,i) => ({label:wbNames[i]+' (Actual)',data:wbIdx[cc],borderColor:wbColors[i],borderWidth:2,pointRadius:0})),
+    grLabels: wbGrYrs,
+    gr: wbCodes.map((cc,i) => ({label:wbNames[i]+' Growth (Actual)',data:wbGr[cc],borderColor:wbColors[i],borderWidth:2,pointRadius:0}))
+  };
+
+  convCharts.converge = makeChart('cConverge','line', convData.model.idx, convData.model.idxLabels);
+  convCharts.growth = makeChart('cConvGrowth','line', convData.model.gr, convData.model.grLabels);
 
   makeChart('cCapConv','line',[
     {label:'US k',data:us.d.map(x=>x.k),borderColor:'#3574c4',borderWidth:2,pointRadius:0},
     {label:'France k',data:fr.d.map(x=>x.k),borderColor:'#b44a2d',borderWidth:2,pointRadius:0},
     {label:'China k',data:cn.d.map(x=>x.k),borderColor:'#2d8a4e',borderWidth:2,pointRadius:0},
     {label:'PH k',data:ph.d.map(x=>x.k),borderColor:'#c4930a',borderWidth:2,pointRadius:0}
-  ],yrs);
+  ],yrsModel);
 }
 
 // ============ TAB 5: POLICY ============
@@ -2180,6 +2386,95 @@ function pwtRender() {
     html += '</tr>';
   });
   $('pwtTable').innerHTML = html;
+}
+
+// ============ WORLD BANK DATA TAB ============
+let wbInited = false;
+let wbCharts = {};
+
+function initWbData() {
+  if (wbInited) return;
+  wbInited = true;
+
+  const colors = {USA:'#3574c4',FRA:'#b44a2d',CHN:'#2d8a4e',PHL:'#c4930a'};
+  const codes = ['USA','FRA','CHN','PHL'];
+
+  wbCharts.gdp = makeChart('cWbChart','line',
+    codes.map(cc => ({label:cc,data:[],borderColor:colors[cc],borderWidth:2,pointRadius:0})),
+    [],{plugins:{...chartDefaults.plugins,legend:{display:true}}});
+
+  wbCharts.growth = makeChart('cWbGrowth','line',
+    codes.map(cc => ({label:cc,data:[],borderColor:colors[cc],borderWidth:2,pointRadius:0})),
+    [],{plugins:{...chartDefaults.plugins,legend:{display:true}}});
+
+  wbCharts.index = makeChart('cWbIndex','line',
+    codes.map(cc => ({label:cc,data:[],borderColor:colors[cc],borderWidth:2,pointRadius:0})),
+    [],{plugins:{...chartDefaults.plugins,legend:{display:true}}});
+
+  wbDataRender();
+}
+
+function wbDataRender() {
+  if (!wbCharts.gdp) return;
+  const highlight = $('wb_country').value;
+  const codes = ['USA','FRA','CHN','PHL'];
+  const names = {USA:'United States',FRA:'France',CHN:'China',PHL:'Philippines'};
+  const yrs = []; for (let y=1960;y<=2023;y++) yrs.push(y);
+  const grYrs = []; for (let y=1961;y<=2023;y++) grYrs.push(y);
+
+  // GDP chart
+  codes.forEach((cc, i) => {
+    const raw = WB_GDP[cc];
+    wbCharts.gdp.data.datasets[i].data = yrs.map(y => raw[y] != null ? raw[y] : NaN);
+    wbCharts.gdp.data.datasets[i].borderWidth = cc === highlight ? 3 : 1.5;
+    wbCharts.gdp.data.datasets[i].borderDash = cc === highlight ? [] : [4,4];
+  });
+  wbCharts.gdp.data.labels = yrs;
+  wbCharts.gdp.update();
+
+  // Growth chart
+  codes.forEach((cc, i) => {
+    const raw = WB_GDP[cc];
+    wbCharts.growth.data.datasets[i].data = grYrs.map(y => {
+      const prev = raw[y-1], curr = raw[y];
+      return (prev != null && curr != null) ? +((curr/prev-1)*100).toFixed(2) : NaN;
+    });
+    wbCharts.growth.data.datasets[i].borderWidth = cc === highlight ? 3 : 1.5;
+    wbCharts.growth.data.datasets[i].borderDash = cc === highlight ? [] : [4,4];
+  });
+  wbCharts.growth.data.labels = grYrs;
+  wbCharts.growth.update();
+
+  // Index chart (1960 = 100)
+  codes.forEach((cc, i) => {
+    const raw = WB_GDP[cc], base = raw[1960];
+    wbCharts.index.data.datasets[i].data = yrs.map(y => raw[y] != null && base ? +((raw[y]/base)*100).toFixed(2) : NaN);
+    wbCharts.index.data.datasets[i].borderWidth = cc === highlight ? 3 : 1.5;
+    wbCharts.index.data.datasets[i].borderDash = cc === highlight ? [] : [4,4];
+  });
+  wbCharts.index.data.labels = yrs;
+  wbCharts.index.update();
+
+  // Table
+  const showYears = [];
+  for (let y=1960; y<=2023; y+=5) showYears.push(y);
+  if (showYears[showYears.length-1] !== 2023) showYears.push(2023);
+
+  let html = '<tr><th style="position:sticky;left:0;background:var(--surface);z-index:1;min-width:140px;">Year</th>';
+  showYears.forEach(y => html += '<th>'+y+'</th>');
+  html += '</tr>';
+  codes.forEach(cc => {
+    const raw = WB_GDP[cc];
+    const hl = cc === highlight;
+    html += '<tr style="'+(hl?'background:var(--surface2);font-weight:600;':'')+'"><td style="text-align:left;font-weight:500;min-width:140px;white-space:nowrap;position:sticky;left:0;background:'+(hl?'var(--surface2)':'var(--surface)')+';z-index:1;">'+names[cc]+' <span style="color:var(--text3);font-weight:400;">('+cc+')</span></td>';
+    showYears.forEach(y => {
+      const v = raw[y];
+      if (v == null) html += '<td>—</td>';
+      else html += '<td>$'+Math.round(v).toLocaleString()+'</td>';
+    });
+    html += '</tr>';
+  });
+  $('wbTable').innerHTML = html;
 }
 
 // ============ FORMULA HIGHLIGHT ON PARAM HOVER ============

@@ -280,6 +280,7 @@ input[type="range"]::-webkit-slider-thumb {
   </button>
   <div class="tabs" id="tabBar">
     <button class="tab active" onclick="switchTab('solow')">Solow Model</button>
+    <button class="tab" onclick="switchTab('wac')">WAC</button>
     <button class="tab" onclick="switchTab('exhibits')">Case Exhibits</button>
     <button class="tab" onclick="switchTab('projections')">Case Projections</button>
     <button class="tab" onclick="switchTab('accounting')">Growth Accounting</button>
@@ -392,6 +393,137 @@ input[type="range"]::-webkit-slider-thumb {
         <div class="chart-box"><canvas id="cGrowth"></canvas></div>
       </div>
     </div>
+  </div>
+</div>
+
+<!-- ========== WAC: WRITTEN ANALYSIS OF CASE ========== -->
+<div class="tab-content" id="tab-wac">
+  <h2>Written Analysis of Case: The Solow Model Unleashed</h2>
+  <div class="subtitle">LT5: Brizuela, Magbitang, Pascua, Valencia</div>
+
+  <div class="card">
+    <h3>Background of the Case</h3>
+    <p style="font-size:14px;line-height:1.8;color:var(--text);margin-bottom:14px;">
+      Durabuild Inc. is a family-held construction business established in 1947 by Frank Stone Sr., with operations both in the United States and France. After World War 2, Frank Sr. saw an opportunity in construction, with the GI Bill of Rights providing war veterans housing subsidies and other help. Having fought in Normandy, he also saw that reconstruction in France would generate great demand. For nearly 20 years, business boomed as France's housing economy soared. But by the 1970s, the economy had leveled off. Frank Sr. hoped the industry would rebound., but while Durabuild's US business held steady, demand in France was drying up.
+    </p>
+    <p style="font-size:14px;line-height:1.8;color:var(--text);">
+      Some 30 years on, under Frank Jr., Durabuild was still struggling to recapture the same initial growth it experienced. Frank Jr.'s daughter Lisa, vice president for business development, is trying to understand the factors that spurred growth in the boom years—particularly as her father is considering an expansion in China. Among her findings: policies that essentially lowered labor productivity in France. To understand it all better, she utilizes the Solow model.
+    </p>
+  </div>
+
+  <div class="card">
+    <h3>The Solow Growth Model</h3>
+    <p style="font-size:14px;line-height:1.8;color:var(--text);margin-bottom:14px;">
+      The Solow Growth Model was developed by Nobel Prize winner Robert Merton Solow (1924–2023). The model explains how economic growth—measured as total output or GDP (Y)—is driven by three main factors: capital (K), labor (L), and technological progress (A). The model expresses output as Y = A * F(K, L), meaning production depends on how capital and labor are combined--with technology affecting how efficiently they are used.
+    </p>
+    <div class="equation">
+      <em>Y</em> <span class="op">=</span> <em>A</em> &middot; <em>K</em><sup>&alpha;</sup> <em>L</em><sup>1&minus;&alpha;</sup>
+    </div>
+    <p style="font-size:14px;line-height:1.8;color:var(--text);margin-bottom:14px;">
+      The model shows how capital accumulates over time. But as to how capital and labor affect production, that is explained using the Cobb–Douglas Production Function, written as Y = A K<sup>&alpha;</sup> L<sup>(1-&alpha;)</sup>. This shows how capital and labor contribute to output and allows the model to analyze how growth evolves over time. Output (Y) depends on capital (K), where more machines, infrastructure, and factories can make workers more productive. More workers or labor hours (L) means more production. More knowledge, technology, or education, can then boost the same labor and capital to produce more output.
+    </p>
+    <p style="font-size:14px;line-height:1.8;color:var(--text);margin-bottom:14px;">
+      However, diminishing returns to capital plays a key role. As more capital is added, each additional unit produces less additional output. Depreciation also factors in. As the capital stock grows, more of it becomes worn and needs replacement. A steady state is reached when investment is just enough to cover the depreciation. At this point, new investment mainly goes to replacing old or worn-out capital, rather than expanding the total capital stock.
+    </p>
+    <p style="font-size:14px;line-height:1.8;color:var(--text);">
+      Simply investing more capital cannot sustain economic growth. Economies such as France, after its period of rapid post-war catch-up growth, eventually move toward the steady state, where capital per worker and output per worker level off. At that stage, further growth can come from improvements in one variable: Total factor productivity (TFP)--or how efficiently an economy can use labor and capital resources to produce more output.
+    </p>
+  </div>
+
+  <div class="card">
+    <h3>How France's Economy Caught Up and Stagnated</h3>
+    <p style="font-size:14px;line-height:1.8;color:var(--text);margin-bottom:14px;">
+      The Solow model reflects France's catch-up growth story following the war. France started far below the United States in 1950, with GDP per capita at just 46 percent of that of the US, or $8,116 versus $17,712 in 2021 PPP (purchasing power parity) dollars. France's capital per worker was roughly 42 percent of that of the US. Both countries had similar investment rates of around 23% of their GDP. Because France started from a lower capital base, its investments produced larger gains.
+    </p>
+    <p style="font-size:14px;line-height:1.8;color:var(--text);margin-bottom:14px;">
+      By 1980, France was closing the gap. Its GDP per capita reached 78 percent that of the US. Capital per worker actually exceeded that of America's. France's TFP rose from 0.73 to 1.14 by 1980. Compared to the US during this period, French workers were briefly more productive than their American counterparts. But by 2000, France's GDP per capita fell back to 68 percent of America's. The convergence story was over.
+    </p>
+    <div class="callout">
+      <strong>Figure 1:</strong> GDP per capita (log scale) for all four countries. France converges toward the USA, then stalls. China accelerates after 1980. The Philippines flatlines.
+    </div>
+
+    <div class="section-label">USA vs France: The Convergence and Slowdown</div>
+    <table class="data-table" style="margin-bottom:16px;">
+      <tr><th>Indicator</th><th>1950</th><th>1970</th><th>1980</th><th>2000</th><th>2023</th></tr>
+      <tr><td>GDP/cap FRA as % USA</td><td>46%</td><td>66%</td><td>78%</td><td>68%</td><td>70%</td></tr>
+      <tr><td>K/Worker FRA as % USA</td><td>42%</td><td>78%</td><td>106%</td><td>79%</td><td>145%</td></tr>
+      <tr><td>TFP FRA (USA=1)</td><td>n/a</td><td>0.92</td><td>1.14</td><td>1.20</td><td>0.89</td></tr>
+      <tr><td>Invest/GDP (FRA)</td><td>23%</td><td>31%</td><td>29%</td><td>21%</td><td>27%</td></tr>
+      <tr><td>Invest/GDP (USA)</td><td>23%</td><td>22%</td><td>24%</td><td>27%</td><td>23%</td></tr>
+    </table>
+    <div style="font-size:11px;color:var(--text3);">
+      Source: Penn World Table 10.01. GDP per capita at current PPPs (2021 US$). TFP indexed to USA=1.
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>China as the Next Convergence Story</h3>
+    <p style="font-size:14px;line-height:1.8;color:var(--text);margin-bottom:14px;">
+      Could China be on the same path as France? According to the Solow method, yes—and at a greater scale, and with greater capital intensity. For decades, China's investment share had been at 35 to 43 percent of GDP, far above that of France and the US. As a result, capital stock grew from $773 billion in 1960 to $172 trillion by 2023. GDP per capita went from $591 to $21,428, moving from 3 percent to 29 percent of the US level.
+    </p>
+    <div class="callout">
+      <strong>Figure 2:</strong> Investment as a share of GDP. China consistently runs at 2x the rate. Meanwhile, the Philippines stays below 25% for most of the period.
+    </div>
+    <p style="font-size:14px;line-height:1.8;color:var(--text);">
+      The Solow model predicts what comes next. It shows that China's internal rate of return on capital has been falling steadily, from 17 percent in 1970 to just 7.4 percent by 2023. Diminishing returns are setting in.
+    </p>
+  </div>
+
+  <div class="card">
+    <h3>TFP: A Key Variable to the China Decision</h3>
+    <p style="font-size:14px;line-height:1.8;color:var(--text);">
+      China's TFP relative to the USA sits at 0.47—it produces only about 47% of equivalent US output. This size is very low, given China's size, rapid growth, and immense capital. The Solow model shows it may be headed to a steady state. So, the question for Lisa is, can China sustain growth through TFP improvements? Perhaps--if it puts more emphasis on technology, improved efficiencies, institutions that support growth through innovation.
+    </p>
+  </div>
+
+  <div class="card">
+    <h3>Philippine Context: Flying So Low</h3>
+    <p style="font-size:14px;line-height:1.8;color:var(--text);margin-bottom:14px;">
+      We momentarily shift our attention to the Philippine context. In 1960, the Philippines had a higher TFP than China (0.51 vs 0.24 relative to the USA) and higher human capital index (1.50 vs 1.23). By any Solow prediction, the Philippines should have outgrown China. It did the opposite. By 2023, China's TFP caught up to Philippine level (0.47 vs. 0.47). In human capital, China was also closing the gap (2.75 vs 2.96). GDP per capita tells the real story: China went from $591 to $21,428, while the Philippines went from $2,205 to $9,606. The Philippines started richer per person, but still ended up poorer.
+    </p>
+    <div class="callout">
+      <strong>Figure 3:</strong> TFP levels relative to USA. The Philippines and China converged to the same level by 2023, despite the Philippines starting far ahead.
+    </div>
+    <p style="font-size:14px;line-height:1.8;color:var(--text);">
+      The key factor is the savings rate. The Philippines never sustained investment above 24 percent of GDP. It averaged 15 to 18 percent for most of the post-war period. In Solow terms its steady-state capital-to-labor ratio stayed low because the economy did not accumulate capital fast enough. By 2023, capital per worker reached $96,960, while China's reached $228,804. The USA stood at $482,411. The Philippines is not converging at the rate the theory predicts because a core input to the Solow engine, the savings rate, has been structurally weak.
+    </p>
+  </div>
+
+  <div class="card">
+    <h3>Four-Country Comparison: Key Solow Indicators</h3>
+    <table class="data-table" style="margin-bottom:16px;">
+      <tr><th>Indicator (2023)</th><th>USA</th><th>FRA</th><th>CHN</th><th>PHL</th><th>Insight</th></tr>
+      <tr><td>GDP per capita</td><td>$74,491</td><td>$51,843</td><td>$21,428</td><td>$9,606</td><td>PHL &lt; CHN despite head start</td></tr>
+      <tr><td>TFP (USA=1)</td><td>1.00</td><td>0.89</td><td>0.47</td><td>0.47</td><td>PHL = CHN after 60 years</td></tr>
+      <tr><td>Human Capital</td><td>3.83</td><td>3.31</td><td>2.75</td><td>2.96</td><td>PHL still leads CHN</td></tr>
+      <tr><td>Investment/GDP</td><td>23%</td><td>27%</td><td>43%</td><td>22%</td><td>CHN 2x everyone else</td></tr>
+      <tr><td>K per Worker ($K)</td><td>$482K</td><td>$697K</td><td>$229K</td><td>$97K</td><td>PHL far from steady state</td></tr>
+      <tr><td>Return on Capital</td><td>8.1%</td><td>4.7%</td><td>7.4%</td><td>17.9%</td><td>PHL highest returns</td></tr>
+    </table>
+    <div style="font-size:11px;color:var(--text3);margin-bottom:16px;">
+      Source: Penn World Table 10.01. All values for 2023. Capital per worker in thousands of 2021 US$ at current PPPs.
+    </div>
+
+    <p style="font-size:14px;line-height:1.8;color:var(--text);margin-bottom:14px;">
+      The following PWT data shows where each country sits. The gap between return on capital and the depreciation rate reflects how far an economy is from its steady state. When the gap is wide, each dollar of investment earns well above what depreciation erodes. When the gap is narrow, the economy is near the crossover point.
+    </p>
+    <div class="callout">
+      <strong>Figure 4:</strong> Return on capital vs depreciation rate (2023). France's gap has nearly closed at 0.9 percentage points. The Philippines has the widest gap at 13.2 points, meaning it is furthest from steady state.
+    </div>
+    <p style="font-size:14px;line-height:1.8;color:var(--text);margin-bottom:14px;">
+      France's gap is just 0.9 percentage points. Its return on capital (4.7%) barely exceeds depreciation (3.8%). It's essentially at steady state. This is why despite having more capital per worker than the USA ($697K vs $482K), France still produces less output per person. The extra capital earns almost nothing at the margin.
+    </p>
+    <p style="font-size:14px;line-height:1.8;color:var(--text);margin-bottom:14px;">
+      China's gap is 2.5 percentage points (return 7.4%, depreciation 4.9%). While still positive, it is narrowing. At its current investment rate of 43%, China is pouring capital faster than any country today. But the Solow model shows it is headed for a great wall. Meanwhile, the Philippines has a 13.2 percentage point gap (return 17.9%, depreciation 4.6%) – the widest of the four countries. Each peso of investment earns well above depreciation. In theory, this is exactly when you want to put in more capital. The marginal product is high, the steady state is far away, and the potential for growth is significant.
+    </p>
+    <p style="font-size:14px;line-height:1.8;color:var(--text);">
+      But the economy is not generating enough savings to exploit the gap. The Philippines sits at the most favorable point on the diminishing returns curve, but has the weakest mechanism to capitalize. France hit the wall, and China is approaching it. The Philippines has not even started the journey.
+    </p>
+  </div>
+
+  <div class="callout blue" style="text-align:center;font-size:14px;">
+    <strong>Scan the QR Code to view LT5' simulation for the Solow model, game theory and more.</strong><br>
+    https://lt5.emba2027a.com/gecon210/solow_final
   </div>
 </div>
 

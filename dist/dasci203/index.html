@@ -125,8 +125,12 @@ p.lead{color:var(--sub);font-size:clamp(15px,2.4vmin,26px);line-height:1.5;max-w
 .vs{color:var(--mute);font-weight:700;font-size:clamp(16px,2.6vmin,28px);align-self:start;margin-top:10vmin}
 /* governance — centered top-view plates, alternating labels */
 .gov{display:flex;flex-direction:column-reverse;gap:2.8vmin;width:100%;margin:3.5vmin auto 0}
-.glayer{display:grid;grid-template-columns:1fr 6vmin auto 6vmin 1fr;align-items:center}
-.glayer .dia{grid-column:3;justify-self:center;position:relative;width:31vmin;height:11.6vmin;clip-path:polygon(50% 0,100% 43%,100% 57%,50% 100%,0 57%,0 43%);opacity:.36;filter:drop-shadow(0 1vmin 1.4vmin rgba(0,0,0,.45));transition:opacity .45s ease,filter .45s ease,transform .5s cubic-bezier(.2,.85,.25,1)}
+.glayer{display:grid;grid-template-columns:1fr 6vmin auto 6vmin 1fr;align-items:center;transition:transform .6s cubic-bezier(.2,.8,.2,1)}
+.gov:not(.fanned) .glayer:nth-child(1){transform:translateY(-15.6vmin)}
+.gov:not(.fanned) .glayer:nth-child(2){transform:translateY(-5.2vmin)}
+.gov:not(.fanned) .glayer:nth-child(3){transform:translateY(5.2vmin)}
+.gov:not(.fanned) .glayer:nth-child(4){transform:translateY(15.6vmin)}
+.glayer .dia{grid-column:3;justify-self:center;position:relative;width:31vmin;height:11.6vmin;clip-path:polygon(50% 0,100% 43%,100% 57%,50% 100%,0 57%,0 43%);opacity:.62;filter:drop-shadow(0 1vmin 1.4vmin rgba(0,0,0,.45));transition:opacity .45s ease,filter .45s ease,transform .5s cubic-bezier(.2,.85,.25,1)}
 .glayer .dia.s{background:#222860}
 .glayer .dia.v{background:#473cae}
 .glayer .dia::before{content:"";position:absolute;top:0;left:0;width:100%;height:86%;clip-path:polygon(50% 0,100% 50%,50% 100%,0 50%)}
@@ -137,7 +141,7 @@ p.lead{color:var(--sub);font-size:clamp(15px,2.4vmin,26px);line-height:1.5;max-w
 .glayer.right .lead{grid-column:4;background:linear-gradient(270deg,rgba(63,224,197,0),var(--cyan))}
 .glayer .lead::after{content:"";position:absolute;top:50%;transform:translateY(-50%);width:1.1vmin;height:1.1vmin;border-radius:50%;background:var(--cyan);box-shadow:0 0 1.6vmin var(--cyan)}
 .glayer.left .lead::after{right:-.2vmin}.glayer.right .lead::after{left:-.2vmin}
-.glayer .lab{opacity:.28;transition:opacity .5s ease;display:flex;flex-direction:column;line-height:1.16}
+.glayer .lab{opacity:0;transition:opacity .5s ease;display:flex;flex-direction:column;line-height:1.16}
 .glayer.left .lab{grid-column:1;text-align:right;align-items:flex-end}
 .glayer.right .lab{grid-column:5;text-align:left;align-items:flex-start}
 .glayer .lab b{color:#fff;font-size:clamp(15px,2.4vmin,27px)}
@@ -357,7 +361,7 @@ function fab(){
 const slides=[...document.querySelectorAll('.slide')];
 const labels=slides.map(s=>s.dataset.label);
 let cur=0,typed=false;
-function updateSteps(s){const st=+(s.dataset.step||0);[...s.querySelectorAll('.glayer')].forEach((L,i)=>L.classList.toggle('on',i<st));}
+function updateSteps(s){const st=+(s.dataset.step||0);const g=s.querySelector('.gov');if(g)g.classList.toggle('fanned',st>0);[...s.querySelectorAll('.glayer')].forEach((L,i)=>L.classList.toggle('on',i<st));}
 function setActive(i){
   slides[cur].classList.remove('active');
   cur=Math.max(0,Math.min(slides.length-1,i));

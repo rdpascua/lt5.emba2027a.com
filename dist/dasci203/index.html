@@ -121,13 +121,17 @@ p.lead{color:var(--sub);font-size:clamp(15px,2.4vmin,26px);line-height:1.5;max-w
 .hotl .loop{position:relative;width:34vmin;height:34vmin;display:flex;align-items:center;justify-content:center;margin-top:1.4vmin}
 .hotl .ring{position:absolute;inset:0;border-radius:50%;border:2px dashed rgba(124,108,242,.5);animation:spin 24s linear infinite}
 .hotl .ring.r2{inset:3.2vmin;border-color:rgba(63,224,197,.22);animation-duration:16s;animation-direction:reverse}
-.hotl .orbit{position:absolute;inset:0;animation:spin 6.5s linear infinite}
+.hotl .orbit{position:absolute;inset:0;animation:spin 6.5s linear infinite;z-index:4}
 .hotl .orbdot{position:absolute;top:-1.3vmin;left:50%;transform:translateX(-50%);width:2.6vmin;height:2.6vmin;border-radius:50%;background:var(--cyan);box-shadow:0 0 3vmin var(--cyan),0 0 .6vmin #fff}
-.hotl .core{text-align:center;z-index:1;padding:0 2vmin}
+.hotl .core{text-align:center;z-index:3;padding:0 2vmin}
 .hotl .core .cn{color:var(--ink);font-weight:700;letter-spacing:.08em;font-size:clamp(13px,2vmin,22px)}
 .hotl .core .cs{color:var(--mute);font-size:clamp(9px,1.45vmin,13px);margin-top:.5vmin}
 .hotl .core .cl{color:var(--violet);font-size:clamp(9px,1.45vmin,13px);margin-top:.7vmin;letter-spacing:.08em}
 @keyframes spin{to{transform:rotate(360deg)}}
+.hotl .feed{position:absolute;inset:0;z-index:2;pointer-events:none}
+.dchip{position:absolute;top:50%;left:50%;width:3.6vmin;height:3.6vmin;opacity:0;animation:ingest 5.4s linear infinite;will-change:transform,opacity}
+.dchip svg{width:100%;height:100%;display:block;filter:drop-shadow(0 0 .8vmin rgba(124,108,242,.55))}
+@keyframes ingest{0%{transform:translate(calc(-50% + var(--sx)),calc(-50% + var(--sy))) scale(1);opacity:0}14%{opacity:1}58%{opacity:1}85%{opacity:0}100%{transform:translate(-50%,-50%) scale(.3);opacity:0}}
 .reveal2{opacity:0;transform:translateY(12px);transition:opacity .5s ease,transform .5s ease}
 .slide.active .reveal2{opacity:1;transform:none}
 .timeline{position:relative;height:30vmin;margin:3.5vmin 0 1vmin}
@@ -396,6 +400,14 @@ p.lead{color:var(--sub);font-size:clamp(15px,2.4vmin,26px);line-height:1.5;max-w
         <div class="ring"></div>
         <div class="ring r2"></div>
         <div class="orbit"><div class="orbdot"></div></div>
+        <div class="feed">
+          <div class="dchip" style="--sx:0;--sy:-23vmin;animation-delay:0s;color:var(--lav)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h5"/></svg></div>
+          <div class="dchip" style="--sx:20vmin;--sy:-11vmin;animation-delay:.9s;color:var(--cyan)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="8.5" cy="10" r="1.5"/><path d="M21 16l-5-5-8 7"/></svg></div>
+          <div class="dchip" style="--sx:21vmin;--sy:6vmin;animation-delay:1.8s;color:var(--lav)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><rect x="5" y="11" width="3" height="7"/><rect x="10.5" y="6" width="3" height="12"/><rect x="16" y="13" width="3" height="5"/></svg></div>
+          <div class="dchip" style="--sx:9vmin;--sy:21vmin;animation-delay:2.7s;color:var(--cyan)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M10 9.5l4.5 2.5L10 14.5z" fill="currentColor" stroke="none"/></svg></div>
+          <div class="dchip" style="--sx:-16vmin;--sy:16vmin;animation-delay:3.6s;color:var(--lav)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="7.5" ry="3"/><path d="M4.5 5v6c0 1.66 3.36 3 7.5 3s7.5-1.34 7.5-3V5"/><path d="M4.5 11v6c0 1.66 3.36 3 7.5 3s7.5-1.34 7.5-3v-6"/></svg></div>
+          <div class="dchip" style="--sx:-21vmin;--sy:-7vmin;animation-delay:4.5s;color:var(--cyan)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 8l-4 4 4 4M15.5 8l4 4-4 4"/></svg></div>
+        </div>
         <div class="core">
           <div class="cn">ALEPH</div>
           <div class="cs">research · analyze · score</div>

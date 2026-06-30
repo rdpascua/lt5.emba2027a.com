@@ -102,6 +102,32 @@ p.lead{color:var(--sub);font-size:clamp(15px,2.4vmin,26px);line-height:1.5;max-w
 .runout .rverd{color:var(--pink);letter-spacing:.14em;font-size:clamp(11px,1.7vmin,17px)}
 .runreal{margin-top:1.2vmin;color:var(--sub);font-size:clamp(13px,2vmin,21px);line-height:1.5;max-width:82ch}
 .payoff{margin-top:2.4vmin;color:var(--cyan);font-weight:700;font-size:clamp(15px,2.5vmin,27px);line-height:1.45;max-width:82ch}
+.synth-slide h2{font-size:clamp(26px,4.6vmin,56px);max-width:24ch}
+.synrow{display:grid;grid-template-columns:1.04fr .96fr;gap:5vmin;align-items:center;margin-top:1vmin}
+.syntext{display:flex;flex-direction:column;gap:1.7vmin;justify-content:center}
+.syntext .cmd{margin-bottom:.3vmin}
+.syntext h2{margin:.2vmin 0 1.1vmin}
+.syntext p{color:var(--sub);font-size:clamp(13px,2.05vmin,22px);line-height:1.5;max-width:48ch;margin:0}
+.syntext p b{color:var(--ink)}
+.hotl{display:flex;flex-direction:column;align-items:center;color:var(--lav)}
+.hotl .human{display:flex;flex-direction:column;align-items:center;gap:.7vmin;animation:hpulse 3.6s ease-in-out infinite}
+@keyframes hpulse{0%,100%{filter:drop-shadow(0 0 1.2vmin rgba(185,174,245,.35))}50%{filter:drop-shadow(0 0 2.6vmin rgba(185,174,245,.7))}}
+.hotl .human svg{width:8.4vmin;height:8.4vmin;color:var(--lav)}
+.hotl .htag{color:var(--lav);font-weight:700;letter-spacing:.14em;text-transform:uppercase;font-size:clamp(11px,1.7vmin,16px)}
+.hotl .hsub{color:var(--mute);font-size:clamp(9px,1.45vmin,13px)}
+.hotl .stem{position:relative;width:2px;height:6.5vmin;background:linear-gradient(rgba(124,108,242,.1),var(--violet))}
+.hotl .stem .up{position:absolute;left:50%;color:var(--cyan);font-size:1.8vmin;animation:upflow 2.2s ease-in-out infinite}
+@keyframes upflow{0%{transform:translate(-50%,2vmin);opacity:0}45%{opacity:1}100%{transform:translate(-50%,-1.8vmin);opacity:0}}
+.hotl .loop{position:relative;width:34vmin;height:34vmin;display:flex;align-items:center;justify-content:center;margin-top:1.4vmin}
+.hotl .ring{position:absolute;inset:0;border-radius:50%;border:2px dashed rgba(124,108,242,.5);animation:spin 24s linear infinite}
+.hotl .ring.r2{inset:3.2vmin;border-color:rgba(63,224,197,.22);animation-duration:16s;animation-direction:reverse}
+.hotl .orbit{position:absolute;inset:0;animation:spin 6.5s linear infinite}
+.hotl .orbdot{position:absolute;top:-1.3vmin;left:50%;transform:translateX(-50%);width:2.6vmin;height:2.6vmin;border-radius:50%;background:var(--cyan);box-shadow:0 0 3vmin var(--cyan),0 0 .6vmin #fff}
+.hotl .core{text-align:center;z-index:1;padding:0 2vmin}
+.hotl .core .cn{color:var(--ink);font-weight:700;letter-spacing:.08em;font-size:clamp(13px,2vmin,22px)}
+.hotl .core .cs{color:var(--mute);font-size:clamp(9px,1.45vmin,13px);margin-top:.5vmin}
+.hotl .core .cl{color:var(--violet);font-size:clamp(9px,1.45vmin,13px);margin-top:.7vmin;letter-spacing:.08em}
+@keyframes spin{to{transform:rotate(360deg)}}
 .reveal2{opacity:0;transform:translateY(12px);transition:opacity .5s ease,transform .5s ease}
 .slide.active .reveal2{opacity:1;transform:none}
 .timeline{position:relative;height:30vmin;margin:3.5vmin 0 1vmin}
@@ -207,6 +233,7 @@ p.lead{color:var(--sub);font-size:clamp(15px,2.4vmin,26px);line-height:1.5;max-w
   .glayer .dia{width:44vmin}
   .hal-lens{width:46vmin;height:46vmin}
   .specrow{font-size:clamp(13px,3.6vmin,20px)}.specrow .dots{border-bottom-width:1px}.runout .rscore{font-size:clamp(22px,6vmin,38px)}.payoff{font-size:clamp(14px,3.8vmin,22px)}
+  .synrow{grid-template-columns:1fr;gap:2.6vmin}.synth-slide h2{font-size:clamp(23px,6.2vmin,34px)}.hotl .loop{width:44vmin;height:44vmin}
 }
 </style></head><body>
 <canvas id="fabric"></canvas><div id="glow"></div><div id="scan"></div>
@@ -348,6 +375,35 @@ p.lead{color:var(--sub);font-size:clamp(15px,2.4vmin,26px);line-height:1.5;max-w
       <figcaption><b class="pk">THE MACHINE</b>Signs nothing. A score can't be fired, sued, or put on a board.</figcaption></figure>
   </div>
   <p class="lead reveal2" style="max-width:74ch">When a Tesla on Full Self-Driving killed a pedestrian in 2023, the family sued the maker <i>and</i> the driver, never the algorithm. A human always has to answer. <span class="dim">(Transport Topics, 2026)</span></p>
+</section>
+<section class="slide synth-slide" data-label="SYNTHESIS">
+  <div class="synrow reveal2">
+    <div class="syntext">
+      <div class="cmd">aleph@quantum-light:~$ who decides</div>
+      <h2>AI runs the loop. A human owns the call.</h2>
+      <p>This was never about AI replacing people. It is about using the strengths of both.</p>
+      <p>So QLC's next step is not a more autonomous Aleph. It is a better process: <b>AI does the research and the analysis, people do the interpretation and the call.</b></p>
+      <p>Aleph was not the crystal ball they hoped for. But it showed AI can help VCs decide better, even if it cannot remove the risk.</p>
+    </div>
+    <div class="hotl">
+      <div class="human">
+        <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="32" cy="19" r="11"/><path d="M11 57c0-12 9-21 21-21s21 9 21 21"/></svg>
+        <div class="htag">the human</div>
+        <div class="hsub">interprets · decides · answers for it</div>
+      </div>
+      <div class="stem"><span class="up">&#9650;</span></div>
+      <div class="loop">
+        <div class="ring"></div>
+        <div class="ring r2"></div>
+        <div class="orbit"><div class="orbdot"></div></div>
+        <div class="core">
+          <div class="cn">ALEPH</div>
+          <div class="cs">research · analyze · score</div>
+          <div class="cl">&#8635; runs all day</div>
+        </div>
+      </div>
+    </div>
+  </div>
 </section>
 <section class="slide gov-slide" data-label="GOVERNANCE" data-steps="4" data-step="0">
   <div class="cmd">aleph@quantum-light:~$ governance?</div>

@@ -32,11 +32,12 @@
   .dot{width:7px;height:7px;border-radius:50%;background:var(--line); cursor:pointer; transition:background .25s, transform .25s;}
   .dot.on{background:var(--orange); transform:scale(1.25);}
   .pager{position:fixed; right:68px; bottom:16px; z-index:6; display:flex; align-items:center;
-         background:var(--panel); border:1px solid var(--line); border-radius:999px;
+         background:var(--panel); border:1px solid var(--line);
          box-shadow:0 1px 3px rgba(32,31,28,.06); overflow:hidden;}
   .pager button{display:flex; align-items:center; justify-content:center; width:40px; height:34px;
                 background:none; border:none; color:var(--ink2); cursor:pointer; transition:color .2s;}
   .pager button:hover{color:var(--orange);}
+  .pager .fs{border-left:1px solid var(--line);}
   .pager .cnt{font-size:12px; letter-spacing:.08em; color:var(--ink); padding:0 4px; min-width:44px;
               text-align:center; font-variant-numeric:tabular-nums;
               border-left:1px solid var(--line); border-right:1px solid var(--line);
@@ -3299,6 +3300,24 @@ function Deck() {
     window.addEventListener("keydown", h);
     return () => window.removeEventListener("keydown", h);
   }, [i, sub]);
+  const [fs, setFs] = useState(false);
+  useEffect(() => {
+    const h = () => setFs(!!(document.fullscreenElement || document.webkitFullscreenElement));
+    document.addEventListener("fullscreenchange", h);
+    document.addEventListener("webkitfullscreenchange", h);
+    return () => {
+      document.removeEventListener("fullscreenchange", h);
+      document.removeEventListener("webkitfullscreenchange", h);
+    };
+  }, []);
+  const toggleFs = () => {
+    if (document.fullscreenElement || document.webkitFullscreenElement) {
+      (document.exitFullscreen || document.webkitExitFullscreen).call(document);
+    } else {
+      const el = document.documentElement;
+      (el.requestFullscreen || el.webkitRequestFullscreen).call(el);
+    }
+  };
   const Cur = SLIDES[i].C;
   return /*#__PURE__*/React.createElement("div", {
     style: {
@@ -3367,6 +3386,21 @@ function Deck() {
     viewBox: "0 0 24 24"
   }, /*#__PURE__*/React.createElement("path", {
     d: "M9 5 L16 12 L9 19",
+    fill: "none",
+    stroke: "currentColor",
+    strokeWidth: "2",
+    strokeLinecap: "round",
+    strokeLinejoin: "round"
+  }))), /*#__PURE__*/React.createElement("button", {
+    className: "fs",
+    "aria-label": fs ? "Exit full screen" : "Full screen",
+    onClick: toggleFs
+  }, /*#__PURE__*/React.createElement("svg", {
+    width: "15",
+    height: "15",
+    viewBox: "0 0 24 24"
+  }, /*#__PURE__*/React.createElement("path", {
+    d: fs ? "M9 4 V9 H4 M15 4 V9 H20 M9 20 V15 H4 M15 20 V15 H20" : "M4 9 V4 H9 M15 4 H20 V9 M20 15 V20 H15 M9 20 H4 V15",
     fill: "none",
     stroke: "currentColor",
     strokeWidth: "2",

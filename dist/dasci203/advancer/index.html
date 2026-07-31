@@ -2837,6 +2837,393 @@ function S8() {
 }
 
 /* ---------- deck ---------- */
+/* ---------- the learning layer: A/B + feedback ---------- */
+function SLearn() {
+  const flyDots = [0, 1, 2];
+  const bars = [{
+    label: "leave",
+    h: 44,
+    c: "var(--aqua)"
+  }, {
+    label: "contracts",
+    h: 58,
+    c: "var(--aqua)"
+  }, {
+    label: "probation",
+    h: 112,
+    c: "var(--orange)"
+  }, {
+    label: "templates",
+    h: 32,
+    c: "var(--aqua)"
+  }];
+  return /*#__PURE__*/React.createElement("div", {
+    className: "slide"
+  }, /*#__PURE__*/React.createElement(Header, {
+    kicker: "Idea 5 - the third layer",
+    title: "Every answer teaches the system",
+    sub: "Clients sometimes see two versions of an answer and tap quick feedback. Every signal is kept, and the patterns decide what gets fixed."
+  }), /*#__PURE__*/React.createElement("div", {
+    className: "stage",
+    style: {
+      alignItems: "flex-start"
+    }
+  }, /*#__PURE__*/React.createElement("svg", {
+    viewBox: "0 0 1160 440",
+    style: {
+      width: "100%",
+      maxWidth: 1160,
+      overflow: "visible"
+    }
+  }, /*#__PURE__*/React.createElement(motion.g, {
+    initial: {
+      opacity: 0,
+      x: -16
+    },
+    animate: {
+      opacity: 1,
+      x: 0
+    },
+    transition: {
+      duration: .5
+    }
+  }, /*#__PURE__*/React.createElement("text", {
+    x: "185",
+    y: "102",
+    textAnchor: "middle",
+    fontSize: "12.5",
+    fontWeight: "bold",
+    fill: "var(--ink2)",
+    letterSpacing: "2"
+  }, "A / B TEST"), /*#__PURE__*/React.createElement("rect", {
+    x: "70",
+    y: "118",
+    width: "230",
+    height: "72",
+    rx: "12",
+    fill: "var(--panel)",
+    stroke: "var(--line)",
+    strokeWidth: "1.5"
+  }), /*#__PURE__*/React.createElement("text", {
+    x: "86",
+    y: "143",
+    fontSize: "12.5",
+    fontWeight: "bold",
+    fill: "var(--ink)"
+  }, "Answer A"), /*#__PURE__*/React.createElement("line", {
+    x1: "86",
+    y1: "158",
+    x2: "256",
+    y2: "158",
+    stroke: "var(--line)",
+    strokeWidth: "2"
+  }), /*#__PURE__*/React.createElement("line", {
+    x1: "86",
+    y1: "172",
+    x2: "216",
+    y2: "172",
+    stroke: "var(--line)",
+    strokeWidth: "2"
+  })), /*#__PURE__*/React.createElement(motion.g, {
+    initial: {
+      opacity: 0,
+      x: -16
+    },
+    animate: {
+      opacity: 1,
+      x: 0
+    },
+    transition: {
+      delay: .2,
+      duration: .5
+    }
+  }, /*#__PURE__*/React.createElement(motion.rect, {
+    x: "70",
+    y: "208",
+    width: "230",
+    height: "72",
+    rx: "12",
+    fill: "var(--panel)",
+    strokeWidth: "1.8",
+    initial: {
+      stroke: "#E4E1D7"
+    },
+    animate: {
+      stroke: ["#E4E1D7", "#E4E1D7", "#C65D3B"]
+    },
+    transition: {
+      delay: 1.4,
+      duration: .8,
+      times: [0, .6, 1]
+    }
+  }), /*#__PURE__*/React.createElement("text", {
+    x: "86",
+    y: "233",
+    fontSize: "12.5",
+    fontWeight: "bold",
+    fill: "var(--ink)"
+  }, "Answer B"), /*#__PURE__*/React.createElement("line", {
+    x1: "86",
+    y1: "248",
+    x2: "256",
+    y2: "248",
+    stroke: "var(--line)",
+    strokeWidth: "2"
+  }), /*#__PURE__*/React.createElement("line", {
+    x1: "86",
+    y1: "262",
+    x2: "236",
+    y2: "262",
+    stroke: "var(--line)",
+    strokeWidth: "2"
+  })), /*#__PURE__*/React.createElement(motion.circle, {
+    cx: "272",
+    cy: "244",
+    r: "10",
+    fill: "none",
+    stroke: "var(--orange)",
+    strokeWidth: "2",
+    initial: {
+      opacity: 0,
+      scale: .4
+    },
+    animate: {
+      opacity: [0, .9, 0],
+      scale: [.4, 1.6, 2.2]
+    },
+    transition: {
+      delay: 1.5,
+      duration: .9
+    }
+  }), /*#__PURE__*/React.createElement(motion.text, {
+    x: "185",
+    y: "302",
+    textAnchor: "middle",
+    fontSize: "11.5",
+    fill: "var(--ink2)",
+    initial: {
+      opacity: 0
+    },
+    animate: {
+      opacity: 1
+    },
+    transition: {
+      delay: 2.0
+    }
+  }, "the client picks the clearer one"), /*#__PURE__*/React.createElement(motion.g, {
+    initial: {
+      opacity: 0,
+      y: 10
+    },
+    animate: {
+      opacity: 1,
+      y: 0
+    },
+    transition: {
+      delay: 2.5,
+      duration: .5
+    }
+  }, /*#__PURE__*/React.createElement("rect", {
+    x: "110",
+    y: "322",
+    width: "150",
+    height: "34",
+    rx: "17",
+    fill: "var(--panel)",
+    stroke: "var(--aqua)",
+    strokeWidth: "1.5"
+  }), /*#__PURE__*/React.createElement("path", {
+    d: "M132 339 l5 6 l9 -11",
+    fill: "none",
+    stroke: "var(--aqua)",
+    strokeWidth: "2.4"
+  }), /*#__PURE__*/React.createElement("text", {
+    x: "196",
+    y: "344",
+    textAnchor: "middle",
+    fontSize: "13",
+    fill: "var(--ink)"
+  }, "helpful")), flyDots.map(k => /*#__PURE__*/React.createElement(motion.circle, {
+    key: "fd" + k,
+    r: "6",
+    fill: ["#C65D3B", "#5E8D87", "#5B7C99"][k],
+    initial: {
+      cx: 305,
+      cy: 250,
+      opacity: 0
+    },
+    animate: {
+      cx: [305, 545],
+      cy: [250, 210 + k * 26],
+      opacity: [0, 1, 1]
+    },
+    transition: {
+      delay: 3.2 + k * .35,
+      duration: .9,
+      ease: "easeInOut"
+    }
+  })), /*#__PURE__*/React.createElement(motion.g, {
+    initial: {
+      opacity: 0
+    },
+    animate: {
+      opacity: 1
+    },
+    transition: {
+      delay: .4
+    }
+  }, /*#__PURE__*/React.createElement(Cylinder, {
+    x: 610,
+    y: 140,
+    w: 150,
+    h: 150,
+    glow: true
+  }), /*#__PURE__*/React.createElement("text", {
+    x: "610",
+    y: "118",
+    textAnchor: "middle",
+    fontSize: "13",
+    fontWeight: "bold",
+    fill: "var(--blue)"
+  }, "FEEDBACK DATABASE"), /*#__PURE__*/React.createElement("text", {
+    x: "610",
+    y: "330",
+    textAnchor: "middle",
+    fontSize: "11.5",
+    fill: "var(--ink2)"
+  }, "durable: every signal is kept, nothing is lost")), /*#__PURE__*/React.createElement(motion.g, {
+    initial: {
+      opacity: 0,
+      x: 16
+    },
+    animate: {
+      opacity: 1,
+      x: 0
+    },
+    transition: {
+      delay: 4.4,
+      duration: .6
+    }
+  }, /*#__PURE__*/React.createElement("text", {
+    x: "945",
+    y: "102",
+    textAnchor: "middle",
+    fontSize: "12.5",
+    fontWeight: "bold",
+    fill: "var(--ink2)",
+    letterSpacing: "2"
+  }, "PATTERN ANALYSIS"), /*#__PURE__*/React.createElement("rect", {
+    x: "790",
+    y: "118",
+    width: "310",
+    height: "212",
+    rx: "12",
+    fill: "var(--panel)",
+    stroke: "var(--line)",
+    strokeWidth: "1.5"
+  })), bars.map((b, k) => /*#__PURE__*/React.createElement(motion.g, {
+    key: b.label
+  }, /*#__PURE__*/React.createElement(motion.rect, {
+    x: 824 + k * 64,
+    width: "34",
+    rx: "4",
+    fill: b.c,
+    initial: {
+      y: 296,
+      height: 0
+    },
+    animate: {
+      y: 296 - b.h,
+      height: b.h
+    },
+    transition: {
+      delay: 5.0 + k * .25,
+      duration: .6,
+      ease: "easeOut"
+    }
+  }), /*#__PURE__*/React.createElement(motion.text, {
+    x: 841 + k * 64,
+    y: "314",
+    textAnchor: "middle",
+    fontSize: "10.5",
+    fill: "var(--ink2)",
+    initial: {
+      opacity: 0
+    },
+    animate: {
+      opacity: 1
+    },
+    transition: {
+      delay: 5.2 + k * .25
+    }
+  }, b.label))), /*#__PURE__*/React.createElement(motion.text, {
+    x: "945",
+    y: "352",
+    textAnchor: "middle",
+    fontSize: "12",
+    fontWeight: "bold",
+    fill: "var(--orange)",
+    initial: {
+      opacity: 0
+    },
+    animate: {
+      opacity: 1
+    },
+    transition: {
+      delay: 6.4
+    }
+  }, "weak spot found: probation answers"), /*#__PURE__*/React.createElement(motion.path, {
+    d: "M 900 90 C 760 10, 340 10, 200 96",
+    fill: "none",
+    stroke: "var(--orange)",
+    strokeWidth: "2",
+    strokeDasharray: "7 6",
+    initial: {
+      pathLength: 0,
+      opacity: 0
+    },
+    animate: {
+      pathLength: 1,
+      opacity: .9
+    },
+    transition: {
+      delay: 7.2,
+      duration: 1.1,
+      ease: "easeInOut"
+    }
+  }), /*#__PURE__*/React.createElement(motion.path, {
+    d: "M 208 88 L 197 98 L 212 102",
+    fill: "none",
+    stroke: "var(--orange)",
+    strokeWidth: "2",
+    initial: {
+      opacity: 0
+    },
+    animate: {
+      opacity: .9
+    },
+    transition: {
+      delay: 8.2
+    }
+  }), /*#__PURE__*/React.createElement(motion.text, {
+    x: "550",
+    y: "14",
+    textAnchor: "middle",
+    fontSize: "12.5",
+    fontWeight: "bold",
+    fill: "var(--orange)",
+    initial: {
+      opacity: 0
+    },
+    animate: {
+      opacity: 1
+    },
+    transition: {
+      delay: 7.8
+    }
+  }, "retrain and audit exactly where the data says it is weak"))));
+}
+
 const SLIDES = [{
   C: S1,
   steps: 0
@@ -2866,6 +3253,9 @@ const SLIDES = [{
   steps: 6
 }, {
   C: S6,
+  steps: 0
+}, {
+  C: SLearn,
   steps: 0
 }, {
   C: SPyr,

@@ -1249,6 +1249,7 @@ function DocIcon({
     strokeWidth: "2"
   }));
 }
+/* ---------- the vector store ---------- */
 function Cylinder({
   x,
   y,
@@ -1257,29 +1258,202 @@ function Cylinder({
   glow
 }) {
   const rx = w / 2,
-    ry = 14;
-  return /*#__PURE__*/React.createElement("g", null, glow && /*#__PURE__*/React.createElement("ellipse", {
-    cx: x,
-    cy: y + h / 2,
-    rx: rx + 16,
-    ry: h / 2 + 16,
+    ry = 15;
+  const sil = `M${x - rx} ${y} a${rx} ${ry} 0 0 1 ${w} 0 v${h} a${rx} ${ry} 0 0 1 ${-w} 0 z`;
+  return /*#__PURE__*/React.createElement("g", null, /*#__PURE__*/React.createElement("defs", null, /*#__PURE__*/React.createElement("linearGradient", {
+    id: "cylBody",
+    x1: "0",
+    y1: "0",
+    x2: "1",
+    y2: "0"
+  }, /*#__PURE__*/React.createElement("stop", {
+    offset: "0",
+    stopColor: "#EEEADE"
+  }), /*#__PURE__*/React.createElement("stop", {
+    offset: ".2",
+    stopColor: "#FFFFFF"
+  }), /*#__PURE__*/React.createElement("stop", {
+    offset: ".66",
+    stopColor: "#FDFCF8"
+  }), /*#__PURE__*/React.createElement("stop", {
+    offset: "1",
+    stopColor: "#EBE7DA"
+  })), /*#__PURE__*/React.createElement("linearGradient", {
+    id: "cylTop",
+    x1: "0",
+    y1: "0",
+    x2: "0",
+    y2: "1"
+  }, /*#__PURE__*/React.createElement("stop", {
+    offset: "0",
+    stopColor: "#F4F1E9"
+  }), /*#__PURE__*/React.createElement("stop", {
+    offset: "1",
+    stopColor: "#FFFFFF"
+  })), /*#__PURE__*/React.createElement("filter", {
+    id: "cylGlow",
+    x: "-45%",
+    y: "-45%",
+    width: "190%",
+    height: "190%"
+  }, /*#__PURE__*/React.createElement("feGaussianBlur", {
+    stdDeviation: "11"
+  }))), glow && /*#__PURE__*/React.createElement(motion.path, {
+    d: sil,
     fill: "var(--blue)",
-    opacity: ".08"
+    filter: "url(#cylGlow)",
+    initial: {
+      opacity: 0
+    },
+    animate: {
+      opacity: .16
+    },
+    transition: {
+      duration: .8
+    }
   }), /*#__PURE__*/React.createElement("path", {
-    d: `M${x - rx} ${y} v${h} a${rx} ${ry} 0 0 0 ${w} 0 v-${h}`,
-    fill: "var(--panel)",
+    d: `M${x - rx} ${y} v${h} a${rx} ${ry} 0 0 0 ${w} 0 v${-h}`,
+    fill: "url(#cylBody)",
     stroke: "var(--line)",
     strokeWidth: "1.6"
+  }), /*#__PURE__*/React.createElement("path", {
+    d: `M${x - rx} ${y + h} a${rx} ${ry} 0 0 0 ${w} 0`,
+    fill: "none",
+    stroke: glow ? "var(--blue)" : "var(--line)",
+    strokeWidth: "1.6",
+    opacity: glow ? .5 : 1
   }), /*#__PURE__*/React.createElement("ellipse", {
     cx: x,
     cy: y,
     rx: rx,
     ry: ry,
-    fill: "var(--panel)",
+    fill: "url(#cylTop)",
     stroke: glow ? "var(--blue)" : "var(--line)",
     strokeWidth: "1.8"
+  }), /*#__PURE__*/React.createElement("ellipse", {
+    cx: x,
+    cy: y + 3.5,
+    rx: rx - 8,
+    ry: ry - 4.5,
+    fill: "none",
+    stroke: "var(--line)",
+    strokeWidth: "1",
+    opacity: ".8"
   }));
 }
+
+/* ---------- geometry of the ingestion row ---------- */
+const VET = {
+  cx: 296,
+  x: 252,
+  w: 88
+};
+const CHK = {
+  cx: 420,
+  x: 376,
+  w: 88
+};
+const EMB = {
+  cx: 560,
+  x: 504,
+  w: 112
+};
+const CARD_Y = 208,
+  CARD_H = 104,
+  MID = 260;
+const DB = {
+  x: 732,
+  y: 182,
+  w: 168,
+  h: 156
+};
+const SEEDS = [{
+  id: "o1",
+  x: 686,
+  y: 230,
+  c: "var(--orange)"
+}, {
+  id: "o2",
+  x: 708,
+  y: 216,
+  c: "var(--orange)"
+}, {
+  id: "o3",
+  x: 698,
+  y: 248,
+  c: "var(--orange)"
+}, {
+  id: "b1",
+  x: 782,
+  y: 240,
+  c: "var(--blue)"
+}, {
+  id: "b2",
+  x: 796,
+  y: 266,
+  c: "var(--blue)"
+}, {
+  id: "b3",
+  x: 768,
+  y: 262,
+  c: "var(--blue)"
+}, {
+  id: "a1",
+  x: 700,
+  y: 302,
+  c: "var(--aqua)"
+}, {
+  id: "a2",
+  x: 726,
+  y: 318,
+  c: "var(--aqua)"
+}, {
+  id: "a3",
+  x: 752,
+  y: 306,
+  c: "var(--aqua)"
+}];
+const ARRIVALS = [{
+  id: "n1",
+  x: 716,
+  y: 236,
+  c: "var(--orange)"
+}, {
+  id: "n2",
+  x: 776,
+  y: 286,
+  c: "var(--blue)"
+}, {
+  id: "n3",
+  x: 726,
+  y: 296,
+  c: "var(--aqua)"
+}];
+// faint neighbourhood links: similar meanings sit close together
+const LINKS = [["o1", "o2"], ["o2", "o3"], ["o3", "o1"], ["b1", "b3"], ["b3", "b2"], ["b2", "b1"], ["a1", "a2"], ["a2", "a3"], ["a3", "a1"]];
+const NEW_LINKS = [["n1", "o3"], ["n2", "b3"], ["n3", "a2"]];
+const MATCH_IDS = ["n2", "a3", "b3"];
+const Q = {
+  x: 752,
+  y: 282
+};
+const STAGES = [{
+  n: "1",
+  cx: VET.cx,
+  cap: "lawyer approves"
+}, {
+  n: "2",
+  cx: CHK.cx,
+  cap: "split into passages"
+}, {
+  n: "3",
+  cx: EMB.cx,
+  cap: "meaning becomes numbers"
+}, {
+  n: "4",
+  cx: DB.x,
+  cap: "similar meanings sit close"
+}];
 function SPipe({
   step = 0
 }) {
@@ -1301,86 +1475,62 @@ function SPipe({
     duration: .9,
     ease: "easeInOut"
   };
-  const db = {
-    x: 730,
-    y: 150,
-    w: 150,
-    h: 150
-  }; // cylinder
-  const stored = [
-  // pre-existing library dots
-  {
-    x: 690,
-    y: 205,
-    c: "var(--orange)"
-  }, {
-    x: 738,
-    y: 190,
-    c: "var(--orange)"
-  }, {
-    x: 775,
-    y: 225,
-    c: "var(--blue)"
-  }, {
-    x: 702,
-    y: 262,
-    c: "var(--blue)"
-  }, {
-    x: 752,
-    y: 282,
-    c: "var(--aqua)"
-  }, {
-    x: 792,
-    y: 262,
-    c: "var(--aqua)"
-  }];
-  const newDots = [{
-    tx: 718,
-    ty: 228,
-    c: "var(--orange)"
-  }, {
-    tx: 758,
-    ty: 250,
-    c: "var(--blue)"
-  }, {
-    tx: 730,
-    ty: 292,
-    c: "var(--aqua)"
-  }];
-  const matches = [stored[1], stored[2], {
-    x: 718,
-    y: 228,
-    c: "var(--orange)"
-  }];
-  const qTarget = {
-    x: 750,
-    y: 232
+  const pos = {};
+  SEEDS.forEach(d => pos[d.id] = d);
+  ARRIVALS.forEach(d => pos[d.id] = d);
+  const isMatch = id => MATCH_IDS.indexOf(id) >= 0;
+  // matched dots ghost out once their copies fly to the phone
+  const dotOp = id => isMatch(id) ? s >= 9 ? .25 : .95 : s === 8 ? .3 : s >= 9 ? .55 : .9;
+  // match lines run edge to edge so they never spike through the query ring
+  const seg = id => {
+    const p = pos[id],
+      dx = p.x - Q.x,
+      dy = p.y - Q.y,
+      L = Math.sqrt(dx * dx + dy * dy) || 1;
+    return {
+      x1: Q.x + dx / L * 13,
+      y1: Q.y + dy / L * 13,
+      x2: p.x - dx / L * 9,
+      y2: p.y - dy / L * 9
+    };
   };
-  const llm = {
-    x: 905,
-    y: 250,
-    w: 190,
-    h: 58
-  };
-  const captions = ["INGEST", "STORE", "ASK", "RETRIEVE", "ANSWER", "CHECK"];
+  const card = (x, w, y, h) => /*#__PURE__*/React.createElement("rect", {
+    x: x,
+    y: y,
+    width: w,
+    height: h,
+    rx: 12,
+    fill: "var(--panel)",
+    stroke: "var(--line)",
+    strokeWidth: "1.4"
+  });
+  const title = (cx, t, color) => /*#__PURE__*/React.createElement("text", {
+    x: cx,
+    y: 198,
+    textAnchor: "middle",
+    fill: color || "var(--ink2)",
+    fontSize: "12.5",
+    fontWeight: "bold",
+    letterSpacing: ".06em"
+  }, t);
   return /*#__PURE__*/React.createElement("div", {
     className: "slide"
   }, /*#__PURE__*/React.createElement(Header, {
     kicker: "Idea 3 - the tooling",
     title: "One pipeline: documents in, grounded answers out"
   }), /*#__PURE__*/React.createElement("div", {
-    className: "stage",
-    style: {
-      alignItems: "flex-start"
-    }
+    className: "stage"
   }, /*#__PURE__*/React.createElement("svg", {
-    viewBox: "0 0 1160 496",
+    viewBox: "0 0 1160 520",
     style: {
       width: "100%",
-      maxWidth: 1160,
+      maxWidth: 1260,
+      maxHeight: "100%",
       overflow: "visible"
     }
-  }, /*#__PURE__*/React.createElement("text", {
+  },
+  /* ---- section rules ---- */
+  /*#__PURE__*/React.createElement("text", {
     x: "435",
     y: "26",
     textAnchor: "middle",
@@ -1408,11 +1558,13 @@ function SPipe({
     y2: "36",
     stroke: "var(--line)",
     strokeWidth: "1"
-  }), /*#__PURE__*/React.createElement(motion.line, {
-    x1: "70",
-    y1: "240",
-    x2: db.x - db.w / 2 - 14,
-    y2: "240",
+  }),
+  /* ---- the thread that runs the whole row ---- */
+  /*#__PURE__*/React.createElement(motion.line, {
+    x1: "196",
+    y1: MID,
+    x2: DB.x - DB.w / 2 - 10,
+    y2: MID,
     stroke: "var(--line)",
     strokeWidth: "2",
     strokeDasharray: "7 7",
@@ -1429,13 +1581,13 @@ function SPipe({
     r: "4",
     fill: "var(--aqua)",
     initial: {
-      cx: 80,
-      cy: 240,
+      cx: 200,
+      cy: MID,
       opacity: 0
     },
     animate: {
-      cx: [80, 600],
-      cy: 240,
+      cx: [200, 640],
+      cy: MID,
       opacity: [0, 1, 1, 0]
     },
     transition: {
@@ -1443,16 +1595,18 @@ function SPipe({
       repeat: Infinity,
       ease: "linear"
     }
-  }), [{
-    y: 150,
+  }),
+  /* ---- sources ---- */
+  [{
+    y: 163,
     c: "var(--aqua)",
     l: "Ceri's content"
   }, {
-    y: 225,
+    y: 238,
     c: "var(--blue)",
     l: "Fair Work Act"
   }, {
-    y: 300,
+    y: 313,
     c: "var(--orange)",
     l: "templates"
   }].map((d, k) => /*#__PURE__*/React.createElement(motion.g, {
@@ -1462,7 +1616,7 @@ function SPipe({
       x: -20
     },
     animate: {
-      opacity: s >= 4 && k > 0 ? .35 : 1,
+      opacity: s >= 1 && s <= 3 && k > 0 ? .4 : 1,
       x: 0
     },
     transition: {
@@ -1477,183 +1631,273 @@ function SPipe({
     y: d.y + 28,
     fill: "var(--ink2)",
     fontSize: "12"
-  }, d.l))), s >= 1 && s < 3 && /*#__PURE__*/React.createElement(motion.g, {
+  }, d.l))),
+  /* ---- VET ---- */
+  /*#__PURE__*/React.createElement(motion.g, fade(.5), card(VET.x, VET.w, CARD_Y, CARD_H), /*#__PURE__*/React.createElement(DocIcon, {
+    x: VET.cx - 17,
+    y: 220,
+    color: "var(--line)"
+  }), title(VET.cx, "VET", "var(--yellow)")), /*#__PURE__*/React.createElement(motion.g, {
     initial: {
-      x: 56,
-      y: 150
+      opacity: 0
     },
     animate: {
-      x: s === 1 ? 268 : 415,
-      y: 218
+      opacity: 1
+    },
+    transition: {
+      delay: .6
+    }
+  }, /*#__PURE__*/React.createElement("circle", {
+    cx: VET.cx,
+    cy: 288,
+    r: "12",
+    fill: s >= 1 ? "rgba(169,138,62,.10)" : "none",
+    stroke: s >= 1 ? "var(--yellow)" : "var(--line)",
+    strokeWidth: "1.6"
+  }), s < 1 && /*#__PURE__*/React.createElement("path", {
+    d: `M${VET.cx - 5.5} 288 l4.5 5 l8.5 -9.5`,
+    fill: "none",
+    stroke: "var(--line)",
+    strokeWidth: "2",
+    strokeLinecap: "round"
+  }), s >= 1 && /*#__PURE__*/React.createElement(motion.path, {
+    d: `M${VET.cx - 5.5} 288 l4.5 5 l8.5 -9.5`,
+    fill: "none",
+    stroke: "var(--yellow)",
+    strokeWidth: "2",
+    strokeLinecap: "round",
+    initial: {
+      pathLength: 0
+    },
+    animate: {
+      pathLength: 1
+    },
+    transition: {
+      delay: .9,
+      duration: .4
+    }
+  })), s === 1 && /*#__PURE__*/React.createElement(motion.text, {
+    x: VET.cx,
+    y: "334",
+    textAnchor: "middle",
+    fill: "var(--yellow)",
+    fontSize: "11.5",
+    fontWeight: "bold",
+    letterSpacing: ".08em",
+    initial: {
+      opacity: 0,
+      y: 6
+    },
+    animate: {
+      opacity: 1,
+      y: 0
+    },
+    transition: {
+      delay: 1.1
+    }
+  }, "APPROVED"),
+  /* ---- CHUNK ---- */
+  /*#__PURE__*/React.createElement(motion.g, fade(.7), card(CHK.x, CHK.w, CARD_Y, CARD_H), [0, 1, 2].map(k => /*#__PURE__*/React.createElement("g", {
+    key: "sl" + k
+  }, /*#__PURE__*/React.createElement("rect", {
+    x: CHK.cx - 30,
+    y: 220 + k * 26,
+    width: "60",
+    height: "18",
+    rx: "4",
+    fill: "none",
+    stroke: "var(--line)",
+    strokeWidth: "1.2"
+  }), /*#__PURE__*/React.createElement("line", {
+    x1: CHK.cx - 6,
+    y1: 229 + k * 26,
+    x2: CHK.cx + 22,
+    y2: 229 + k * 26,
+    stroke: "var(--line)",
+    strokeWidth: "2"
+  }))), title(CHK.cx, "CHUNK")),
+  /* ---- EMBED ---- */
+  /*#__PURE__*/React.createElement(motion.g, fade(.9), card(EMB.x, EMB.w, CARD_Y, CARD_H), title(EMB.cx, "EMBED"), /*#__PURE__*/React.createElement("text", {
+    x: EMB.cx,
+    y: "252",
+    textAnchor: "middle",
+    fill: "var(--ink)",
+    fontSize: "15",
+    fontFamily: "monospace"
+  }, "[0.2,"), /*#__PURE__*/React.createElement("text", {
+    x: EMB.cx,
+    y: "276",
+    textAnchor: "middle",
+    fill: "var(--ink)",
+    fontSize: "15",
+    fontFamily: "monospace"
+  }, "-0.8,…]")),
+  /* ---- the document that walks the row ---- */
+  s >= 1 && s < 3 && /*#__PURE__*/React.createElement(motion.g, {
+    initial: {
+      x: 56,
+      y: 163
+    },
+    animate: {
+      x: s === 1 ? VET.cx - 17 : CHK.cx - 17,
+      y: 220
     },
     transition: T
   }, /*#__PURE__*/React.createElement(DocIcon, {
     x: 0,
     y: 0,
     color: "var(--aqua)"
-  })), /*#__PURE__*/React.createElement(motion.g, fade(.5), /*#__PURE__*/React.createElement("rect", {
-    x: "260",
-    y: "196",
-    width: "76",
-    height: "92",
-    rx: "10",
-    fill: "none",
-    stroke: "var(--yellow)",
-    strokeWidth: "1.8"
-  }), /*#__PURE__*/React.createElement("text", {
-    x: "298",
-    y: "185",
-    textAnchor: "middle",
-    fill: "var(--yellow)",
-    fontSize: "12.5",
-    fontWeight: "bold"
-  }, "VET"), /*#__PURE__*/React.createElement("text", {
-    x: "298",
-    y: "304",
-    textAnchor: "middle",
-    fill: "var(--ink2)",
-    fontSize: "11.5"
-  }, "lawyer approves")), s === 1 && /*#__PURE__*/React.createElement(motion.text, {
-    x: "298",
-    y: "160",
-    textAnchor: "middle",
-    fill: "var(--aqua)",
-    fontSize: "12",
-    fontWeight: "bold",
-    initial: {
-      opacity: 0,
-      scale: .5
-    },
-    animate: {
-      opacity: 1,
-      scale: 1
-    },
-    transition: {
-      delay: 1.0,
-      type: "spring"
-    }
-  }, "APPROVED"), /*#__PURE__*/React.createElement(motion.g, fade(.7), /*#__PURE__*/React.createElement("text", {
-    x: "430",
-    y: "185",
-    textAnchor: "middle",
-    fill: "var(--ink2)",
-    fontSize: "12.5",
-    fontWeight: "bold"
-  }, "CHUNK"), /*#__PURE__*/React.createElement("text", {
-    x: "430",
-    y: "304",
-    textAnchor: "middle",
-    fill: "var(--ink2)",
-    fontSize: "11.5"
-  }, "split into passages")), s >= 2 && s < 4 && [0, 1, 2].map(k => /*#__PURE__*/React.createElement(motion.rect, {
+  })),
+  /* ---- passages, tagged then embedded ---- */
+  s >= 2 && s < 4 && [0, 1, 2].map(k => /*#__PURE__*/React.createElement(motion.rect, {
     key: "ch" + k,
-    width: "16",
-    height: "16",
+    width: "12",
+    height: "12",
     rx: "3",
     fill: ["var(--orange)", "var(--blue)", "var(--aqua)"][k],
     initial: {
-      x: 415,
-      y: 225,
+      x: CHK.cx - 6,
+      y: 240,
       opacity: 0
     },
     animate: {
-      x: s === 2 ? 413 + k % 2 * 22 : 528,
-      y: s === 2 ? 205 + k * 24 : 214 + k * 24,
+      x: s === 2 ? CHK.cx - 24 : EMB.x + 16,
+      y: s === 2 ? 223 + k * 26 : 228 + k * 26,
       opacity: 1
     },
     transition: {
       ...T,
       delay: k * .12
     }
-  })), /*#__PURE__*/React.createElement(motion.g, fade(.9), /*#__PURE__*/React.createElement("rect", {
-    x: "520",
-    y: "200",
-    width: "88",
-    height: "84",
-    rx: "10",
-    fill: "var(--panel)",
-    stroke: "var(--line)",
-    strokeWidth: "1.6"
+  })),
+  /* ---- the store ---- */
+  /*#__PURE__*/React.createElement(Cylinder, {
+    x: DB.x,
+    y: DB.y,
+    w: DB.w,
+    h: DB.h,
+    glow: s >= 5
   }), /*#__PURE__*/React.createElement("text", {
-    x: "564",
-    y: "185",
+    x: DB.x,
+    y: DB.y - 26,
     textAnchor: "middle",
-    fill: "var(--ink2)",
-    fontSize: "12.5",
-    fontWeight: "bold"
-  }, "EMBED"), /*#__PURE__*/React.createElement("text", {
-    x: "564",
-    y: "238",
-    textAnchor: "middle",
-    fill: "var(--ink)",
-    fontSize: "15",
-    fontFamily: "monospace"
-  }, "[0.2,"), /*#__PURE__*/React.createElement("text", {
-    x: "564",
-    y: "256",
-    textAnchor: "middle",
-    fill: "var(--ink)",
-    fontSize: "15",
-    fontFamily: "monospace"
-  }, "-0.8,…]"), /*#__PURE__*/React.createElement("text", {
-    x: "564",
-    y: "304",
-    textAnchor: "middle",
-    fill: "var(--ink2)",
-    fontSize: "11.5"
-  }, "meaning becomes numbers")), s >= 3 && newDots.map((d, k) => /*#__PURE__*/React.createElement(motion.circle, {
-    key: "nd" + k,
-    r: "7",
-    fill: d.c,
+    fill: s >= 5 ? "var(--blue)" : "var(--ink2)",
+    fontSize: "13",
+    fontWeight: "bold",
+    letterSpacing: ".06em"
+  }, "VECTOR DATABASE"), LINKS.map(([a, b], k) => /*#__PURE__*/React.createElement(motion.line, {
+    key: "lk" + k,
+    x1: pos[a].x,
+    y1: pos[a].y,
+    x2: pos[b].x,
+    y2: pos[b].y,
+    stroke: pos[a].c,
+    strokeWidth: "1.1",
     initial: {
-      cx: 612,
-      cy: 222 + k * 20,
       opacity: 0
     },
     animate: {
-      cx: s >= 4 ? d.tx : 612,
-      cy: s >= 4 ? d.ty : 222 + k * 20,
-      opacity: 1
+      opacity: s >= 8 ? .12 : .26
+    },
+    transition: {
+      delay: .5 + k * .05
+    }
+  })), s >= 4 && NEW_LINKS.map(([a, b], k) => /*#__PURE__*/React.createElement(motion.line, {
+    key: "nl" + k,
+    x1: pos[a].x,
+    y1: pos[a].y,
+    x2: pos[b].x,
+    y2: pos[b].y,
+    stroke: pos[a].c,
+    strokeWidth: "1.1",
+    initial: {
+      opacity: 0
+    },
+    animate: {
+      opacity: s >= 8 ? .12 : .26
+    },
+    transition: {
+      delay: 1.1 + k * .12
+    }
+  })), SEEDS.map((d, k) => /*#__PURE__*/React.createElement(motion.circle, {
+    key: d.id,
+    cx: d.x,
+    cy: d.y,
+    r: "6.5",
+    fill: d.c,
+    initial: {
+      opacity: 0
+    },
+    animate: {
+      opacity: dotOp(d.id)
+    },
+    transition: {
+      delay: .3 + k * .06
+    }
+  })), s >= 3 && ARRIVALS.map((d, k) => /*#__PURE__*/React.createElement(motion.circle, {
+    key: d.id,
+    r: "6.5",
+    fill: d.c,
+    initial: {
+      cx: 634,
+      cy: 232 + k * 28,
+      opacity: 0
+    },
+    animate: {
+      cx: s >= 4 ? d.x : 634,
+      cy: s >= 4 ? d.y : 232 + k * 28,
+      opacity: dotOp(d.id)
     },
     transition: {
       ...T,
       delay: k * .15
     }
-  })), /*#__PURE__*/React.createElement(Cylinder, {
-    x: db.x + 75 - 75,
-    y: db.y,
-    w: db.w,
-    h: db.h,
-    glow: s >= 5
-  }), /*#__PURE__*/React.createElement("text", {
-    x: db.x,
-    y: db.y - 22,
-    textAnchor: "middle",
-    fill: s >= 5 ? "var(--blue)" : "var(--ink2)",
-    fontSize: "13.5",
-    fontWeight: "bold"
-  }, "VECTOR DATABASE"), /*#__PURE__*/React.createElement("text", {
-    x: db.x,
-    y: db.y + db.h + 40,
-    textAnchor: "middle",
-    fill: "var(--ink2)",
-    fontSize: "11.5"
-  }, "similar meanings sit close together"), stored.map((d, k) => /*#__PURE__*/React.createElement(motion.circle, {
-    key: "st" + k,
-    cx: d.x,
-    cy: d.y,
-    r: "7",
-    fill: d.c,
-    initial: {
-      opacity: 0
-    },
-    animate: {
-      opacity: s >= 8 && !matches.includes(d) ? .35 : .9
-    },
-    transition: {
-      delay: .3 + k * .08
-    }
-  })), s >= 6 && /*#__PURE__*/React.createElement("g", {
+  })),
+  /* ---- the numbered rail ---- */
+  /*#__PURE__*/React.createElement(motion.g, fade(1.1), /*#__PURE__*/React.createElement("line", {
+    x1: VET.cx,
+    y1: "404",
+    x2: DB.x,
+    y2: "404",
+    stroke: "var(--line)",
+    strokeWidth: "1"
+  }), STAGES.map((st, k) => {
+    const on = s >= k + 1;
+    return /*#__PURE__*/React.createElement("g", {
+      key: st.n
+    }, /*#__PURE__*/React.createElement("circle", {
+      cx: st.cx,
+      cy: "404",
+      r: "12.5",
+      fill: "var(--bg)",
+      stroke: on ? "var(--ink)" : "var(--line)",
+      strokeWidth: "1.4",
+      style: {
+        transition: "stroke .4s ease"
+      }
+    }), /*#__PURE__*/React.createElement("text", {
+      x: st.cx,
+      y: "408.5",
+      textAnchor: "middle",
+      fontSize: "11.5",
+      fontWeight: "bold",
+      fill: on ? "var(--ink)" : "var(--ink2)",
+      style: {
+        transition: "fill .4s ease"
+      }
+    }, st.n), /*#__PURE__*/React.createElement("text", {
+      x: st.cx,
+      y: "436",
+      textAnchor: "middle",
+      fontSize: "11.5",
+      fill: on ? "var(--ink)" : "var(--ink2)",
+      style: {
+        transition: "fill .4s ease"
+      }
+    }, st.cap));
+  })),
+  /* ---- the phone ---- */
+  s >= 6 && /*#__PURE__*/React.createElement("g", {
     transform: "translate(0,24)"
   }, /*#__PURE__*/React.createElement(motion.g, {
     initial: {
@@ -1671,7 +1915,7 @@ function SPipe({
     x: "907",
     y: "27",
     width: "246",
-    height: "439",
+    height: "450",
     rx: "29",
     fill: "var(--panel)",
     stroke: "var(--line)",
@@ -1753,25 +1997,13 @@ function SPipe({
     textAnchor: "middle",
     fontSize: "10.5",
     fill: "var(--ink2)"
-  }, "answers only from what it was given"))), s >= 7 && /*#__PURE__*/React.createElement(motion.circle, {
-    r: "8",
-    fill: "var(--yellow)",
-    initial: {
-      cx: 908,
-      cy: 124,
-      opacity: 0
-    },
-    animate: {
-      cx: qTarget.x,
-      cy: qTarget.y,
-      opacity: 1
-    },
-    transition: {
-      duration: 1.2,
-      ease: "easeInOut"
-    }
-  }), s >= 7 && /*#__PURE__*/React.createElement(motion.path, {
-    d: `M908 124 C 845 160, ${qTarget.x + 55} 185, ${qTarget.x + 12} ${qTarget.y - 8}`,
+  }, "answers only from what it was given"))),
+  /* ---- the question lands in the meaning space ---- */
+  s >= 7 && /*#__PURE__*/React.createElement(motion.line, {
+    x1: "905",
+    y1: "127",
+    x2: Q.x + (908 - Q.x) * 14 / 222,
+    y2: Q.y + (124 - Q.y) * 14 / 222,
     fill: "none",
     stroke: "var(--line)",
     strokeWidth: "1.4",
@@ -1782,15 +2014,36 @@ function SPipe({
     animate: {
       opacity: .8
     }
-  }), s >= 8 && matches.map((m, k) => /*#__PURE__*/React.createElement(motion.line, {
-    key: "ml" + k,
-    x1: qTarget.x,
-    y1: qTarget.y,
-    x2: m.x,
-    y2: m.y,
+  }), s >= 7 && /*#__PURE__*/React.createElement(motion.g, {
+    initial: {
+      x: 908,
+      y: 124,
+      opacity: 0
+    },
+    animate: {
+      x: Q.x,
+      y: Q.y,
+      opacity: 1
+    },
+    transition: {
+      duration: 1.2,
+      ease: "easeInOut"
+    }
+  }, /*#__PURE__*/React.createElement("circle", {
+    r: "11",
+    fill: "none",
     stroke: "var(--yellow)",
-    strokeWidth: "2.4",
-    strokeDasharray: "5 4",
+    strokeWidth: "1.8",
+    opacity: ".85"
+  }), /*#__PURE__*/React.createElement("circle", {
+    r: "4",
+    fill: "var(--yellow)"
+  })), s >= 8 && MATCH_IDS.map((id, k) => /*#__PURE__*/React.createElement(motion.line, {
+    key: "ml" + k,
+    ...seg(id),
+    stroke: "var(--yellow)",
+    strokeWidth: "1.8",
+    strokeDasharray: "4 3",
     initial: {
       pathLength: 0,
       opacity: 0
@@ -1804,11 +2057,11 @@ function SPipe({
       duration: .5
     }
   })), s === 8 && /*#__PURE__*/React.createElement(motion.text, {
-    x: db.x,
-    y: db.y - 42,
+    x: DB.x,
+    y: "376",
     textAnchor: "middle",
     fill: "var(--yellow)",
-    fontSize: "12.5",
+    fontSize: "12",
     fontWeight: "bold",
     initial: {
       opacity: 0
@@ -1819,13 +2072,13 @@ function SPipe({
     transition: {
       delay: .6
     }
-  }, "nearest passages found"), s >= 9 && matches.map((m, k) => /*#__PURE__*/React.createElement(motion.circle, {
+  }, "nearest passages found"), s >= 9 && MATCH_IDS.map((id, k) => /*#__PURE__*/React.createElement(motion.circle, {
     key: "rv" + k,
-    r: "7",
-    fill: m.c,
+    r: "6.5",
+    fill: pos[id].c,
     initial: {
-      cx: m.x,
-      cy: m.y,
+      cx: pos[id].x,
+      cy: pos[id].y,
       opacity: 0
     },
     animate: {
@@ -1838,7 +2091,9 @@ function SPipe({
       delay: k * .15,
       ease: "easeInOut"
     }
-  })), s >= 10 && /*#__PURE__*/React.createElement("g", {
+  })),
+  /* ---- the grounded answer ---- */
+  s >= 10 && /*#__PURE__*/React.createElement("g", {
     transform: "translate(0,24)"
   }, /*#__PURE__*/React.createElement(motion.g, {
     initial: {

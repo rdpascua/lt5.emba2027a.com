@@ -145,6 +145,13 @@ svg text{font-family:"Newsreader",Georgia,serif}
 .ans .al{font-size:15px;letter-spacing:.2em;text-transform:uppercase;padding-top:4px}
 .ans .av{font-size:36px;font-style:italic;font-weight:300;letter-spacing:-.015em;margin:8px 0 6px;line-height:1.05}
 .ans p{font-size:19px;color:var(--mute);line-height:1.4}
+.pre{border-left:2px solid currentColor;padding:4px 0 4px 16px;font-size:18px;line-height:1.45}
+.pre b{display:block;font-weight:400;font-size:13px;letter-spacing:.2em;text-transform:uppercase;color:var(--mute);margin-bottom:4px}
+.p4{display:grid;grid-template-columns:1fr 1fr;border-top:1px solid var(--line)}
+.p4>div{padding:14px 20px 14px 0;border-bottom:1px solid var(--line)}
+.p4 h3{font-size:28px;margin:0 0 4px}
+.p4 .g{font-size:22px;font-style:italic;font-weight:300;line-height:1.15}
+table.tight td,table.tight th{padding-top:10px;padding-bottom:10px}
 #bar{position:fixed;left:0;bottom:0;height:2px;background:#fff;mix-blend-mode:difference;transition:width .7s var(--ease);z-index:10}
 #hint{position:fixed;right:20px;bottom:12px;font:14px "Newsreader",serif;color:#fff;mix-blend-mode:difference;opacity:.5;letter-spacing:.08em;z-index:10;user-select:none}
 .navbtn{position:fixed;top:0;bottom:0;width:18%;z-index:5;cursor:pointer;background:transparent;border:0}
@@ -294,7 +301,7 @@ svg text{font-family:"Newsreader",Georgia,serif}
       <h2 class="r" style="--d:300;margin-top:22px;font-size:60px">Tricker's model, <em>turned upside down.</em></h2>
       <p class="r" style="--d:600;margin-top:28px;font-size:22px">Normally, owners elect the board, and the board answers to them.</p>
       <p class="r" style="--d:800;margin-top:16px;font-size:22px">At OpenAI, a nonprofit board sat <em>above</em> the owners. Its directors held no equity. It answered to the mission.</p>
-      <p class="r mute" style="--d:1000;margin-top:16px;font-size:22px">Microsoft had about $13bn invested and no vote. A simple majority of the six directors could remove the CEO.</p>
+      <div class="pre r" style="--d:1100;margin-top:22px"><b>Pre-read · Mayer (2021)</b>Foundations already own companies to protect a founder's purpose: Bosch, Carlsberg, IKEA, Tata. OpenAI's design had precedent.</div>
     </div>
     <svg viewBox="0 0 900 640" width="900" height="640" class="r" style="--d:300" aria-label="OpenAI governance structure, based on case Exhibit 1">
       <!-- layer labels -->
@@ -468,19 +475,45 @@ svg text{font-family:"Newsreader",Georgia,serif}
 <section class="slide dark" data-ch="4">
   <div class="kicker r" style="--d:100;margin-top:30px">Dilemma 03 · Rules-based vs. Principles-based</div>
   <h2 class="r" style="--d:300;margin-top:22px">Tick the box, <em>or use your judgement?</em></h2>
-  <table style="margin-top:34px">
+  <table class="tight" style="margin-top:26px">
     <tr class="r" style="--d:500"><th></th><th>Rules-based</th><th>Principles-based</th></tr>
     <tr class="r" style="--d:700"><td>Core idea</td><td>Detailed, prescriptive requirements. Bright lines.</td><td>Broad outcomes. Directors decide how to meet them.</td></tr>
-    <tr class="r" style="--d:900"><td>Example</td><td>US Sarbanes-Oxley Act (2002), passed after Enron.</td><td>UK Corporate Governance Code: "comply or explain."</td></tr>
+    <tr class="r" style="--d:900"><td>Example</td><td>US Sarbanes-Oxley Act (2002), passed after Enron's board waived conflict-of-interest safeguards.</td><td>UK Corporate Governance Code: "comply or explain."</td></tr>
     <tr class="r" style="--d:1100"><td>Strength</td><td>Clear, measurable, easy to enforce.</td><td>Flexible. Fits unusual structures and new situations.</td></tr>
     <tr class="r" style="--d:1300"><td>Weakness</td><td>Invites loopholes: <em>"it wasn't against the rules."</em></td><td>Vague. Depends on the integrity of the people applying it.</td></tr>
     <tr class="r" style="--d:1500"><td>OpenAI</td><td>Few hard rules bound the board. None were broken.</td><td>One principle, the mission, which each side read differently.</td></tr>
   </table>
-  <div class="link r" style="--d:1900"><b>Mission link</b><i></i><span>A mission is a principle. With no rules on how to apply it, it can justify almost anything.</span></div>
+  <div class="pre r" style="--d:1700;position:absolute;left:120px;right:120px;bottom:40px"><b>Pre-read · Mayer (2021)</b>Rules struggle in fast technology. Regulators are "less well informed than the companies they are regulating," and technology leaves regulation "increasingly far behind."</div>
 </section>
 
-<!-- 15 PRINCIPLES APPLIED -->
+<!-- 15 PRE-READS -->
 <section class="slide" data-ch="5">
+  <div class="kicker r" style="--d:100;margin-top:26px">What the pre-reads tell us</div>
+  <h2 class="r" style="--d:300;margin-top:18px;max-width:1360px">OpenAI had a purpose. <em>It did not have a precise one.</em></h2>
+  <div class="grid2" style="margin-top:36px;gap:80px">
+    <div>
+      <div class="kicker r" style="--d:500">Mayer (2021) · The economics of purpose</div>
+      <blockquote class="r" style="--d:700;margin-top:18px;font-size:36px">"Purpose should be neither mundane nor aspirational."</blockquote>
+      <div class="pre r" style="--d:1000;margin-top:24px"><b>Precision</b>A real purpose states which problems it solves, for whom, and how. "Benefit all of humanity" states none of these.</div>
+      <div class="pre r" style="--d:1200;margin-top:16px"><b>Trust</b>Trust comes from clarity plus credible commitment. OpenAI had the commitment, but not the clarity.</div>
+      <div class="pre r" style="--d:1400;margin-top:16px"><b>Accountability</b>With a purpose, the board's accountability "extends to a wider body of beneficiaries," not only to owners.</div>
+    </div>
+    <div>
+      <div class="kicker r" style="--d:600">Investopedia · The 4 Ps of governance</div>
+      <div class="p4 r" style="--d:900;margin-top:18px">
+        <div><h3>Purpose</h3><div class="g">Strong, but too broad to guide a decision.</div></div>
+        <div><h3>People</h3><div class="g">Loyal to the CEO, not to the board.</div></div>
+        <div><h3>Process</h3><div class="g">Missing: no rules for disclosure or succession.</div></div>
+        <div><h3>Performance</h3><div class="g">World-leading: ChatGPT started the AI race.</div></div>
+      </div>
+      <p class="r small mute" style="--d:1600;margin-top:18px">The UK Corporate Governance Code, quoted by Mayer: the board should ensure that purpose, values, strategy and culture "are aligned." At OpenAI, 747 of 770 staff showed they were not.</p>
+    </div>
+  </div>
+  <div class="src r" style="--d:1800">Sources: Mayer, C. (2021). The Future of the Corporation and the Economics of Purpose. <em>Journal of Management Studies</em>, 58(3). Investopedia, "Corporate Governance." Grades are our own assessment.</div>
+</section>
+
+<!-- 16 PRINCIPLES APPLIED -->
+<section class="slide dark" data-ch="5">
   <div class="kicker r" style="--d:100;margin-top:30px">The three principles · applied to the OpenAI board</div>
   <h2 class="r" style="--d:300;margin-top:22px;max-width:1300px">The board fired its CEO for not being candid. <em>Then it was not candid with anyone.</em></h2>
   <div class="score3" style="margin-top:44px">
@@ -491,8 +524,8 @@ svg text{font-family:"Newsreader",Georgia,serif}
   <div class="src r" style="--d:1600">Source: HKU Case HK1445. Grades are our own assessment, for discussion.</div>
 </section>
 
-<!-- 16 TRICKER APPLIED -->
-<section class="slide dark" data-ch="5">
+<!-- 17 TRICKER APPLIED -->
+<section class="slide" data-ch="5">
   <div class="kicker r" style="--d:100;margin-top:26px">Tricker's four board roles · applied to OpenAI, November 2023</div>
   <h2 class="r" style="--d:300;margin-top:18px">Strong on power. <em>Weak on process.</em></h2>
   <div class="matrix roles r" style="--d:500;height:500px;margin-top:30px">
@@ -502,13 +535,13 @@ svg text{font-family:"Newsreader",Georgia,serif}
     <div class="cell"><div class="rc"><div><span class="tag">Performance</span><h3>Strategy</h3><p class="small mute">Set the long-term direction of the organisation.</p></div><div class="gr"><div class="verdict">Clear intent.</div><div class="meter"><i style="--w:70%;--d:1000"></i></div><p class="small">The board put the mission ahead of growth, as the charter required.</p></div></div></div>
     <div class="ax side">Inward</div>
     <div class="cell"><div class="rc"><div><span class="tag">Conformance</span><h3>Supervision</h3><p class="small mute">Monitor management. Hire, review and, if needed, remove the CEO.</p></div><div class="gr"><div class="verdict">Power, no plan.</div><div class="meter"><i style="--w:45%;--d:1600"></i></div><p class="small">The board used its power to remove the CEO, with no plan for the day after.</p></div></div></div>
-    <div class="cell"><div class="rc"><div><span class="tag">Performance</span><h3>Policy</h3><p class="small mute">Set the policies and limits that management works within.</p></div><div class="gr"><div class="verdict">Missing.</div><div class="meter"><i style="--w:20%;--d:1900"></i></div><p class="small">No visible policy on disclosure, succession or consulting stakeholders.</p></div></div></div>
+    <div class="cell"><div class="rc"><div><span class="tag">Performance</span><h3>Policy</h3><p class="small mute">Set the policies and limits that management works within.</p></div><div class="gr"><div class="verdict">Missing.</div><div class="meter"><i style="--w:20%;--d:1900"></i></div><p class="small">No visible policy for decisions that conflict with the mission, a test the Investopedia pre-read names.</p></div></div></div>
   </div>
   <div class="src r" style="--d:2200">Framework: Tricker, B. (2010). <em>Corporate Governance: Principles, Policies, and Practices.</em> Grades are our own assessment, for discussion.</div>
 </section>
 
-<!-- 17 VERDICT -->
-<section class="slide" data-ch="5">
+<!-- 18 VERDICT -->
+<section class="slide dark" data-ch="5">
   <div class="kicker r" style="--d:100;margin-top:26px">The answer</div>
   <h2 class="r" style="--d:300;margin-top:18px;max-width:1300px">Right power. Wrong process. <em>Unclear purpose.</em></h2>
   <div class="ans r" style="--d:500;margin-top:36px">
@@ -523,11 +556,11 @@ svg text{font-family:"Newsreader",Georgia,serif}
     <div><div class="kicker">Letter vs. Spirit</div><div class="av">Letter kept. Spirit broken.</div><p>The charter was followed. Its purpose was not served.</p></div>
     <div><div class="kicker">Rules vs. Principles</div><div class="av">A principle, no rules.</div><p>"Benefit humanity" justified the act and defined nothing.</p></div>
   </div>
-  <p class="r" style="--d:1400;margin-top:34px;font-size:24px">The irony: the board built to protect the mission lost its seats within five days. <em>Power without legitimacy does not last.</em></p>
+  <p class="r" style="--d:1400;margin-top:34px;font-size:24px">In the 4 Ps: strong on purpose, missing on process. The irony: the board built to protect the mission lost its seats within five days. <em>Power without legitimacy does not last.</em></p>
   <div class="link r" style="--d:1800"><b>Back to the mission</b><i></i><span>Did the board protect the mission, or only its right to decide?</span></div>
 </section>
 
-<!-- 18 CLOSE -->
+<!-- 19 CLOSE -->
 <section class="slide dark" data-ch="5">
   <div class="center">
     <h1 class="r" style="--d:300;font-size:86px;line-height:1.08;white-space:nowrap">Rules tell you what you <em>can</em> do.<br><span class="mute">Principles tell you what you</span> <em>should.</em></h1>
